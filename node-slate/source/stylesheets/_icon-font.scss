@@ -1,0 +1,39 @@
+@font-face {
+   font-family: 'slate';
+   src:
+      url('../fonts/slate.woff2?-syv14m') format('woff2'),
+      url('../fonts/slate.woff?-syv14m')  format('woff'),
+      url('../fonts/slate.ttf?-syv14m')   format('truetype');
+   font-weight: normal;
+   font-style: normal;
+   }
+
+@mixin Icon {
+   font-family: 'slate';
+   speak: none;
+   font-style: normal;
+   font-weight: normal;
+   font-variant: normal;
+   text-transform: none;
+   line-height: 1;
+   }
+
+%icon-exclamation-sign {
+   @include Icon;
+   content: "\e600";
+   }
+
+%icon-info-sign {
+   @include Icon;
+   content: "\e602";
+   }
+
+%icon-ok-sign {
+   @include Icon;
+   content: "\e606";
+   }
+
+%icon-search {
+   @include Icon;
+   content: "\e607";
+   }

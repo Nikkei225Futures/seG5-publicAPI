@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang=en>
+   <head>
+      <meta charset=utf-8>
+      <meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1">
+      <title>API Reference</title>
+      <link rel=icon href=images/bookmark.png>
+      <link href=stylesheets/screen.css rel=stylesheet media=screen>
+      <link href=stylesheets/print.css rel=stylesheet media=print>
+      <link href=stylesheets/highlight-monokai.css rel=stylesheet media=screen,print>
+      <script src=javascripts/all.js></script>
+   </head>
+   <body class="" data-languages="[&#34;bash&#34;,&#34;ruby&#34;,&#34;python&#34;,&#34;javascript&#34;]">
+      <a href=# id=nav-button>
+         <span>NAV <img alt=navbar class=image-navbar src=images/navbar.png></span>
+      </a>
+      <div class=tocify-wrapper>
+         <img alt=logo class=image-logo src=images/logo.png>
+         <div class=lang-selector>
+            <a href=# data-language-name="bash">bash</a>
+            <a href=# data-language-name="ruby">ruby</a>
+            <a href=# data-language-name="python">python</a>
+            <a href=# data-language-name="javascript">javascript</a>
+         </div>
+         <div class=search>
+            <input type=text class=search id=input-search placeholder="Search">
+         </div>
+         <ul class=search-results></ul>
+         <div id=toc></div>
+         <ul class=toc-footer>
+            <li><a href=https://github.com/center-key/node-slate>node-slate on GitHub</a></li>
+            <li><a href=https://www.npmjs.com/package/node-slate>Documentation powered by Slate</a></li>
+         </ul>
+      </div>
+      <div class=page-wrapper>
+         <div class=dark-box></div>
+         <div class=content>
+            <h1 id="introduction">Introduction</h1>
+            <p>これは, ソフトウェア工学でのG5-ちらSeatの公開APIドキュメントである.</p>
+            <h1 id="overview">Overview</h1>
+            <p>この公開APIでは, APIにアクセスするためにWebsocketを用いる. また, APIはJSON-RPCのメッセージ形式でデータの送受信を行う.</p>
+            <h2 id="json-rpc">JSON-RPC</h2>
+            <p>JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルである. JSON-RPCでは, クライアント-サーバ間で送受信されるデータ構造とそのルールを定義する.</p>
+            <h3 id="関数を呼び出すリクエスト">関数を呼び出す(リクエスト)</h3>
+            <pre class="highlight bash"><code></code></pre>
+            <blockquote>
+               <p>リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;12345&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;login&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;userName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheUser&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myPasswordIsPASSWORD&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;restaurant&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>本APIではリクエスト(ここでは関数呼び出し)は以下のようなフィールドを持つJSONオブジェクトのことを表す.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>フィールド</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>jsonrpc</td>
+                     <td>string</td>
+                     <td>JSON-RPCの仕様のバージョン, このフィールドは常に&quot;2.0&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>id</td>
+                     <td>int or string</td>
+                     <td>リクエストの識別子. 応答には同じidが返却される.</td>
+                  </tr>
+                  <tr>
+                     <td>method</td>
+                     <td>string</td>
+                     <td>呼び出される関数名(メソッド名)</td>
+                  </tr>
+                  <tr>
+                     <td>params</td>
+                     <td>object</td>
+                     <td>呼び出される関数への引数</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="レスポンスメッセージ">レスポンスメッセージ</h3>
+            <pre class="highlight bash"><code></code></pre>
+            <blockquote>
+               <p>レスポンスメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;12345&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;no such user exist&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>本APIでは常に次のようなフィールドを持つJSONオブジェクトを用いてリクエストに対して応答を行う.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>フィールド</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>jsonrpc</td>
+                     <td>string</td>
+                     <td>JSON-RPCの仕様のバージョン, このフィールドは常に&quot;2.0&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>id</td>
+                     <td>int</td>
+                     <td>リクエストで送信されたものと同じid</td>
+                  </tr>
+                  <tr>
+                     <td>result</td>
+                     <td>object</td>
+                     <td>実行結果</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; status</td>
+                     <td>string</td>
+                     <td>実行結果の状態を表す. <br>実行が成功した -&gt; &quot;success&quot;, 実行中にエラーが生じた -&gt; &quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>params</td>
+                     <td>object</td>
+                     <td>呼び出される関数への引数</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h1 id="api">API</h1>
+            <p>本項では, 公開APIに実装するメソッドとそのメッセージ形式について記述する. 各項目の後のカッコ内が呼び出しメソッド名であり, これ以降はJSON-RPCに共通するフィールドは省き, パラメータ(呼び出し関数の引数)の定義のみを記述する.</p>
+            <h2 id="ログインapilogin">ログインAPI(login)</h2>
+            <p>ログインAPIでは, クライアントからの要求によりサーバ側で認証を行い, 以降に記述する各種APIにアクセスするためのトークンを発行する. よって, このAPIはクライアントが起動してからサーバに通信を行う時, 一番最初に実行されなければならない.</p>
+            <h3 id="ログインapiでのリクエストメッセージ定義">ログインAPIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;login&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;userName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheUser&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myPasswordIsPASSWORD&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>userName</td>
+                     <td>string</td>
+                     <td>ユーザ名</td>
+                  </tr>
+                  <tr>
+                     <td>password</td>
+                     <td>string</td>
+                     <td>パスワード</td>
+                  </tr>
+                  <tr>
+                     <td>role</td>
+                     <td>string</td>
+                     <td>各クライアントが利用者, 店舗もしくは管理者かを表す. <br> 利用者: &quot;user&quot;, 店舗: &quot;restaurant&quot;, 管理者: &quot;admin&quot; のいずれかである必要がある.</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="ログインapiでのレスポンスメッセージ定義">ログインAPIでのレスポンスメッセージ定義</h3>
+            <h4 id="ログイン認証成功時のレスポンスメッセージ定義">ログイン(認証)成功時のレスポンスメッセージ定義</h4>
+            <blockquote>
+               <p>レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;issuerRole&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;expire&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1639406450754&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>token</td>
+                     <td>string(UUID)</td>
+                     <td>各種APIへアクセスするためのトークン.</td>
+                  </tr>
+                  <tr>
+                     <td>issuerRole</td>
+                     <td>string</td>
+                     <td>各クライアントが利用者, 店舗もしくは管理者かを表す. <br> 利用者: &quot;user&quot;, 店舗: &quot;restaurant&quot;, 管理者: &quot;admin&quot; のいずれかである.</td>
+                  </tr>
+                  <tr>
+                     <td>expire</td>
+                     <td>int or string</td>
+                     <td>発行したトークンが失効する時間(UNIX timestamp形式, ミリ秒単位)</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h4 id="ログイン認証失敗時のレスポンスメッセージ定義">ログイン(認証)失敗時のレスポンスメッセージ定義</h4>
+            <blockquote>
+               <p>レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;no such user exists&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>認証に失敗した理由を表す(後述).</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>認証失敗時には, 次のようなメッセージを返却する.<br></p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>認証失敗理由</th>
+                     <th>メッセージ内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>DBにユーザ名が存在しない</td>
+                     <td>no such user exists</td>
+                  </tr>
+                  <tr>
+                     <td>パスワードが間違っている</td>
+                     <td>wrong password</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="ログアウトapilogout">ログアウトAPI(logout)</h2>
+            <p>ログアウトAPIでは, クライアントからの要求によりログアウト処理を行う. ログアウト処理では, 発行したトークンを即時に破棄する.</p>
+            <h3 id="ログアウトapiでのリクエストメッセージ定義">ログアウトAPIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;logout&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="ログアウトapiでのレスポンスメッセージ定義">ログアウトAPIでのレスポンスメッセージ定義</h3>
+            <h4 id="ログアウト成功時のレスポンスメッセージ定義">ログアウト成功時のレスポンスメッセージ定義</h4>
+            <blockquote>
+               <p>レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h4 id="ログアウト失敗時のレスポンスメッセージ定義">ログアウト失敗時のレスポンスメッセージ定義</h4>
+            <blockquote>
+               <p>レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;invalid token&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>&quot;invalid token&quot;, ログアウト失敗理由は無効なトークンが送られた場合のみである.</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h1 id="authentication">Authentication</h1>
+            <blockquote>
+               <p>To authorize, use this code:</p>
+            </blockquote>
+            <pre class="highlight ruby"><code><span class="hljs-keyword">require</span> <span class="hljs-string">&#x27;kittn&#x27;</span>
+
+api = Kittn::APIClient.authorize!(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>)</code></pre><pre class="highlight python"><code><span class="hljs-keyword">import</span> kittn
+
+api = kittn.authorize(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>)</code></pre><pre class="highlight bash"><code><span class="hljs-comment"># With shell, you can just pass the correct header with each request</span>
+curl <span class="hljs-string">&quot;api_endpoint_here&quot;</span>
+  -H <span class="hljs-string">&quot;Authorization: meowmeowmeow&quot;</span></code></pre><pre class="highlight javascript"><code><span class="hljs-keyword">import</span> { kittn } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;kittn&#x27;</span>;
+
+<span class="hljs-keyword">const</span> api = kittn.<span class="hljs-title function_">authorize</span>(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>);</code></pre>
+            <blockquote>
+               <p>Make sure to replace <code>meowmeowmeow</code> with your API key.</p>
+            </blockquote>
+            <p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="https://example.com/developers">developer portal</a>.</p>
+            <p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
+            <p><code>Authorization: meowmeowmeow</code></p>
+            <aside class=notice> You must replace <code>meowmeowmeow</code> with your personal API key. </aside>
+            <h1 id="kittens">Kittens</h1>
+            <h2 id="get-all-kittens">Get All Kittens</h2>
+            <pre class="highlight ruby"><code><span class="hljs-keyword">require</span> <span class="hljs-string">&#x27;kittn&#x27;</span>
+
+api = Kittn::APIClient.authorize!(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>)
+api.kittens.get</code></pre><pre class="highlight python"><code><span class="hljs-keyword">import</span> kittn
+
+api = kittn.authorize(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>)
+api.kittens.get()</code></pre><pre class="highlight bash"><code>curl <span class="hljs-string">&quot;https://example.com/api/kittens&quot;</span>
+  -H <span class="hljs-string">&quot;Authorization: meowmeowmeow&quot;</span></code></pre><pre class="highlight javascript"><code><span class="hljs-keyword">import</span> { kittn } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;kittn&#x27;</span>;
+
+<span class="hljs-keyword">const</span> api = kittn.<span class="hljs-title function_">authorize</span>(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>);
+<span class="hljs-keyword">const</span> kittens = api.<span class="hljs-property">kittens</span>.<span class="hljs-title function_">get</span>();</code></pre>
+            <blockquote>
+               <p>The above command returns JSON structured like this:</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">[</span>
+   <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span>         <span class="hljs-number">1</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span>       <span class="hljs-string">&quot;Fluffums&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;breed&quot;</span><span class="hljs-punctuation">:</span>      <span class="hljs-string">&quot;calico&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;fluffiness&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">6</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;cuteness&quot;</span><span class="hljs-punctuation">:</span>   <span class="hljs-number">7</span>
+   <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span>         <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span>       <span class="hljs-string">&quot;Max&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;breed&quot;</span><span class="hljs-punctuation">:</span>      <span class="hljs-string">&quot;unknown&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;fluffiness&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;cuteness&quot;</span><span class="hljs-punctuation">:</span>   <span class="hljs-number">10</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span></code></pre>
+            <p>This endpoint retrieves all kittens.</p>
+            <h3 id="http-request">HTTP Request</h3>
+            <p><code>GET https://example.com/api/kittens</code></p>
+            <h3 id="query-parameters">Query Parameters</h3>
+            <table>
+               <thead>
+                  <tr>
+                     <th>Parameter</th>
+                     <th>Default</th>
+                     <th>Description</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>include_cats</td>
+                     <td>false</td>
+                     <td>If set to true, the result will also include cats.</td>
+                  </tr>
+                  <tr>
+                     <td>available</td>
+                     <td>true</td>
+                     <td>If set to false, the result will include kittens that have already been adopted.</td>
+                  </tr>
+               </tbody>
+            </table>
+            <aside class=success> Remember — a happy kitten is an authenticated kitten! </aside>
+            <h2 id="get-a-specific-kitten">Get a Specific Kitten</h2>
+            <pre class="highlight ruby"><code><span class="hljs-keyword">require</span> <span class="hljs-string">&#x27;kittn&#x27;</span>
+
+api = Kittn::APIClient.authorize!(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>)
+api.kittens.get(<span class="hljs-number">2</span>)</code></pre><pre class="highlight python"><code><span class="hljs-keyword">import</span> kittn
+
+api = kittn.authorize(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>)
+api.kittens.get(<span class="hljs-number">2</span>)</code></pre><pre class="highlight bash"><code>curl <span class="hljs-string">&quot;https://example.com/api/kittens/2&quot;</span>
+  -H <span class="hljs-string">&quot;Authorization: meowmeowmeow&quot;</span></code></pre><pre class="highlight javascript"><code><span class="hljs-keyword">import</span> { kittn } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;kittn&#x27;</span>;
+
+<span class="hljs-keyword">const</span> api = kittn.<span class="hljs-title function_">authorize</span>(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>);
+<span class="hljs-keyword">const</span> max = api.<span class="hljs-property">kittens</span>.<span class="hljs-title function_">get</span>(<span class="hljs-number">2</span>);</code></pre>
+            <blockquote>
+               <p>The above command returns JSON structured like this:</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span>         <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span>       <span class="hljs-string">&quot;Max&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;breed&quot;</span><span class="hljs-punctuation">:</span>      <span class="hljs-string">&quot;unknown&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;fluffiness&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;cuteness&quot;</span><span class="hljs-punctuation">:</span>   <span class="hljs-number">10</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>This endpoint retrieves a specific kitten.</p>
+            <aside class=warning> Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code. </aside>
+            <h3 id="http-request-with-id">HTTP Request (with ID)</h3>
+            <p><code>GET https://example.com/kittens/&lt;ID&gt;</code></p>
+            <h3 id="url-parameters">URL Parameters</h3>
+            <table>
+               <thead>
+                  <tr>
+                     <th>Parameter</th>
+                     <th>Description</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>ID</td>
+                     <td>The ID of the kitten to retrieve</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h1 id="errors">Errors</h1>
+            <aside class=error> This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files...just save them to the `includes` folder and add them to the top of your `index.md`'s front matter. Files are included in the order listed. </aside>
+            <p>The Kittn API uses the following error codes:</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>Error Code</th>
+                     <th>Meaning</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>400</td>
+                     <td>Bad Request -- The request could not be understood by the server due to malformed syntax.</td>
+                  </tr>
+                  <tr>
+                     <td>401</td>
+                     <td>Unauthorized -- Your API key is wrong.</td>
+                  </tr>
+                  <tr>
+                     <td>403</td>
+                     <td>Forbidden -- The kitten requested is hidden for administrators only.</td>
+                  </tr>
+                  <tr>
+                     <td>404</td>
+                     <td>Not Found -- The specified kitten could not be found.</td>
+                  </tr>
+                  <tr>
+                     <td>405</td>
+                     <td>Method Not Allowed -- You tried to access a kitten with an invalid method.</td>
+                  </tr>
+                  <tr>
+                     <td>406</td>
+                     <td>Not Acceptable -- You requested a format that isn&#39;t JSON.</td>
+                  </tr>
+                  <tr>
+                     <td>410</td>
+                     <td>Gone -- The kitten requested has been removed from our servers.</td>
+                  </tr>
+                  <tr>
+                     <td>418</td>
+                     <td>I&#39;m a teapot.</td>
+                  </tr>
+                  <tr>
+                     <td>429</td>
+                     <td>Too Many Requests -- You&#39;re requesting too many kittens! Slow down!</td>
+                  </tr>
+                  <tr>
+                     <td>500</td>
+                     <td>Internal Server Error -- We had a problem with our server. Try again later.</td>
+                  </tr>
+                  <tr>
+                     <td>503</td>
+                     <td>Service Unavailable -- We&#39;re temporarily offline for maintenance. Please try again later.</td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+         <div class=dark-box>
+            <div class=lang-selector>
+               <a href=# data-language-name="bash">bash</a>
+               <a href=# data-language-name="ruby">ruby</a>
+               <a href=# data-language-name="python">python</a>
+               <a href=# data-language-name="javascript">javascript</a>
+            </div>
+         </div>
+      </div>
+   </body>
+</html>

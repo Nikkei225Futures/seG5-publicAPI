@@ -1,0 +1,19 @@
+title: API Reference
+
+language_tabs:
+   - bash
+   - ruby
+   - python
+   - javascript
+
+toc_footers:
+   - <a href=https://github.com/center-key/node-slate>node-slate on GitHub</a>
+   - <a href=https://www.npmjs.com/package/node-slate>Documentation powered by Slate</a>
+
+includes:
+   - main
+   - _errors
+
+search: true
+
+highlight_theme: monokai
