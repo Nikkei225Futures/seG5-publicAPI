@@ -125,7 +125,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
    "jsonrpc": "2.0",
    "id": "1",
    "result": {
-      "status": "success",
+      "status": "error",
       "reason": "no such user exists"
    }
 }
@@ -201,7 +201,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 
 
 
-
+#以下サンプル, 書き終わったら消します
 
 
 
