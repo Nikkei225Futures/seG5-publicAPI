@@ -1,5 +1,5 @@
 # Common errors
-このAPIでは共通エラーとして次のようなメッセージが返却される. 共通エラーでのreasonは大体がHTTPのステータスコードに似るように設計しているが, 一部拡張されている.
+このAPIでは共通エラーとして次のようなメッセージが返却される. 共通エラーでのreasonはHTTPのステータスコードに準拠するように設計しているが, 一部拡張されている.
 ```bash
 
 ```
@@ -19,12 +19,12 @@
 reason | Meaning
 ---------- | -------
 400 | Bad Request -- サーバが理解できないメッセージ形式である.
-401 | No token included -- トークンによる認証が必要なAPIにおいてパラメータにトークンが含まれていない
-402 | Unauthorized -- トークンによる認証が必要なAPIにおいて認証が失敗した.
+401 | Unauthorized -- トークンによる認証が必要なAPIにおいて認証が失敗した.
 403 | Forbidden -- 実行が許可されていないメソッドを実行しようとした.
 404 | Not Found -- メソッドが存在しない.
-418 | I'm a teapot -- pouring coffee into teapot is unacceptable. stop doing it.
+418 | I'm a teapot -- pouring coffee with teapot is unacceptable. respect teapot and the humanity.
 429 | Too Many Requests -- リクエストが多すぎる.
+452 | No token included -- トークンによる認証が必要なAPIにおいてパラメータにトークンが含まれていない
 500 | Internal Server Error -- 何等かの理由で処理が実行できなかった.
 512 | DB connection failed -- DBへ接続できなかった.
 

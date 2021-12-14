@@ -38,7 +38,7 @@
             <h1 id="introduction">Introduction</h1>
             <p>これは, ソフトウェア工学でのG5-ちらSeatの公開APIドキュメントである.</p>
             <h1 id="overview">Overview</h1>
-            <p>この公開APIでは, APIにアクセスするためにWebsocketを用いる. また, APIはJSON-RPCのメッセージ形式でデータの送受信を行う. この公開APIでは, 主にログイン/ログアウト系, 情報参照系, 情報変更系の3種類のAPIが提供される. 特に, 情報参照, 情報変更系APIへのアクセスはトークンによる認証を行うため, ログインAPIを1番最初に実行してトークンを手に入れる必要がある.</p>
+            <p>この公開APIでは, APIにアクセスするためにWebsocketを用いる. また, APIはJSON-RPCのメッセージ形式でデータの送受信を行う. この公開APIでは, 主にアカウント登録系, ログイン/ログアウト系, 情報参照系, 情報取得系APIの5種類が提供される. 特に, 情報参照, 情報変更系APIへのアクセスはトークンによる認証を行うため, ログインAPIを1番最初に実行してトークンを手に入れる必要がある.</p>
             <h2 id="json-rpc">JSON-RPC</h2>
             <p>JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルである. JSON-RPCでは, クライアント-サーバ間で送受信されるデータ構造とそのルールを定義する.</p>
             <h3 id="関数を呼び出すリクエスト">関数を呼び出す(リクエスト)</h3>
@@ -136,247 +136,10 @@
             <p>各項目でエラー条件等は記載するが, 共通エラーはCommon errorsに記載する.</p>
             <h1 id="api">API</h1>
             <p>公開APIに実装するメソッドとそのメッセージ形式について記述する. 各項目の後のカッコ内が呼び出しメソッド名であり, これ以降はJSON-RPCに共通するフィールドは省き, パラメータ(呼び出し関数の引数)の定義のみを記述する.</p>
-            <h1 id="ログインログアウト系api">ログイン/ログアウト系API</h1>
-            <p>ログイン/ログアウトAPIでは, クライアントからの要求により, ログイン処理とログアウト処理を行う. なお, ログイン処理では, 各種APIの実行に必要なトークンを発行するため, これを必ずクライアント側で保持しておかなければならない.</p>
-            <h2 id="ログインapilogin">ログインAPI(login)</h2>
-            <p>ログインAPIでは, クライアントからの要求によりサーバ側で認証を行い, 以降に記述する各種APIにアクセスするためのトークンを発行する. よって, このAPIはクライアントが起動してからサーバに通信を行う時, 一番最初に実行されなければならない.</p>
-            <h3 id="ログインapiでのリクエストメッセージ定義">ログインAPIでのリクエストメッセージ定義</h3>
-            <blockquote>
-               <p>リクエストメッセージの例</p>
-            </blockquote>
-            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
-   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;login&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">&quot;userName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheUser&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myPasswordIsPASSWORD&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span>
-   <span class="hljs-punctuation">}</span>
-<span class="hljs-punctuation">}</span></code></pre>
-            <table>
-               <thead>
-                  <tr>
-                     <th>パラメータ</th>
-                     <th>型</th>
-                     <th>説明</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>userName</td>
-                     <td>string</td>
-                     <td>ユーザ名</td>
-                  </tr>
-                  <tr>
-                     <td>password</td>
-                     <td>string</td>
-                     <td>パスワード</td>
-                  </tr>
-                  <tr>
-                     <td>role</td>
-                     <td>string</td>
-                     <td>各クライアントが利用者, 店舗もしくは管理者かを表す. <br> 利用者: &quot;user&quot;, 店舗: &quot;restaurant&quot;, 管理者: &quot;admin&quot; のいずれかである必要がある.</td>
-                  </tr>
-               </tbody>
-            </table>
-            <h3 id="ログインapiでのレスポンスメッセージ定義">ログインAPIでのレスポンスメッセージ定義</h3>
-            <h4 id="ログイン認証成功時のレスポンスメッセージ定義">ログイン(認証)成功時のレスポンスメッセージ定義</h4>
-            <blockquote>
-               <p>レスポンスメッセージの例(成功時)</p>
-            </blockquote>
-            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
-   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;issuerRole&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;expire&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1639406450754&quot;</span>
-   <span class="hljs-punctuation">}</span>
-<span class="hljs-punctuation">}</span></code></pre>
-            <table>
-               <thead>
-                  <tr>
-                     <th>返り値</th>
-                     <th>型</th>
-                     <th>説明</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>status</td>
-                     <td>string</td>
-                     <td>&quot;success&quot;</td>
-                  </tr>
-                  <tr>
-                     <td>token</td>
-                     <td>string(UUID)</td>
-                     <td>各種APIへアクセスするためのトークン.</td>
-                  </tr>
-                  <tr>
-                     <td>issuerRole</td>
-                     <td>string</td>
-                     <td>各クライアントが利用者, 店舗もしくは管理者かを表す. <br> 利用者: &quot;user&quot;, 店舗: &quot;restaurant&quot;, 管理者: &quot;admin&quot; のいずれかである.</td>
-                  </tr>
-                  <tr>
-                     <td>expire</td>
-                     <td>int or string</td>
-                     <td>発行したトークンが失効する時間(UNIX timestamp形式, ミリ秒単位)</td>
-                  </tr>
-               </tbody>
-            </table>
-            <h4 id="ログイン認証失敗時のレスポンスメッセージ定義">ログイン(認証)失敗時のレスポンスメッセージ定義</h4>
-            <blockquote>
-               <p>レスポンスメッセージの例(失敗時)</p>
-            </blockquote>
-            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
-   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;no such user exists&quot;</span>
-   <span class="hljs-punctuation">}</span>
-<span class="hljs-punctuation">}</span></code></pre>
-            <table>
-               <thead>
-                  <tr>
-                     <th>返り値</th>
-                     <th>型</th>
-                     <th>説明</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>status</td>
-                     <td>string</td>
-                     <td>&quot;error&quot;</td>
-                  </tr>
-                  <tr>
-                     <td>reason</td>
-                     <td>string</td>
-                     <td>認証に失敗した理由を表す(後述).</td>
-                  </tr>
-               </tbody>
-            </table>
-            <p>認証失敗時には, 次のようなメッセージを返却する.<br></p>
-            <table>
-               <thead>
-                  <tr>
-                     <th>認証失敗理由</th>
-                     <th>メッセージ内容</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>DBにユーザ名が存在しない</td>
-                     <td>no such user exists</td>
-                  </tr>
-                  <tr>
-                     <td>パスワードが間違っている</td>
-                     <td>wrong password</td>
-                  </tr>
-                  <tr>
-                     <td>パラメータroleが間違っている</td>
-                     <td>invalid parameter(params.role at login request)</td>
-                  </tr>
-               </tbody>
-            </table>
-            <h2 id="ログアウトapilogout">ログアウトAPI(logout)</h2>
-            <p>ログアウトAPIでは, クライアントからの要求によりログアウト処理を行う. ログアウト処理では, 発行したトークンを即時に破棄する.</p>
-            <h3 id="ログアウトapiでのリクエストメッセージ定義">ログアウトAPIでのリクエストメッセージ定義</h3>
-            <blockquote>
-               <p>リクエストメッセージの例</p>
-            </blockquote>
-            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
-   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;logout&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span>
-   <span class="hljs-punctuation">}</span>
-<span class="hljs-punctuation">}</span></code></pre>
-            <table>
-               <thead>
-                  <tr>
-                     <th>パラメータ</th>
-                     <th>型</th>
-                     <th>説明</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>token</td>
-                     <td>string</td>
-                     <td>ログイン時に発行されたtoken</td>
-                  </tr>
-               </tbody>
-            </table>
-            <h3 id="ログアウトapiでのレスポンスメッセージ定義">ログアウトAPIでのレスポンスメッセージ定義</h3>
-            <h4 id="ログアウト成功時のレスポンスメッセージ定義">ログアウト成功時のレスポンスメッセージ定義</h4>
-            <blockquote>
-               <p>レスポンスメッセージの例(成功時)</p>
-            </blockquote>
-            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
-   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-punctuation">}</span>
-<span class="hljs-punctuation">}</span></code></pre>
-            <table>
-               <thead>
-                  <tr>
-                     <th>返り値</th>
-                     <th>型</th>
-                     <th>説明</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>status</td>
-                     <td>string</td>
-                     <td>&quot;success&quot;</td>
-                  </tr>
-               </tbody>
-            </table>
-            <h4 id="ログアウト失敗時のレスポンスメッセージ定義">ログアウト失敗時のレスポンスメッセージ定義</h4>
-            <blockquote>
-               <p>レスポンスメッセージの例(失敗時)</p>
-            </blockquote>
-            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
-   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;invalid token&quot;</span>
-   <span class="hljs-punctuation">}</span>
-<span class="hljs-punctuation">}</span></code></pre>
-            <table>
-               <thead>
-                  <tr>
-                     <th>返り値</th>
-                     <th>型</th>
-                     <th>説明</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>status</td>
-                     <td>string</td>
-                     <td>&quot;error&quot;</td>
-                  </tr>
-                  <tr>
-                     <td>reason</td>
-                     <td>string</td>
-                     <td>&quot;invalid token&quot;, ログアウト失敗理由は無効なトークンが送られた場合のみである.</td>
-                  </tr>
-               </tbody>
-            </table>
-            <h1 id="アカウント登録系api">アカウント登録系API</h1>
-            <p>アカウント登録APIでは, 登録したいアカウントの種類ごとに異なるAPIが使用される.</p>
+            <h1 id="アカウント登録系api">&gt; アカウント登録系API</h1>
+            <p>アカウント登録APIでは, 登録したいアカウントの種類ごとに異なるAPIが使用される. なお, アカウント登録系APIの実行には認証トークンは必要ない.</p>
             <h2 id="利用者アカウント登録apiregisteruser">利用者アカウント登録API(register/user)</h2>
-            <p>これは利用者アカウントを登録する際に使用するAPIである. このAPIを実行すると, 引数に含まれるユーザ名とパスワードで利用者アカウントが作成される.</p>
+            <p>これは利用者アカウントを登録する際に使用するAPIである. このAPIを実行すると, 引数に含まれるユーザ名とパスワードで利用者アカウントが作成される. ただし, ユーザ名(user_name)は一意でなければならない.</p>
             <h3 id="利用者アカウント登録apiでのリクエストメッセージ定義">利用者アカウント登録APIでのリクエストメッセージ定義</h3>
             <blockquote>
                <p>利用者アカウント登録API-リクエストメッセージの例</p>
@@ -386,7 +149,7 @@
    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2&quot;</span><span class="hljs-punctuation">,</span>
    <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;register/user&quot;</span><span class="hljs-punctuation">,</span>
    <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">&quot;userName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheUser&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;user_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheUser&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;yourPasswordMustBeString&quot;</span>
    <span class="hljs-punctuation">}</span>
 <span class="hljs-punctuation">}</span></code></pre>
@@ -475,9 +238,24 @@
                   </tr>
                </tbody>
             </table>
+            <p>また, このメソッドには共通エラーメッセージの他に次のエラーメッセージ(reason)が含まれる場合がある. これは次の表の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>user_nameが他のユーザと重複している</td>
+                     <td>&quot;user_name has already taken by other user&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
             <h2 id="店舗アカウント登録apiregisterrestaurant">店舗アカウント登録API(register/restaurant)</h2>
             <h3 id="店舗アカウント登録apiでのリクエストメッセージ定義">店舗アカウント登録APIでのリクエストメッセージ定義</h3>
-            <p>これは店舗アカウントを登録する際に使用するAPIである. このAPIを実行すると, 引数に含まれるユーザ名とパスワードで店舗アカウントが作成される.</p>
+            <p>これは店舗アカウントを登録する際に使用するAPIである. このAPIを実行すると, 引数に含まれるユーザ名とパスワードで店舗アカウントが作成される. ただし, ユーザ名(restaurant_name)は一意でなければならない.</p>
             <blockquote>
                <p>店舗アカウント登録API-リクエストメッセージの例</p>
             </blockquote>
@@ -486,7 +264,7 @@
    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;3&quot;</span><span class="hljs-punctuation">,</span>
    <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;register/restaurant&quot;</span><span class="hljs-punctuation">,</span>
    <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">&quot;userName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheRestaurant&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;restaurant_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheRestaurant&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myPasswordIsWeak&quot;</span>
    <span class="hljs-punctuation">}</span>
 <span class="hljs-punctuation">}</span></code></pre>
@@ -514,7 +292,7 @@
             </table>
             <h3 id="店舗アカウント登録成功時のレスポンスメッセージ定義">店舗アカウント登録成功時のレスポンスメッセージ定義</h3>
             <blockquote>
-               <p>利用者アカウント登録API-レスポンスメッセージの例(成功時)</p>
+               <p>店舗アカウント登録API-レスポンスメッセージの例(成功時)</p>
             </blockquote>
             <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
    <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
@@ -542,7 +320,7 @@
             </table>
             <h3 id="店舗アカウント登録失敗時のレスポンスメッセージ定義">店舗アカウント登録失敗時のレスポンスメッセージ定義</h3>
             <blockquote>
-               <p>利用者アカウント登録API-レスポンスメッセージの例(失敗時)</p>
+               <p>店舗アカウント登録API-レスポンスメッセージの例(失敗時)</p>
             </blockquote>
             <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
    <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
@@ -574,29 +352,879 @@
                   </tr>
                </tbody>
             </table>
-            <h2 id="管理者アカウント登録apiregistreadmin">管理者アカウント登録API(registre/admin)</h2>
-            <p>これは管理者アカウントを登録する際に使用するAPIである. このAPIを実行すると, 引数に含まれるユーザ名とパスワードで管理者アカウントが作成される.</p>
-            <h1 id="情報参照系api">情報参照系API</h1>
-            <h2 id="利用者アカウント情報取得apigetinfouser">利用者アカウント情報取得API(getInfo/user)</h2>
-            <h3 id="利用者予約情報取得apigetinfouserreservations">利用者予約情報取得API(getInfo/user/reservations)</h3>
-            <h2 id="店舗アカウント情報取得getinforestaurantwhole">店舗アカウント情報取得(getInfo/restaurant/whole)</h2>
-            <h3 id="店舗基本情報取得apigetinforestaurantbasic">店舗基本情報取得API(getInfo/restaurant/basic)</h3>
-            <h3 id="店舗座席情報取得apigetinforestaurantseats">店舗座席情報取得API(getInfo/restaurant/seats)</h3>
-            <h3 id="店舗座席利用状況取得apigetinforestaurantseatsavailability">店舗座席利用状況取得API(getInfo/restaurant/seatsAvailability)</h3>
-            <h3 id="店舗予約情報取得apigetinforestaurantreservations">店舗予約情報取得API(getInfo/restaurant/reservations)</h3>
-            <h3 id="店舗休日情報取得apigetinforestaurantholidays">店舗休日情報取得API(getInfo/restaurant/holidays)</h3>
-            <h3 id="店舗食べログ情報取得apigetinforestaurantevaluations">店舗食べログ情報取得API(getInfo/restaurant/evaluations)</h3>
-            <h2 id="管理者アカウント情報取得apigetinfoadmin">管理者アカウント情報取得API(getInfo/admin)</h2>
-            <h1 id="情報更新系api">情報更新系API</h1>
-            <h2 id="利用者アカウント情報更新apiupdateinfouser">利用者アカウント情報更新API(updateInfo/user)</h2>
+            <p>また, このメソッドには共通エラーメッセージの他に次のエラーメッセージ(reason)が含まれる場合がある. これは次の表の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>restaurant_nameが他のユーザと重複している</td>
+                     <td>&quot;restaurant_name has already taken by other user&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="管理者アカウント登録apiregisteradmin">管理者アカウント登録API(register/admin)</h2>
+            <p>これは管理者アカウントを登録する際に使用するAPIである. このAPIを実行すると, 引数に含まれるユーザ名とパスワードで管理者アカウントが作成される. ただし, ユーザ名(admin_name)は一意でなければならない.</p>
+            <h3 id="管理者アカウント登録apiでのリクエストメッセージ定義">管理者アカウント登録APIでのリクエストメッセージ定義</h3>
+            <p>これは管理者アカウントを登録する際に使用するAPIである. このAPIを実行すると, 引数に含まれるユーザ名とパスワードで管理者アカウントが作成される. なお, 管理者アカウントの作成はリクエストにあるadminPasswordを知っている者のみが可能である.</p>
+            <blockquote>
+               <p>店舗アカウント登録API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;4&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;register/admin&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;admin_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheAdmin&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myPasswordIsWeak&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;adminPassword&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;SECRET&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>管理者アカウント登録APIへのリクエストメッセージには次のパラメータが含まれていなければならない.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>adminName</td>
+                     <td>string</td>
+                     <td>管理者名</td>
+                  </tr>
+                  <tr>
+                     <td>password</td>
+                     <td>string</td>
+                     <td>パスワード</td>
+                  </tr>
+                  <tr>
+                     <td>adminPassword</td>
+                     <td>string</td>
+                     <td>管理者アカウントを作成するためのパスワード</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="管理者アカウント登録成功時のレスポンスメッセージ定義">管理者アカウント登録成功時のレスポンスメッセージ定義</h3>
+            <blockquote>
+               <p>管理者アカウント登録API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;4&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>リクエストが正常に処理され, 成功した場合は次のようなレスポンスが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="管理者アカウント登録失敗時のレスポンスメッセージ定義">管理者アカウント登録失敗時のレスポンスメッセージ定義</h3>
+            <blockquote>
+               <p>管理者アカウント登録API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;4&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;You don&#x27;t have permission to create admin account. adminPassword is wrong.&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>リクエストの処理に失敗した場合は次のようなレスポンスが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>エラーメッセージ</td>
+                  </tr>
+                  <tr>
+                     <td><br></td>
+                     <td></td>
+                     <td></td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>このメソッドには共通エラーメッセージの他に次のエラーメッセージ(reason)が含まれる場合がある. これは次の表の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>adminPasswordが間違っている</td>
+                     <td>&quot;You don&#39;t have permission to create admin account. adminPassword is wrong.&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>admin_nameが他のユーザと重複している</td>
+                     <td>&quot;admin_name has already taken by other user&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h1 id="ログインログアウト系api">&gt; ログイン/ログアウト系API</h1>
+            <p>ログイン/ログアウトAPIでは, クライアントからの要求により, ログイン処理とログアウト処理を行う. なお, ログイン処理では, 各種APIの実行に必要なトークンを発行するため, これを必ずクライアント側で保持しておかなければならない.</p>
+            <h2 id="ログインapilogin">ログインAPI(login)</h2>
+            <p>ログインAPIでは, クライアントからの要求によりサーバ側で認証を行い, 以降に記述する各種APIにアクセスするためのトークンを発行する. よって, このAPIはクライアントが起動してからサーバに通信を行う時, 一番最初に実行されなければならない.</p>
+            <h3 id="ログインapiでのリクエストメッセージ定義">ログインAPIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>ログインAPI-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;login&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;userName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheUser&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myPasswordIsPASSWORD&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>userName</td>
+                     <td>string</td>
+                     <td>ユーザ名</td>
+                  </tr>
+                  <tr>
+                     <td>password</td>
+                     <td>string</td>
+                     <td>パスワード</td>
+                  </tr>
+                  <tr>
+                     <td>role</td>
+                     <td>string</td>
+                     <td>各クライアントが利用者, 店舗もしくは管理者かを表す. <br> 利用者: &quot;user&quot;, 店舗: &quot;restaurant&quot;, 管理者: &quot;admin&quot; のいずれかである必要がある.</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="ログインapiでのレスポンスメッセージ定義">ログインAPIでのレスポンスメッセージ定義</h3>
+            <h4 id="ログイン認証成功時のレスポンスメッセージ定義">ログイン(認証)成功時のレスポンスメッセージ定義</h4>
+            <blockquote>
+               <p>ログインAPI-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;issuerRole&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;expire&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1639406450754&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>token</td>
+                     <td>string(UUID)</td>
+                     <td>各種APIへアクセスするためのトークン.</td>
+                  </tr>
+                  <tr>
+                     <td>issuerRole</td>
+                     <td>string</td>
+                     <td>各クライアントが利用者, 店舗もしくは管理者かを表す. <br> 利用者: &quot;user&quot;, 店舗: &quot;restaurant&quot;, 管理者: &quot;admin&quot; のいずれかである.</td>
+                  </tr>
+                  <tr>
+                     <td>expire</td>
+                     <td>int or string</td>
+                     <td>発行したトークンが失効する時間(UNIX timestamp形式, ミリ秒単位)</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h4 id="ログイン認証失敗時のレスポンスメッセージ定義">ログイン(認証)失敗時のレスポンスメッセージ定義</h4>
+            <blockquote>
+               <p>ログインAPI-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;no such user exists&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>認証に失敗した理由を表す(後述).</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>認証失敗時には, 次のようなメッセージを返却する.<br></p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>認証失敗理由</th>
+                     <th>メッセージ内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>DBにユーザ名が存在しない</td>
+                     <td>no such user exists</td>
+                  </tr>
+                  <tr>
+                     <td>パスワードが間違っている</td>
+                     <td>wrong password</td>
+                  </tr>
+                  <tr>
+                     <td>パラメータroleが間違っている</td>
+                     <td>invalid parameter(params.role at login request)</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="ログアウトapilogout">ログアウトAPI(logout)</h2>
+            <p>ログアウトAPIでは, クライアントからの要求によりログアウト処理を行う. ログアウト処理では, 発行したトークンを即時に破棄する. また, トークンが見つからない場合, ログアウトAPIはエラーメッセージを返却するが, トークンは一定時間で破棄されるのでクライアント側ではそのままログアウト処理を継続しても構わない.</p>
+            <h3 id="ログアウトapiでのリクエストメッセージ定義">ログアウトAPIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>ログアウトAPI-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;logout&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="ログアウトapiでのレスポンスメッセージ定義">ログアウトAPIでのレスポンスメッセージ定義</h3>
+            <h4 id="ログアウト成功時のレスポンスメッセージ定義">ログアウト成功時のレスポンスメッセージ定義</h4>
+            <blockquote>
+               <p>ログアウトAPI-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h4 id="ログアウト失敗時のレスポンスメッセージ定義">ログアウト失敗時のレスポンスメッセージ定義</h4>
+            <blockquote>
+               <p>ログアウトAPI-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;invalid token&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>&quot;invalid token&quot;, ログアウト失敗理由は無効なトークンが送られた場合のみである.</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h1 id="情報参照系api">&gt; 情報参照系API</h1>
+            <p>情報参照系APIは各アカウントの情報等を取得することができる. ただし, 情報参照系APIのリクエストメッセージのパラメータには認証トークンが必須であり, この認証トークンの発行者によってレスポンスメッセージが異なる.</p>
+            <h2 id="利用者アカウント情報取得api">利用者アカウント情報取得API</h2>
+            <p>これは利用者アカウント情報を取得するAPIであり, 利用者アカウント基本情報取得APIと利用者予約情報取得API, 利用者食べログ情報取得APIの3種類が提供される.</p>
+            <h2 id="利用者アカウント基本情報取得apigetinfouserbasic">&gt; 利用者アカウント基本情報取得API(getInfo/user/basic)</h2>
+            <p>利用者アカウント基本情報取得APIを実行すると, ユーザのアカウント情報が返却される. また, 利用者アカウント基本情報取得APIでは, IDもしくは利用者アカウント名によって検索することが可能である. </p>
+            <h3 id="利用者アカウント基本情報取得apiでのリクエストメッセージ定義">利用者アカウント基本情報取得APIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>利用者アカウント基本情報取得API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;5&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;getInfo/user/basic&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;searchBy&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user_id&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456789&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>利用者アカウント基本情報取得APIにおけるリクエストメッセージでは, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>searchBy</td>
+                     <td>string</td>
+                     <td>検索方法を表す.<br> 利用者アカウントIDによる検索 -&gt; &quot;user_id&quot;<br> 利用者アカウント名による検索 -&gt; &quot;user_name&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>user_id</td>
+                     <td>string</td>
+                     <td>searchByが&quot;user_id&quot;の場合に必須. 情報を取得したい利用者アカウントのIDを表す.</td>
+                  </tr>
+                  <tr>
+                     <td>user_name</td>
+                     <td>string</td>
+                     <td>searchByが&quot;user_name&quot;の場合に必須. 情報を取得したい利用者アカウントの名前を表す.</td>
+                  </tr>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="利用者アカウント基本情報取得apiでのレスポンスメッセージ定義成功時">利用者アカウント基本情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>利用者アカウント基本情報取得API-レスポンスメッセージの例(成功時, トークン発行者がユーザ若しくは管理者の場合)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;5&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456789&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;user_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheUser&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;age&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;25&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;gender&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;male&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;email_addr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;example@example.com&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;address&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;高知県香美市土佐山田町宮ノ口185&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;num_vicious_cancels&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;0&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>利用者アカウント基本情報取得APIの実行成功時には次のようなメッセージが返却される.<br> ただし, 次の表4列目の通り, 店舗アカウントがこのAPIを実行した時にはいくつかの項目が返却されない.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                     <th>含まれる条件</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                     <td>トークン発行者が利用者本人または店舗, 管理者の時</td>
+                  </tr>
+                  <tr>
+                     <td>user_id</td>
+                     <td>string</td>
+                     <td>利用者アカウントのID</td>
+                     <td>トークン発行者が利用者本人または店舗, 管理者の時</td>
+                  </tr>
+                  <tr>
+                     <td>user_name</td>
+                     <td>string</td>
+                     <td>利用者の名前</td>
+                     <td>トークン発行者が利用者本人または店舗, 管理者の時</td>
+                  </tr>
+                  <tr>
+                     <td>age</td>
+                     <td>string</td>
+                     <td>利用者の年齢</td>
+                     <td>トークン発行者が利用者本人または店舗, 管理者の時</td>
+                  </tr>
+                  <tr>
+                     <td>gender</td>
+                     <td>string</td>
+                     <td>利用者の性別</td>
+                     <td>トークン発行者が利用者本人または店舗, 管理者の時</td>
+                  </tr>
+                  <tr>
+                     <td>email_addr</td>
+                     <td>string</td>
+                     <td>利用者のメールアドレス</td>
+                     <td>トークン発行者が利用者本人または管理者の時</td>
+                  </tr>
+                  <tr>
+                     <td>address</td>
+                     <td>string</td>
+                     <td>利用者の住所</td>
+                     <td>トークン発行者が利用者本人または管理者の時</td>
+                  </tr>
+                  <tr>
+                     <td>num_vicious_cancels</td>
+                     <td>string</td>
+                     <td>利用者の悪質な予約キャンセル数</td>
+                     <td>トークン発行者が利用者本人または店舗, 管理者の時</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="利用者アカウント基本情報取得apiでのレスポンスメッセージ定義失敗時">利用者アカウント基本情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>利用者アカウント基本情報取得API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;5&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;no user matched&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>利用者アカウント基本情報取得APIの実行失敗時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                     <th>含まれる条件</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                     <td>トークン発行者が利用者本人または店舗, 管理者の時</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行が失敗した理由</td>
+                     <td>トークン発行者が利用者本人または店舗, 管理者の時</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>パラメータsearchByがメッセージに含まれていない</td>
+                     <td>&quot;param.searchBy is not found&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>パラメータsearchByが不正</td>
+                     <td>&quot;params.searchBy is invalid. this should be &quot;user_id&quot; or &quot;user_name&quot; &quot;</td>
+                  </tr>
+                  <tr>
+                     <td>パラメータsearchByが&quot;user_id&quot;であるが, パラメータに&quot;user_id&quot;が含まれていない</td>
+                     <td>&quot;you specified &quot;user_id&quot; in params.searchBy but there are not key(&quot;user_id&quot;)&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>パラメータsearchByが&quot;user_name&quot;であるが, パラメータに&quot;user_name&quot;が含まれていない</td>
+                     <td>&quot;you specified &quot;user_name&quot; in params.searchBy but there are not key(&quot;user_name&quot;)&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>利用者アカウントが見つからなかった</td>
+                     <td>&quot;no user matched&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="利用者予約情報取得apigetinfouserreservations">&gt; 利用者予約情報取得API(getInfo/user/reservations)</h2>
+            <p>利用者予約情報取得APIを実行すると, ユーザが保持している有効な予約情報の一覧を取得することができる. なお, このAPIは店舗アカウントからは実行できない.</p>
+            <h3 id="利用者予約情報取得apiでのリクエストメッセージ定義">利用者予約情報取得APIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>利用者予約情報取得API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;6&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;getInfo/user/reservations&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;searchBy&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user_name&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;user_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;YouAreTheUser&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>利用者予約情報取得APIにおけるリクエストメッセージでは, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>searchBy</td>
+                     <td>string</td>
+                     <td>検索方法を表す.<br> 利用者アカウントIDによる検索 -&gt; &quot;user_id&quot;<br> 利用者アカウント名による検索 -&gt; &quot;user_name&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>user_id</td>
+                     <td>string</td>
+                     <td>searchByが&quot;user_id&quot;の場合に必須. 情報を取得したい利用者アカウントのIDを表す.</td>
+                  </tr>
+                  <tr>
+                     <td>user_name</td>
+                     <td>string</td>
+                     <td>searchByが&quot;user_name&quot;の場合に必須. 情報を取得したい利用者アカウントの名前を表す.</td>
+                  </tr>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="利用者予約情報取得apiでのレスポンスメッセージ定義成功時">利用者予約情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>利用者アカウント基本情報取得API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;6&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reservations&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;reservation_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;5548&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456789&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;55795132&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;seat_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;7894561230&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;time_start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1639494000000&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;time_end&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1639497600000&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;num_people&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;4&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;is_expired&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span>
+         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;reservation_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;5678&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456789&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;55795132&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;seat_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;7894561237&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;time_start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1639594000000&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;time_end&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1639597600000&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;num_people&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;is_expired&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span>
+         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;reservation_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;5897&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1234567114&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;55795132&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;seat_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;7894467982&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;time_start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1639494000000&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;time_end&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1639497600000&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;num_people&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;4&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;is_expired&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span>
+         <span class="hljs-punctuation">}</span>
+      <span class="hljs-punctuation">]</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>利用者予約情報取得APIの実行成功時には次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reservations</td>
+                     <td>JSONObject[]</td>
+                     <td>JSONオブジェクトの配列</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; reservation_id</td>
+                     <td>string</td>
+                     <td>予約ID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; restaurant_id</td>
+                     <td>string</td>
+                     <td>予約したレストランのID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; user_id</td>
+                     <td>string</td>
+                     <td>常に検索したユーザのIDが入る</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; seat_id</td>
+                     <td>string</td>
+                     <td>予約した席のID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; time_start</td>
+                     <td>string</td>
+                     <td>予約した開始時間</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; time_end</td>
+                     <td>string</td>
+                     <td>予約した終了時間</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; num_people</td>
+                     <td>string</td>
+                     <td>一緒に行く人数</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; is_expired</td>
+                     <td>boolean</td>
+                     <td>予約が失効しているかどうか, これは常にfalse</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="利用者予約情報取得apiでのレスポンスメッセージ定義失敗時">利用者予約情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>利用者予約情報取得API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;6&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;The user has no reservation&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>利用者予約情報取得APIの実行失敗時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行が失敗した理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>パラメータsearchByがメッセージに含まれていない</td>
+                     <td>&quot;param.searchBy is not found&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>パラメータsearchByが不正</td>
+                     <td>&quot;params.searchBy is invalid. this should be &quot;user_id&quot; or &quot;user_name&quot;&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>パラメータsearchByが&quot;user_id&quot;であるが, パラメータに&quot;user_id&quot;が含まれていない</td>
+                     <td>&quot;you specified &quot;user_id&quot; in params.searchBy but there are not key(&quot;user_id&quot;)&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>パラメータsearchByが&quot;user_name&quot;であるが, パラメータに&quot;user_name&quot;が含まれていない</td>
+                     <td>&quot;you specified &quot;user_name&quot; in params.searchBy but there are not key(&quot;user_name&quot;)&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>利用者アカウントが見つからなかった</td>
+                     <td>&quot;no user matched&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>利用者アカウントは予約情報を持っていない</td>
+                     <td>&quot;The user has no reservation&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="利用者食べログ情報取得apigetinfouserevaluations">&gt; 利用者食べログ情報取得API(getInfo/user/evaluations)</h2>
+            <h3 id="利用者食べログ情報取得apiでのリクエストメッセージ定義">利用者食べログ情報取得APIでのリクエストメッセージ定義</h3>
+            <h3 id="利用者食べログ情報取得apiでのレスポンスメッセージ定義成功時">利用者食べログ情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="利用者食べログ情報取得apiでのレスポンスメッセージ定義失敗時">利用者食べログ情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h2 id="店舗アカウント情報取得api">店舗アカウント情報取得API</h2>
+            <h2 id="店舗基本情報取得apigetinforestaurantbasic">&gt; 店舗基本情報取得API(getInfo/restaurant/basic)</h2>
+            <h3 id="店舗基本情報取得apiでのリクエストメッセージ定義">店舗基本情報取得APIでのリクエストメッセージ定義</h3>
+            <h3 id="店舗基本情報取得apiでのレスポンスメッセージ定義成功時">店舗基本情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="店舗基本情報取得apiでのレスポンスメッセージ定義失敗時">店舗基本情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h2 id="店舗座席情報取得apigetinforestaurantseats">&gt; 店舗座席情報取得API(getInfo/restaurant/seats)</h2>
+            <h3 id="店舗座席情報取得apiでのリクエストメッセージ定義">店舗座席情報取得APIでのリクエストメッセージ定義</h3>
+            <h3 id="店舗座席情報取得apiでのレスポンスメッセージ定義成功時">店舗座席情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="店舗座席情報取得apiでのレスポンスメッセージ定義失敗時">店舗座席情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h2 id="店舗予約情報取得apigetinforestaurantreservations">&gt; 店舗予約情報取得API(getInfo/restaurant/reservations)</h2>
+            <h3 id="店舗予約情報取得apiでのリクエストメッセージ定義">店舗予約情報取得APIでのリクエストメッセージ定義</h3>
+            <h3 id="店舗予約情報取得apiでのレスポンスメッセージ定義成功時">店舗予約情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="店舗予約情報取得apiでのレスポンスメッセージ定義失敗時">店舗予約情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h2 id="店舗休日情報取得apigetinforestaurantholidays">&gt; 店舗休日情報取得API(getInfo/restaurant/holidays)</h2>
+            <h3 id="店舗休日情報取得apiでのリクエストメッセージ定義">店舗休日情報取得APIでのリクエストメッセージ定義</h3>
+            <h3 id="店舗休日情報取得apiでのレスポンスメッセージ定義成功時">店舗休日情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="店舗休日情報取得apiでのレスポンスメッセージ定義失敗時">店舗休日情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h2 id="店舗食べログ情報取得apigetinforestaurantevaluations">&gt; 店舗食べログ情報取得API(getInfo/restaurant/evaluations)</h2>
+            <h3 id="店舗食べログ情報取得apiでのリクエストメッセージ定義">店舗食べログ情報取得APIでのリクエストメッセージ定義</h3>
+            <h3 id="店舗食べログ情報取得apiでのレスポンスメッセージ定義成功時">店舗食べログ情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="店舗食べログ情報取得apiでのレスポンスメッセージ定義失敗時">店舗食べログ情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h2 id="管理者アカウント情報取得api">管理者アカウント情報取得API</h2>
+            <h2 id="管理者アカウント基本情報取得apigetinfoadminbasic">&gt; 管理者アカウント基本情報取得API(getInfo/admin/basic)</h2>
+            <h3 id="管理者アカウント基本情報取得apiでのリクエストメッセージ定義">管理者アカウント基本情報取得APIでのリクエストメッセージ定義</h3>
+            <h3 id="管理者アカウント基本情報取得apiでのレスポンスメッセージ定義成功時">管理者アカウント基本情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="管理者アカウント基本情報取得apiでのレスポンスメッセージ定義失敗時">管理者アカウント基本情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h1 id="情報更新系api">&gt; 情報更新系API</h1>
+            <h2 id="利用者アカウント情報更新api">利用者アカウント情報更新API</h2>
+            <h2 id="利用者アカウント基本情報更新apiupdateinfouserbasic">&gt; 利用者アカウント基本情報更新API(updateInfo/user/basic)</h2>
+            <h3 id="利用者アカウント基本情報更新apiでのリクエストメッセージ定義">利用者アカウント基本情報更新APIでのリクエストメッセージ定義</h3>
+            <h3 id="利用者アカウント基本情報更新apiでのレスポンスメッセージ定義成功時">利用者アカウント基本情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="利用者アカウント基本情報更新apiでのレスポンスメッセージ定義失敗時">利用者アカウント基本情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h2 id="利用者予約情報登録削除apiupdateinfouserreservation">&gt; 利用者予約情報登録/削除API(updateInfo/user/reservation)</h2>
+            <h3 id="利用者予約情報登録削除apiでのリクエストメッセージ定義">利用者予約情報登録/削除APIでのリクエストメッセージ定義</h3>
+            <h3 id="利用者予約情報登録削除apiでのレスポンスメッセージ定義成功時">利用者予約情報登録/削除APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="利用者予約情報登録削除apiでのレスポンスメッセージ定義失敗時">利用者予約情報登録/削除APIでのレスポンスメッセージ定義(失敗時)</h3>
             <h2 id="店舗アカウント情報更新api">店舗アカウント情報更新API</h2>
-            <h3 id="店舗アカウント基本情報更新apiupdateinforestaurantbasic">店舗アカウント基本情報更新API(updateInfo/restaurant/basic)</h3>
-            <h3 id="店舗座席情報更新apiupdateinforestaurantseats">店舗座席情報更新API(updateInfo/restaurant/seats)</h3>
-            <h3 id="店舗座席利用状況更新apiupdateinforestaurantseatsavailability">店舗座席利用状況更新API(updateInfo/restaurant/seatsAvailability)</h3>
-            <h3 id="店舗休日情報更新apiupdateinforestaurantholidays">店舗休日情報更新API(updateInfo/restaurant/holidays)</h3>
-            <h2 id="管理者アカウント情報更新apiupdateinfoadmin">管理者アカウント情報更新API(updateInfo/admin)</h2>
-            <h2 id="予約情報更新apiupdateinforeservations">予約情報更新API(updateInfo/reservations)</h2>
-            <h2 id="食べログ情報更新apiupdateinfoevaluations">食べログ情報更新API(updateInfo/evaluations)</h2>
+            <h2 id="店舗アカウント基本情報更新apiupdateinforestaurantbasic">&gt; 店舗アカウント基本情報更新API(updateInfo/restaurant/basic)</h2>
+            <h3 id="店舗アカウント基本情報更新apiでのリクエストメッセージ定義">店舗アカウント基本情報更新APIでのリクエストメッセージ定義</h3>
+            <h3 id="店舗アカウント基本情報更新apiでのレスポンスメッセージ定義成功時">店舗アカウント基本情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="店舗アカウント基本情報更新apiでのレスポンスメッセージ定義失敗時">店舗アカウント基本情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h2 id="店舗座席情報更新apiupdateinforestaurantseats">&gt; 店舗座席情報更新API(updateInfo/restaurant/seats)</h2>
+            <h3 id="店舗座席情報更新apiでのリクエストメッセージ定義">店舗座席情報更新APIでのリクエストメッセージ定義</h3>
+            <h3 id="店舗座席情報更新apiでのレスポンスメッセージ定義成功時">店舗座席情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="店舗座席情報更新apiでのレスポンスメッセージ定義失敗時">店舗座席情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h2 id="店舗座席利用状況更新apiupdateinforestaurantseatsavailability">&gt; 店舗座席利用状況更新API(updateInfo/restaurant/seatsAvailability)</h2>
+            <h3 id="店舗座席利用状況更新apiでのリクエストメッセージ定義">店舗座席利用状況更新APIでのリクエストメッセージ定義</h3>
+            <h3 id="店舗座席利用状況更新apiでのレスポンスメッセージ定義成功時">店舗座席利用状況更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="店舗座席利用状況更新apiでのレスポンスメッセージ定義失敗時">店舗座席利用状況更新APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h2 id="店舗予約情報削除apiupdateinforestaurantdeletereservations">&gt; 店舗予約情報削除API(updateInfo/restaurant/deleteReservations)</h2>
+            <h3 id="店舗予約情報削除apiでのリクエストメッセージ定義">店舗予約情報削除APIでのリクエストメッセージ定義</h3>
+            <h3 id="店舗予約情報削除apiでのレスポンスメッセージ定義成功時">店舗予約情報削除APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="店舗予約情報削除apiでのレスポンスメッセージ定義失敗時">店舗予約情報削除APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h2 id="店舗食べログ情報削除apiupdateinforestaurantdeleteevaluations">&gt; 店舗食べログ情報削除API(updateInfo/restaurant/deleteEvaluations)</h2>
+            <h3 id="店舗食べログ情報削除apiでのリクエストメッセージ定義">店舗食べログ情報削除APIでのリクエストメッセージ定義</h3>
+            <h3 id="店舗食べログ情報削除apiでのレスポンスメッセージ定義成功時">店舗食べログ情報削除APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="店舗食べログ情報削除apiでのレスポンスメッセージ定義失敗時">店舗食べログ情報削除APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h2 id="店舗休日情報更新apiupdateinforestaurantholidays">&gt; 店舗休日情報更新API(updateInfo/restaurant/holidays)</h2>
+            <h3 id="店舗休日情報更新apiでのリクエストメッセージ定義">店舗休日情報更新APIでのリクエストメッセージ定義</h3>
+            <h3 id="店舗休日情報更新apiでのレスポンスメッセージ定義成功時">店舗休日情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="店舗休日情報更新apiでのレスポンスメッセージ定義失敗時">店舗休日情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h2 id="管理者アカウント情報更新api">管理者アカウント情報更新API</h2>
+            <h2 id="管理者アカウント基本情報更新apiupdateinfoadminbasic">&gt; 管理者アカウント基本情報更新API(updateInfo/admin/basic)</h2>
+            <h3 id="管理者アカウント基本情報更新apiでのリクエストメッセージ定義">管理者アカウント基本情報更新APIでのリクエストメッセージ定義</h3>
+            <h3 id="管理者アカウント基本情報更新apiでのレスポンスメッセージ定義成功時">管理者アカウント基本情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="管理者アカウント基本情報更新apiでのレスポンスメッセージ定義失敗時">管理者アカウント基本情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
             <h1 id="以下サンプル-書き終わったら消します">以下サンプル, 書き終わったら消します</h1>
             <h1 id="authentication">Authentication</h1>
             <blockquote>
@@ -718,7 +1346,7 @@ api.kittens.get(<span class="hljs-number">2</span>)</code></pre><pre class="high
                </tbody>
             </table>
             <h1 id="common-errors">Common errors</h1>
-            <p>このAPIでは共通エラーとして次のようなメッセージが返却される. 共通エラーでのreasonは大体がHTTPのステータスコードに似るように設計しているが, 一部拡張されている.</p>
+            <p>このAPIでは共通エラーとして次のようなメッセージが返却される. 共通エラーでのreasonはHTTPのステータスコードに準拠するように設計しているが, 一部拡張されている.</p>
             <pre class="highlight bash"><code></code></pre>
             <blockquote>
                <p>共通エラーメッセージの例</p>
@@ -745,10 +1373,6 @@ api.kittens.get(<span class="hljs-number">2</span>)</code></pre><pre class="high
                   </tr>
                   <tr>
                      <td>401</td>
-                     <td>No token included -- トークンによる認証が必要なAPIにおいてパラメータにトークンが含まれていない</td>
-                  </tr>
-                  <tr>
-                     <td>402</td>
                      <td>Unauthorized -- トークンによる認証が必要なAPIにおいて認証が失敗した.</td>
                   </tr>
                   <tr>
@@ -761,11 +1385,15 @@ api.kittens.get(<span class="hljs-number">2</span>)</code></pre><pre class="high
                   </tr>
                   <tr>
                      <td>418</td>
-                     <td>I&#39;m a teapot -- pouring coffee into teapot is unacceptable. stop doing it.</td>
+                     <td>I&#39;m a teapot -- pouring coffee with teapot is unacceptable. respect teapot and the humanity.</td>
                   </tr>
                   <tr>
                      <td>429</td>
                      <td>Too Many Requests -- リクエストが多すぎる.</td>
+                  </tr>
+                  <tr>
+                     <td>452</td>
+                     <td>No token included -- トークンによる認証が必要なAPIにおいてパラメータにトークンが含まれていない</td>
                   </tr>
                   <tr>
                      <td>500</td>
