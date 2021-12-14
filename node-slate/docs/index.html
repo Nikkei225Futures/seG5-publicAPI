@@ -476,7 +476,104 @@
                </tbody>
             </table>
             <h2 id="店舗アカウント登録apiregisterrestaurant">店舗アカウント登録API(register/restaurant)</h2>
+            <h3 id="店舗アカウント登録apiでのリクエストメッセージ定義">店舗アカウント登録APIでのリクエストメッセージ定義</h3>
             <p>これは店舗アカウントを登録する際に使用するAPIである. このAPIを実行すると, 引数に含まれるユーザ名とパスワードで店舗アカウントが作成される.</p>
+            <blockquote>
+               <p>店舗アカウント登録API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;3&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;register/restaurant&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;userName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheRestaurant&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myPasswordIsWeak&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗アカウント登録APIへのリクエストメッセージには次のパラメータが含まれていなければならない.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>restaurantName</td>
+                     <td>string</td>
+                     <td>店舗名</td>
+                  </tr>
+                  <tr>
+                     <td>password</td>
+                     <td>string</td>
+                     <td>パスワード</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗アカウント登録成功時のレスポンスメッセージ定義">店舗アカウント登録成功時のレスポンスメッセージ定義</h3>
+            <blockquote>
+               <p>利用者アカウント登録API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;3&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>リクエストが正常に処理され, 成功した場合は次のようなレスポンスが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗アカウント登録失敗時のレスポンスメッセージ定義">店舗アカウント登録失敗時のレスポンスメッセージ定義</h3>
+            <blockquote>
+               <p>利用者アカウント登録API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;3&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;418&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>リクエストの処理に失敗した場合は次のようなレスポンスが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>エラーメッセージ</td>
+                  </tr>
+               </tbody>
+            </table>
             <h2 id="管理者アカウント登録apiregistreadmin">管理者アカウント登録API(registre/admin)</h2>
             <p>これは管理者アカウントを登録する際に使用するAPIである. このAPIを実行すると, 引数に含まれるユーザ名とパスワードで管理者アカウントが作成される.</p>
             <h1 id="情報参照系api">情報参照系API</h1>
