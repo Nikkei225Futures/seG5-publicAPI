@@ -484,7 +484,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 
 | 返り値 | 型 | 説明 | 含まれる条件 |
 | --------- | --- | --- | ---- |
-| status | string | "success" | トークン発行者が利用者本人または店舗, 管理者の時 |
+| status | string | "error" | トークン発行者が利用者本人または店舗, 管理者の時 |
 | reason | string | 実行が失敗した理由 | トークン発行者が利用者本人または店舗, 管理者の時 |
 
 実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.
@@ -497,7 +497,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 | 利用者アカウントが見つからなかった | "no user matched" |
 
 ## > 利用者予約情報取得API(getInfo/user/reservations)
-利用者予約情報取得APIを実行すると, ユーザが保持している有効な予約情報の一覧を取得することができる. なお, このAPIは店舗アカウントからは実行できない.
+利用者予約情報取得APIを実行すると, ユーザが保持している有効な予約情報の一覧を取得することができる. なお, このAPIは利用者本人もしくは管理者のみしか実行できない. それ以外が実行した場合は403エラーが返却される.
 ### 利用者予約情報取得APIでのリクエストメッセージ定義
 > 利用者予約情報取得API-リクエストメッセージの例
 ```json
@@ -506,8 +506,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
    "id": "6",
    "method": "getInfo/user/reservations",
    "params": {
-      "searchBy": "user_name",
-      "user_name": "YouAreTheUser",
+      "user_id": "YouAreTheUser",
       "token": "634ba39e-bf6f-93c5-f9dd-f1597c0683b0"
    }
 }
@@ -515,9 +514,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 利用者予約情報取得APIにおけるリクエストメッセージでは, 次のパラメータが含まれている必要がある.
 | パラメータ | 型 | 説明 |
 | --------- | --- | --- |
-| searchBy | string | 検索方法を表す.<br> 利用者アカウントIDによる検索 -> "user_id"<br> 利用者アカウント名による検索 -> "user_name" |
-| user_id | string | searchByが"user_id"の場合に必須. 情報を取得したい利用者アカウントのIDを表す. |
-| user_name | string | searchByが"user_name"の場合に必須. 情報を取得したい利用者アカウントの名前を表す. |
+| user_id | string | 情報を取得したい利用者アカウントのIDを表す. |
 | token | string | ログイン時に発行されたtoken |
 
 ### 利用者予約情報取得APIでのレスポンスメッセージ定義(成功時)
@@ -593,50 +590,230 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 
 | 返り値 | 型 | 説明 |
 | --------- | --- | --- |
+| status | string | "error" |
+| reason | string | 実行が失敗した理由 |
+
+実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.
+| 失敗理由 | reasonの内容 |
+|--------|------|
+| 利用者アカウントが見つからなかった | "no user matched" |
+| 利用者アカウントは予約情報を持っていない | "The user has no reservation" |
+
+
+## > 利用者食べログ情報取得API(getInfo/user/evaluations)
+利用者食べログ情報取得APIを実行すると, 利用者が過去に書き込んだ食べログ情報の全てを取得することができる.
+なお, このAPIが実行できるのは利用者本人もしくは管理者のみである. それ以外が実行した場合は403エラーが返却される.
+
+### 利用者食べログ情報取得APIでのリクエストメッセージ定義
+> 利用者食べログ情報取得API-リクエストメッセージの例
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "9",
+   "method": "getInfo/user/evaluations",
+   "params": {
+      "user_id": "654321",
+      "token": "634ba39e-bf6f-93c5-f9dd-f1597c0683b0"
+   }
+}
+```
+利用者食べログ情報取得APIにおけるリクエストメッセージでは, 次のパラメータが含まれている必要がある.
+| パラメータ | 型 | 説明 |
+| --------- | --- | --- |
+| user_id | string | 情報を取得したい利用者アカウントのIDを表す. |
+| token | string | ログイン時に発行されたtoken |
+
+
+### 利用者食べログ情報取得APIでのレスポンスメッセージ定義(成功時)
+> 利用者食べログ情報取得API-レスポンスメッセージの例(成功時)
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "9",
+   "result": {
+      "status": "success",
+      "evaluations":[
+         {
+            "reservation_id": "467832",
+            "restaurant_id": "346876",
+            "user_id": "654321",
+            "evaluation_grade": "4",
+            "evaluation_comment": "まあまあ美味しかった"
+         },
+         {
+            "reservation_id": "467845",
+            "restaurant_id": "422235",
+            "user_id": "654321",
+            "evaluation_grade": "1",
+            "evaluation_comment": "クソまずかった"
+         }
+      ]
+   }
+}
+```
+
+利用者食べログ情報取得APIの実行成功時には次のようなメッセージが返却される.
+| 返り値 | 型 | 説明 | 
+| --------- | --- | --- | 
 | status | string | "success" |
+| evaluations | JSONObject[] | JSONオブジェクトの配列 |
+| > evaluation_id | string | 食べログID |
+| > restaurant_id | string | 評価したレストランのID |
+| > user_id | string | 常に検索したユーザのIDが入る |
+| > evaluation_grade | string | 5段階評価, 1-5が入る |
+| > evaluation_comment | string | 食べログのコメント |
+
+
+
+### 利用者食べログ情報取得APIでのレスポンスメッセージ定義(失敗時)
+> 利用者食べログ情報取得API-レスポンスメッセージの例(失敗時)
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "9",
+   "result": {
+      "status": "error",
+      "reason": "403"
+   }
+}
+```
+
+利用者食べログ情報取得APIの実行失敗時には次のようなメッセージが返却される
+
+| 返り値 | 型 | 説明 |
+| --------- | --- | --- |
+| status | string | "error" |
+| reason | string | 実行が失敗した理由 |
+
+実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.
+| 失敗理由 | reasonの内容 |
+|--------|------|
+| 利用者アカウントが見つからなかった | "no user matched" |
+| 利用者アカウントは食べログ情報を持っていない | "The user has no evaluation" |
+
+
+
+## 店舗アカウント情報取得API
+店舗アカウント情報取得APIでは, 店舗に関する基本情報, 座席情報, 予約情報, 休日情報を取得するAPIを提供する. また, このAPIはトークンの発行者によって実行結果が変化する.
+
+## > 店舗基本情報取得API(getInfo/restaurant/basic)
+店舗基本情報取得APIを実行すると, 店舗に関する基本情報(店舗ID, 店舗名, 住所, メールアドレス, 営業時間, 休日情報)を取得できる. なお, この基本情報はトークン発行者によって実行結果が変化せず, 全てのクライアントから実行可能である.
+
+### 店舗基本情報取得APIでのリクエストメッセージ定義
+> 店舗基本情報取得API-リクエストメッセージの例
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "10",
+   "method": "getInfo/restaurant/basic",
+   "params": {
+      "searchBy": "restaurant_name",
+      "restaurant_name": "abcdefg焼肉店",
+      "token": "634ba39e-bf6f-93c5-f9dd-f1597c0683b0"
+   }
+}
+```
+店舗基本情報取得APIにおけるリクエストメッセージでは, 次のパラメータが含まれている必要がある.
+| パラメータ | 型 | 説明 |
+| --------- | --- | --- |
+| searchBy | string | 検索方法を表す.<br> 店舗アカウントIDによる検索 -> "restaurant_id"<br> 店舗名による検索 -> "restaurant_name" |
+| restaurant_id | string | searchByが"user_id"の場合に必須. 情報を取得したい利用者アカウントのIDを表す. |
+| restaurant_name | string | searchByが"user_name"の場合に必須. 情報を取得したい利用者アカウントの名前を表す. |
+| token | string | ログイン時に発行されたtoken |
+
+### 店舗基本情報取得APIでのレスポンスメッセージ定義(成功時)
+> 店舗基本情報取得API-レスポンスメッセージの例(成功時)
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "10",
+   "result": {
+      "status": "success",
+      "restaurant_id": "123456789",
+      "restaurant_name": "abcdefg焼肉店",
+      "email_addr": "example@example.com",
+      "address": "高知県香美市土佐山田町xx番地yy",
+      "time_open": "10:00",
+      "time_close": "23:00",
+      "holidays": [
+         {
+            "holiday": "2021/12/24"
+         },
+         {
+            "holiday": "2021/12/25"
+         },
+         {
+            "holiday": "2022/01/01"
+         },
+         {
+            "holiday": "2022/01/02"
+         },
+         {
+            "holiday": "2022/01/04"
+         },
+      ]
+   }
+}
+```
+店舗情報取得APIの実行成功時には次のようなメッセージが返却される.<br>
+ただし, 次の表4列目の通り, 店舗アカウントがこのAPIを実行した時にはいくつかの項目が返却されない.
+
+| 返り値 | 型 | 説明 |
+| --------- | --- | --- |
+| status | string | "success" |
+| restaurant_id | string | 店舗のID | 
+| restaurant_name | string | 店舗名 |
+| email_addr | string | 店舗のメールアドレス |
+| address | string | 店舗の住所 |
+| time_open | string | 店舗の始業時間 |
+| time_close | string | 店舗の終業時間 |
+| holidays | string | JSONObject |
+| > holiday | string | 休日の年月日, YYYY/MM/DD形式 |
+
+### 店舗基本情報取得APIでのレスポンスメッセージ定義(失敗時)
+> 店舗基本情報取得API-レスポンスメッセージの例(失敗時)
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "10",
+   "result": {
+      "status": "error",
+      "reason": "no restaurant matched"
+   }
+}
+```
+店舗基本情報取得APIの実行失敗時には次のようなメッセージが返却される
+
+| 返り値 | 型 | 説明 |
+| --------- | --- | --- | 
+| status | string | "error" | 
 | reason | string | 実行が失敗した理由 |
 
 実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.
 | 失敗理由 | reasonの内容 |
 |--------|------|
 | パラメータsearchByがメッセージに含まれていない | "param.searchBy is not found" |
-| パラメータsearchByが不正 | "params.searchBy is invalid. this should be "user_id" or "user_name"" |
-| パラメータsearchByが"user_id"であるが, パラメータに"user_id"が含まれていない | "you specified "user_id" in params.searchBy but there are not key("user_id")" |
-| パラメータsearchByが"user_name"であるが, パラメータに"user_name"が含まれていない| "you specified "user_name" in params.searchBy but there are not key("user_name")" |
-| 利用者アカウントが見つからなかった | "no user matched" |
-| 利用者アカウントは予約情報を持っていない | "The user has no reservation" |
+| パラメータsearchByが不正 | "params.searchBy is invalid. this should be "restaurant_id" or "restaurant_name" " |
+| パラメータsearchByが"restaurant_id"であるが, パラメータに"restaurant_id"が含まれていない | "you specified "restaurant_id" in params.searchBy but there are not key("restaurant_id")" |
+| パラメータsearchByが"restaurant_name"であるが, パラメータに"restaurant_name"が含まれていない| "you specified "restaurant_name" in params.searchBy but there are not key("restaurant_name")" |
+| 店舗アカウントが見つからなかった | "no restaurant matched" |
 
 
-## > 利用者食べログ情報取得API(getInfo/user/evaluations)
-### 利用者食べログ情報取得APIでのリクエストメッセージ定義
-### 利用者食べログ情報取得APIでのレスポンスメッセージ定義(成功時)
-### 利用者食べログ情報取得APIでのレスポンスメッセージ定義(失敗時)
-
-## 店舗アカウント情報取得API
-## > 店舗基本情報取得API(getInfo/restaurant/basic)
-### 店舗基本情報取得APIでのリクエストメッセージ定義
-### 店舗基本情報取得APIでのレスポンスメッセージ定義(成功時)
-### 店舗基本情報取得APIでのレスポンスメッセージ定義(失敗時)
-
-## > 店舗座席情報取得API(getInfo/restaurant/seats)
+## > 店舗座席情報取得API(getInfo/restaurant/seats), 予約情報含む
 ### 店舗座席情報取得APIでのリクエストメッセージ定義
 ### 店舗座席情報取得APIでのレスポンスメッセージ定義(成功時)
 ### 店舗座席情報取得APIでのレスポンスメッセージ定義(失敗時)
-
-## > 店舗予約情報取得API(getInfo/restaurant/reservations)
-### 店舗予約情報取得APIでのリクエストメッセージ定義
-### 店舗予約情報取得APIでのレスポンスメッセージ定義(成功時)
-### 店舗予約情報取得APIでのレスポンスメッセージ定義(失敗時)
-
-## > 店舗休日情報取得API(getInfo/restaurant/holidays)
-### 店舗休日情報取得APIでのリクエストメッセージ定義
-### 店舗休日情報取得APIでのレスポンスメッセージ定義(成功時)
-### 店舗休日情報取得APIでのレスポンスメッセージ定義(失敗時)
 
 ## > 店舗食べログ情報取得API(getInfo/restaurant/evaluations)
 ### 店舗食べログ情報取得APIでのリクエストメッセージ定義
 ### 店舗食べログ情報取得APIでのレスポンスメッセージ定義(成功時)
 ### 店舗食べログ情報取得APIでのレスポンスメッセージ定義(失敗時)
+
+## > 店舗情報検索API(getInfo/restaurants)
+### 店舗情報検索APIでのリクエストメッセージ定義
+### 店舗情報検索APIでのレスポンスメッセージ定義(成功時)
+### 店舗情報検索APIでのレスポンスメッセージ定義(失敗時)
+
 
 ## 管理者アカウント情報取得API
 ## > 管理者アカウント基本情報取得API(getInfo/admin/basic)
@@ -699,6 +876,18 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 ### 管理者アカウント基本情報更新APIでのリクエストメッセージ定義
 ### 管理者アカウント基本情報更新APIでのレスポンスメッセージ定義(成功時)
 ### 管理者アカウント基本情報更新APIでのレスポンスメッセージ定義(失敗時)
+
+# アカウント退会系API
+## アカウント退会API(resign)
+### アカウント退会APIでのリクエストメッセージ定義
+### アカウント退会APIでのレスポンスメッセージ定義(成功時)
+### アカウント退会APIでのリクエストメッセージ定義(失敗時)
+
+
+## アカウント強制退会API(resign/forced)
+### アカウント強制退会APIでのリクエストメッセージ定義
+### アカウント強制退会APIでのレスポンスメッセージ定義(成功時)
+### アカウント強制退会APIでのリクエストメッセージ定義(失敗時)
 
 
 # 以下サンプル, 書き終わったら消します
