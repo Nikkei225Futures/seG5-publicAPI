@@ -38,7 +38,7 @@
             <h1 id="introduction">Introduction</h1>
             <p>これは, ソフトウェア工学でのG5-ちらSeatの公開APIドキュメントである.</p>
             <h1 id="overview">Overview</h1>
-            <p>この公開APIでは, APIにアクセスするためにWebsocketを用いる. また, APIはJSON-RPCのメッセージ形式でデータの送受信を行う.</p>
+            <p>この公開APIでは, APIにアクセスするためにWebsocketを用いる. また, APIはJSON-RPCのメッセージ形式でデータの送受信を行う. この公開APIでは, 主にログイン/ログアウト系, 情報参照系, 情報変更系の3種類のAPIが提供される. 特に, 情報参照, 情報変更系APIへのアクセスはトークンによる認証を行うため, ログインAPIを1番最初に実行してトークンを手に入れる必要がある.</p>
             <h2 id="json-rpc">JSON-RPC</h2>
             <p>JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルである. JSON-RPCでは, クライアント-サーバ間で送受信されるデータ構造とそのルールを定義する.</p>
             <h3 id="関数を呼び出すリクエスト">関数を呼び出す(リクエスト)</h3>
@@ -131,13 +131,9 @@
                      <td>string</td>
                      <td>実行結果の状態を表す. <br>実行が成功した -&gt; &quot;success&quot;, 実行中にエラーが生じた -&gt; &quot;error&quot;</td>
                   </tr>
-                  <tr>
-                     <td>params</td>
-                     <td>object</td>
-                     <td>呼び出される関数への引数</td>
-                  </tr>
                </tbody>
             </table>
+            <p>各項目でエラー条件等は記載するが, 共通エラーはCommon errorsに記載する.</p>
             <h1 id="api">API</h1>
             <p>公開APIに実装するメソッドとそのメッセージ形式について記述する. 各項目の後のカッコ内が呼び出しメソッド名であり, これ以降はJSON-RPCに共通するフィールドは省き, パラメータ(呼び出し関数の引数)の定義のみを記述する.</p>
             <h1 id="ログインログアウト系api">ログイン/ログアウト系API</h1>
@@ -377,6 +373,133 @@
                   </tr>
                </tbody>
             </table>
+            <h1 id="アカウント登録系api">アカウント登録系API</h1>
+            <p>アカウント登録APIでは, 登録したいアカウントの種類ごとに異なるAPIが使用される.</p>
+            <h2 id="利用者アカウント登録apiregisteruser">利用者アカウント登録API(register/user)</h2>
+            <p>これは利用者アカウントを登録する際に使用するAPIである. このAPIを実行すると, 引数に含まれるユーザ名とパスワードで利用者アカウントが作成される.</p>
+            <h3 id="利用者アカウント登録apiでのリクエストメッセージ定義">利用者アカウント登録APIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>利用者アカウント登録API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;register/user&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;userName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheUser&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;yourPasswordMustBeString&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>利用者アカウント登録APIへのリクエストメッセージには次のパラメータが含まれていなければならない.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>userName</td>
+                     <td>string</td>
+                     <td>ユーザ名</td>
+                  </tr>
+                  <tr>
+                     <td>password</td>
+                     <td>string</td>
+                     <td>パスワード</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="利用者アカウント登録apiでのレスポンスメッセージ">利用者アカウント登録APIでのレスポンスメッセージ</h3>
+            <h4 id="利用者アカウント登録成功時のレスポンスメッセージ定義">利用者アカウント登録成功時のレスポンスメッセージ定義</h4>
+            <blockquote>
+               <p>利用者アカウント登録API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>リクエストが正常に処理され, 成功した場合は次のようなレスポンスが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h4 id="利用者アカウント登録失敗時のレスポンスメッセージ定義">利用者アカウント登録失敗時のレスポンスメッセージ定義</h4>
+            <blockquote>
+               <p>利用者アカウント登録API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;500&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>リクエストの処理に失敗した場合は次のようなレスポンスが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>エラーメッセージ</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="店舗アカウント登録apiregisterrestaurant">店舗アカウント登録API(register/restaurant)</h2>
+            <p>これは店舗アカウントを登録する際に使用するAPIである. このAPIを実行すると, 引数に含まれるユーザ名とパスワードで店舗アカウントが作成される.</p>
+            <h2 id="管理者アカウント登録apiregistreadmin">管理者アカウント登録API(registre/admin)</h2>
+            <p>これは管理者アカウントを登録する際に使用するAPIである. このAPIを実行すると, 引数に含まれるユーザ名とパスワードで管理者アカウントが作成される.</p>
+            <h1 id="情報参照系api">情報参照系API</h1>
+            <h2 id="利用者アカウント情報取得apigetinfouser">利用者アカウント情報取得API(getInfo/user)</h2>
+            <h3 id="利用者予約情報取得apigetinfouserreservations">利用者予約情報取得API(getInfo/user/reservations)</h3>
+            <h2 id="店舗アカウント情報取得getinforestaurantwhole">店舗アカウント情報取得(getInfo/restaurant/whole)</h2>
+            <h3 id="店舗基本情報取得apigetinforestaurantbasic">店舗基本情報取得API(getInfo/restaurant/basic)</h3>
+            <h3 id="店舗座席情報取得apigetinforestaurantseats">店舗座席情報取得API(getInfo/restaurant/seats)</h3>
+            <h3 id="店舗座席利用状況取得apigetinforestaurantseatsavailability">店舗座席利用状況取得API(getInfo/restaurant/seatsAvailability)</h3>
+            <h3 id="店舗予約情報取得apigetinforestaurantreservations">店舗予約情報取得API(getInfo/restaurant/reservations)</h3>
+            <h3 id="店舗休日情報取得apigetinforestaurantholidays">店舗休日情報取得API(getInfo/restaurant/holidays)</h3>
+            <h3 id="店舗食べログ情報取得apigetinforestaurantevaluations">店舗食べログ情報取得API(getInfo/restaurant/evaluations)</h3>
+            <h2 id="管理者アカウント情報取得apigetinfoadmin">管理者アカウント情報取得API(getInfo/admin)</h2>
+            <h1 id="情報更新系api">情報更新系API</h1>
+            <h2 id="利用者アカウント情報更新apiupdateinfouser">利用者アカウント情報更新API(updateInfo/user)</h2>
+            <h2 id="店舗アカウント情報更新api">店舗アカウント情報更新API</h2>
+            <h3 id="店舗アカウント基本情報更新apiupdateinforestaurantbasic">店舗アカウント基本情報更新API(updateInfo/restaurant/basic)</h3>
+            <h3 id="店舗座席情報更新apiupdateinforestaurantseats">店舗座席情報更新API(updateInfo/restaurant/seats)</h3>
+            <h3 id="店舗座席利用状況更新apiupdateinforestaurantseatsavailability">店舗座席利用状況更新API(updateInfo/restaurant/seatsAvailability)</h3>
+            <h3 id="店舗休日情報更新apiupdateinforestaurantholidays">店舗休日情報更新API(updateInfo/restaurant/holidays)</h3>
+            <h2 id="管理者アカウント情報更新apiupdateinfoadmin">管理者アカウント情報更新API(updateInfo/admin)</h2>
+            <h2 id="予約情報更新apiupdateinforeservations">予約情報更新API(updateInfo/reservations)</h2>
+            <h2 id="食べログ情報更新apiupdateinfoevaluations">食べログ情報更新API(updateInfo/evaluations)</h2>
             <h1 id="以下サンプル-書き終わったら消します">以下サンプル, 書き終わったら消します</h1>
             <h1 id="authentication">Authentication</h1>
             <blockquote>
@@ -497,63 +620,67 @@ api.kittens.get(<span class="hljs-number">2</span>)</code></pre><pre class="high
                   </tr>
                </tbody>
             </table>
-            <h1 id="errors">Errors</h1>
-            <aside class=error> This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files...just save them to the `includes` folder and add them to the top of your `index.md`'s front matter. Files are included in the order listed. </aside>
-            <p>The Kittn API uses the following error codes:</p>
+            <h1 id="common-errors">Common errors</h1>
+            <p>このAPIでは共通エラーとして次のようなメッセージが返却される. 共通エラーでのreasonは大体がHTTPのステータスコードに似るように設計しているが, 一部拡張されている.</p>
+            <pre class="highlight bash"><code></code></pre>
+            <blockquote>
+               <p>共通エラーメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;987654321&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;400&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
             <table>
                <thead>
                   <tr>
-                     <th>Error Code</th>
+                     <th>reason</th>
                      <th>Meaning</th>
                   </tr>
                </thead>
                <tbody>
                   <tr>
                      <td>400</td>
-                     <td>Bad Request -- The request could not be understood by the server due to malformed syntax.</td>
+                     <td>Bad Request -- サーバが理解できないメッセージ形式である.</td>
                   </tr>
                   <tr>
                      <td>401</td>
-                     <td>Unauthorized -- Your API key is wrong.</td>
+                     <td>No token included -- トークンによる認証が必要なAPIにおいてパラメータにトークンが含まれていない</td>
+                  </tr>
+                  <tr>
+                     <td>402</td>
+                     <td>Unauthorized -- トークンによる認証が必要なAPIにおいて認証が失敗した.</td>
                   </tr>
                   <tr>
                      <td>403</td>
-                     <td>Forbidden -- The kitten requested is hidden for administrators only.</td>
+                     <td>Forbidden -- 実行が許可されていないメソッドを実行しようとした.</td>
                   </tr>
                   <tr>
                      <td>404</td>
-                     <td>Not Found -- The specified kitten could not be found.</td>
-                  </tr>
-                  <tr>
-                     <td>405</td>
-                     <td>Method Not Allowed -- You tried to access a kitten with an invalid method.</td>
-                  </tr>
-                  <tr>
-                     <td>406</td>
-                     <td>Not Acceptable -- You requested a format that isn&#39;t JSON.</td>
-                  </tr>
-                  <tr>
-                     <td>410</td>
-                     <td>Gone -- The kitten requested has been removed from our servers.</td>
+                     <td>Not Found -- メソッドが存在しない.</td>
                   </tr>
                   <tr>
                      <td>418</td>
-                     <td>I&#39;m a teapot.</td>
+                     <td>I&#39;m a teapot -- pouring coffee into teapot is unacceptable. stop doing it.</td>
                   </tr>
                   <tr>
                      <td>429</td>
-                     <td>Too Many Requests -- You&#39;re requesting too many kittens! Slow down!</td>
+                     <td>Too Many Requests -- リクエストが多すぎる.</td>
                   </tr>
                   <tr>
                      <td>500</td>
-                     <td>Internal Server Error -- We had a problem with our server. Try again later.</td>
+                     <td>Internal Server Error -- 何等かの理由で処理が実行できなかった.</td>
                   </tr>
                   <tr>
-                     <td>503</td>
-                     <td>Service Unavailable -- We&#39;re temporarily offline for maintenance. Please try again later.</td>
+                     <td>512</td>
+                     <td>DB connection failed -- DBへ接続できなかった.</td>
                   </tr>
                </tbody>
             </table>
+            <p>共通エラー以外で各項目に定めるエラー時のreasonには上記以外のレスポンスが含まれる.</p>
          </div>
          <div class=dark-box>
             <div class=lang-selector>
