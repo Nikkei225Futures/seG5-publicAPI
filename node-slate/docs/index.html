@@ -1357,23 +1357,7 @@
       <span class="hljs-attr">&quot;address&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;高知県香美市土佐山田町xx番地yy&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;time_open&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;10:00&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;time_close&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;23:00&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;holidays&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
-         <span class="hljs-punctuation">{</span>
-            <span class="hljs-attr">&quot;holiday&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2021/12/24&quot;</span>
-         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
-         <span class="hljs-punctuation">{</span>
-            <span class="hljs-attr">&quot;holiday&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2021/12/25&quot;</span>
-         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
-         <span class="hljs-punctuation">{</span>
-            <span class="hljs-attr">&quot;holiday&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2022/01/01&quot;</span>
-         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
-         <span class="hljs-punctuation">{</span>
-            <span class="hljs-attr">&quot;holiday&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2022/01/02&quot;</span>
-         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
-         <span class="hljs-punctuation">{</span>
-            <span class="hljs-attr">&quot;holiday&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2022/01/04&quot;</span>
-         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-punctuation">]</span>
+      <span class="hljs-attr">&quot;holidays&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;2021/12/24&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2021/12/25&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2022/01/01&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2022/0102&quot;</span><span class="hljs-punctuation">]</span>
    <span class="hljs-punctuation">}</span>
 <span class="hljs-punctuation">}</span></code></pre>
             <p>店舗情報取得APIの実行成功時には次のようなメッセージが返却される.<br> ただし, 次の表4列目の通り, 店舗アカウントがこのAPIを実行した時にはいくつかの項目が返却されない.</p>
@@ -1412,7 +1396,7 @@
                      <td>店舗の住所</td>
                   </tr>
                   <tr>
-                     <td>time_open</td>
+                     <td>店舗me_open</td>
                      <td>string</td>
                      <td>店舗の始業時間</td>
                   </tr>
@@ -1423,12 +1407,7 @@
                   </tr>
                   <tr>
                      <td>holidays</td>
-                     <td>string</td>
-                     <td>JSONObject</td>
-                  </tr>
-                  <tr>
-                     <td>&gt; holiday</td>
-                     <td>string</td>
+                     <td>string[]</td>
                      <td>休日の年月日, YYYY/MM/DD形式</td>
                   </tr>
                </tbody>
@@ -1498,9 +1477,185 @@
                   </tr>
                </tbody>
             </table>
-            <h2 id="店舗座席情報取得apigetinforestaurantseats-予約情報含む">&gt; 店舗座席情報取得API(getInfo/restaurant/seats), 予約情報含む</h2>
+            <h2 id="店舗座席情報取得apigetinforestaurantseats">&gt; 店舗座席情報取得API(getInfo/restaurant/seats)</h2>
+            <p>店舗座席情報取得APIでは, 店舗の座席情報(座席に座れる人数, 座席の予約情報, 座席の特徴)を提供する. また, この APIがトークンの発行者によって実行結果が変化する.</p>
             <h3 id="店舗座席情報取得apiでのリクエストメッセージ定義">店舗座席情報取得APIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>店舗座席情報取得API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;getInfo/restaurant/seats&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123234&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗座席情報取得APIにおけるリクエストメッセージでは, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>restaurant_id</td>
+                     <td>string</td>
+                     <td>情報を取得したい利用者アカウントのIDを表す.</td>
+                  </tr>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+               </tbody>
+            </table>
             <h3 id="店舗座席情報取得apiでのレスポンスメッセージ定義成功時">店舗座席情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>店舗座席情報取得API-レスポンスメッセージの例(成功時, トークン発行者が店舗アカウント若しくは管理者の場合)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;15&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;seats&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;seat_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;12398345&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;seat_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1番卓&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;023848345&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;capacity&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;5&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;is_filled&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;time_start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;17:30:00&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;staying_times&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;00:15:00&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;00:20:00&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;01:00:00&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;05:00:00&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;avg_staying_time&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;02:00:00&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;feauture&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;窓際&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;reservations&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span>
+               <span class="hljs-punctuation">{</span>
+                  <span class="hljs-attr">&quot;reservation_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2349834&quot;</span><span class="hljs-punctuation">,</span>
+                  <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2985345&quot;</span><span class="hljs-punctuation">,</span>
+                  <span class="hljs-attr">&quot;time_start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2021/12/25-12:00:00&quot;</span><span class="hljs-punctuation">,</span>
+                  <span class="hljs-attr">&quot;time_end&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2021/12/25-13:00:00&quot;</span>
+               <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+               <span class="hljs-punctuation">{</span>
+                  <span class="hljs-attr">&quot;reservation_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2349834&quot;</span><span class="hljs-punctuation">,</span>
+                  <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2985345&quot;</span><span class="hljs-punctuation">,</span>
+                  <span class="hljs-attr">&quot;time_start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2021/12/25-16:00:00&quot;</span><span class="hljs-punctuation">,</span>
+                  <span class="hljs-attr">&quot;time_end&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2021/12/25-19:00:00&quot;</span>
+               <span class="hljs-punctuation">}</span>
+            <span class="hljs-punctuation">]</span>
+         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;seat_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;12398346&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;seat_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2番卓&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;023848345&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;capacity&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;is_filled&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;time_start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;17:30:00&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;staying_times&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;00:15:00&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;00:20:00&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;01:00:00&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;05:00:00&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;avg_staying_time&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;02:00:00&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;feauture&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;カウンター席&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;reservations&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span>   <span class="hljs-comment">//予約なし空の配列</span>
+         <span class="hljs-punctuation">}</span>
+      <span class="hljs-punctuation">]</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗座席情報取得API実行成功時には次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>seats</td>
+                     <td>JSONOArray</td>
+                     <td>座席情報の配列</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; seat_id</td>
+                     <td>string</td>
+                     <td>座席ID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; seat_name</td>
+                     <td>string</td>
+                     <td>座席名</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; restaurant_id</td>
+                     <td>string</td>
+                     <td>店舗ID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; capacity</td>
+                     <td>string</td>
+                     <td>席に座れる人数</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; is_filled</td>
+                     <td>boolean</td>
+                     <td>席が現在使用されているか</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; time_start</td>
+                     <td>string</td>
+                     <td>席が使用されていれば, いつから使用されているか. HH:MM:SS形式</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; staying_times</td>
+                     <td>string[]</td>
+                     <td>席が利用されていた時間の配列, HH:MM:SS形式</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; avg_stay_time</td>
+                     <td>string</td>
+                     <td>座席平均利用時間</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; feauture</td>
+                     <td>string</td>
+                     <td>座席の特徴</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; reservations</td>
+                     <td>JSONArray</td>
+                     <td>座席の予約情報</td>
+                  </tr>
+                  <tr>
+                     <td>&gt;&gt; reservation_id</td>
+                     <td>string</td>
+                     <td>予約ID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt;&gt; user_id</td>
+                     <td>string</td>
+                     <td>利用者ID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt;&gt; time_start</td>
+                     <td>string</td>
+                     <td>予約時間(開始)</td>
+                  </tr>
+                  <tr>
+                     <td>&gt;&gt; time_end</td>
+                     <td>string</td>
+                     <td>予約時間(終了)</td>
+                  </tr>
+               </tbody>
+            </table>
             <h3 id="店舗座席情報取得apiでのレスポンスメッセージ定義失敗時">店舗座席情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
             <h2 id="店舗食べログ情報取得apigetinforestaurantevaluations">&gt; 店舗食べログ情報取得API(getInfo/restaurant/evaluations)</h2>
             <h3 id="店舗食べログ情報取得apiでのリクエストメッセージ定義">店舗食べログ情報取得APIでのリクエストメッセージ定義</h3>
