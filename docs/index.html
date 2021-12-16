@@ -797,7 +797,7 @@
       <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456789&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;user_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheUser&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;age&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;25&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;birthday&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2000/01/01&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;gender&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;male&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;email_addr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;example@example.com&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;address&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;高知県香美市土佐山田町宮ノ口185&quot;</span><span class="hljs-punctuation">,</span>
@@ -834,9 +834,9 @@
                      <td>トークン発行者が利用者本人または店舗, 管理者の時</td>
                   </tr>
                   <tr>
-                     <td>age</td>
+                     <td>birthday</td>
                      <td>string</td>
-                     <td>利用者の年齢</td>
+                     <td>利用者の誕生日, YYYY/MM/DD形式</td>
                      <td>トークン発行者が利用者本人または店舗, 管理者の時</td>
                   </tr>
                   <tr>
@@ -944,7 +944,7 @@
    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;6&quot;</span><span class="hljs-punctuation">,</span>
    <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;getInfo/user/reservations&quot;</span><span class="hljs-punctuation">,</span>
    <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;YouAreTheUser&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;12345697895&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span>
    <span class="hljs-punctuation">}</span>
 <span class="hljs-punctuation">}</span></code></pre>
@@ -1030,7 +1030,7 @@
                   </tr>
                   <tr>
                      <td>reservations</td>
-                     <td>JSONObject[]</td>
+                     <td>JSONArray</td>
                      <td>JSONオブジェクトの配列</td>
                   </tr>
                   <tr>
@@ -1209,7 +1209,7 @@
                   </tr>
                   <tr>
                      <td>evaluations</td>
-                     <td>JSONObject[]</td>
+                     <td>JSONArray</td>
                      <td>JSONオブジェクトの配列</td>
                   </tr>
                   <tr>
@@ -1342,9 +1342,9 @@
                   </tr>
                </tbody>
             </table>
-            <h3 id="店舗基本情報取得apiでのレスポンスメッセージ定義成功時">店舗基本情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
+            <h3 id="店舗アカウント基本情報取得apiでのレスポンスメッセージ定義成功時">店舗アカウント基本情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
             <blockquote>
-               <p>店舗基本情報取得API-レスポンスメッセージの例(成功時)</p>
+               <p>店舗アカウント基本情報取得API-レスポンスメッセージの例(成功時)</p>
             </blockquote>
             <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
    <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
@@ -1357,10 +1357,11 @@
       <span class="hljs-attr">&quot;address&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;高知県香美市土佐山田町xx番地yy&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;time_open&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;10:00&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;time_close&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;23:00&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;features&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;焼肉 ドリンクバー&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;holidays&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;2021/12/24&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2021/12/25&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2022/01/01&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2022/0102&quot;</span><span class="hljs-punctuation">]</span>
    <span class="hljs-punctuation">}</span>
 <span class="hljs-punctuation">}</span></code></pre>
-            <p>店舗情報取得APIの実行成功時には次のようなメッセージが返却される.<br> ただし, 次の表4列目の通り, 店舗アカウントがこのAPIを実行した時にはいくつかの項目が返却されない.</p>
+            <p>店舗アカウント情報取得APIの実行成功時には次のようなメッセージが返却される.<br></p>
             <table>
                <thead>
                   <tr>
@@ -1406,15 +1407,20 @@
                      <td>店舗の終業時間</td>
                   </tr>
                   <tr>
+                     <td>features</td>
+                     <td>string</td>
+                     <td>特徴キーワード</td>
+                  </tr>
+                  <tr>
                      <td>holidays</td>
                      <td>string[]</td>
                      <td>休日の年月日, YYYY/MM/DD形式</td>
                   </tr>
                </tbody>
             </table>
-            <h3 id="店舗基本情報取得apiでのレスポンスメッセージ定義失敗時">店舗基本情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <h3 id="店舗アカウント基本情報取得apiでのレスポンスメッセージ定義失敗時">店舗アカウント基本情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
             <blockquote>
-               <p>店舗基本情報取得API-レスポンスメッセージの例(失敗時)</p>
+               <p>店舗アカウント基本情報取得API-レスポンスメッセージの例(失敗時)</p>
             </blockquote>
             <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
    <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
@@ -1424,7 +1430,7 @@
       <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;no restaurant matched&quot;</span>
    <span class="hljs-punctuation">}</span>
 <span class="hljs-punctuation">}</span></code></pre>
-            <p>店舗基本情報取得APIの実行失敗時には次のようなメッセージが返却される</p>
+            <p>店舗アカウント基本情報取得APIの実行失敗時には次のようなメッセージが返却される</p>
             <table>
                <thead>
                   <tr>
@@ -1478,7 +1484,7 @@
                </tbody>
             </table>
             <h2 id="店舗座席情報取得apigetinforestaurantseats">&gt; 店舗座席情報取得API(getInfo/restaurant/seats)</h2>
-            <p>店舗座席情報取得APIでは, 店舗の座席情報(座席に座れる人数, 座席の予約情報, 座席の特徴)を提供する. また, この APIがトークンの発行者によって実行結果が変化する.</p>
+            <p>店舗座席情報取得APIでは, 店舗の座席情報(座席に座れる人数, 座席の予約情報, 座席の特徴など)を提供する.</p>
             <h3 id="店舗座席情報取得apiでのリクエストメッセージ定義">店舗座席情報取得APIでのリクエストメッセージ定義</h3>
             <blockquote>
                <p>店舗座席情報取得API-リクエストメッセージの例</p>
@@ -1505,7 +1511,7 @@
                   <tr>
                      <td>restaurant_id</td>
                      <td>string</td>
-                     <td>情報を取得したい利用者アカウントのIDを表す.</td>
+                     <td>情報を取得したい店舗アカウントのIDを表す.</td>
                   </tr>
                   <tr>
                      <td>token</td>
@@ -1516,7 +1522,7 @@
             </table>
             <h3 id="店舗座席情報取得apiでのレスポンスメッセージ定義成功時">店舗座席情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
             <blockquote>
-               <p>店舗座席情報取得API-レスポンスメッセージの例(成功時, トークン発行者が店舗アカウント若しくは管理者の場合)</p>
+               <p>店舗座席情報取得API-レスポンスメッセージの例(成功時)</p>
             </blockquote>
             <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
    <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
@@ -1657,189 +1663,2201 @@
                </tbody>
             </table>
             <h3 id="店舗座席情報取得apiでのレスポンスメッセージ定義失敗時">店舗座席情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h2 id="店舗食べログ情報取得apigetinforestaurantevaluations">&gt; 店舗食べログ情報取得API(getInfo/restaurant/evaluations)</h2>
-            <h3 id="店舗食べログ情報取得apiでのリクエストメッセージ定義">店舗食べログ情報取得APIでのリクエストメッセージ定義</h3>
-            <h3 id="店舗食べログ情報取得apiでのレスポンスメッセージ定義成功時">店舗食べログ情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="店舗食べログ情報取得apiでのレスポンスメッセージ定義失敗時">店舗食べログ情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h2 id="店舗情報検索apigetinforestaurants">&gt; 店舗情報検索API(getInfo/restaurants)</h2>
-            <h3 id="店舗情報検索apiでのリクエストメッセージ定義">店舗情報検索APIでのリクエストメッセージ定義</h3>
-            <h3 id="店舗情報検索apiでのレスポンスメッセージ定義成功時">店舗情報検索APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="店舗情報検索apiでのレスポンスメッセージ定義失敗時">店舗情報検索APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h2 id="管理者アカウント情報取得api">管理者アカウント情報取得API</h2>
-            <h2 id="管理者アカウント基本情報取得apigetinfoadminbasic">&gt; 管理者アカウント基本情報取得API(getInfo/admin/basic)</h2>
-            <h3 id="管理者アカウント基本情報取得apiでのリクエストメッセージ定義">管理者アカウント基本情報取得APIでのリクエストメッセージ定義</h3>
-            <h3 id="管理者アカウント基本情報取得apiでのレスポンスメッセージ定義成功時">管理者アカウント基本情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="管理者アカウント基本情報取得apiでのレスポンスメッセージ定義失敗時">管理者アカウント基本情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h1 id="情報更新系api">&gt; 情報更新系API</h1>
-            <h2 id="利用者アカウント情報更新api">利用者アカウント情報更新API</h2>
-            <h2 id="利用者アカウント基本情報更新apiupdateinfouserbasic">&gt; 利用者アカウント基本情報更新API(updateInfo/user/basic)</h2>
-            <h3 id="利用者アカウント基本情報更新apiでのリクエストメッセージ定義">利用者アカウント基本情報更新APIでのリクエストメッセージ定義</h3>
-            <h3 id="利用者アカウント基本情報更新apiでのレスポンスメッセージ定義成功時">利用者アカウント基本情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="利用者アカウント基本情報更新apiでのレスポンスメッセージ定義失敗時">利用者アカウント基本情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h2 id="利用者予約情報登録削除apiupdateinfouserreservation">&gt; 利用者予約情報登録/削除API(updateInfo/user/reservation)</h2>
-            <h3 id="利用者予約情報登録削除apiでのリクエストメッセージ定義">利用者予約情報登録/削除APIでのリクエストメッセージ定義</h3>
-            <h3 id="利用者予約情報登録削除apiでのレスポンスメッセージ定義成功時">利用者予約情報登録/削除APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="利用者予約情報登録削除apiでのレスポンスメッセージ定義失敗時">利用者予約情報登録/削除APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h2 id="利用者食べログ情報更新apiupdateinfouserevaluations">&gt; 利用者食べログ情報更新API(updateInfo/user/evaluations)</h2>
-            <h3 id="利用者食べログ情報更新apiでのリクエストメッセージ定義">利用者食べログ情報更新APIでのリクエストメッセージ定義</h3>
-            <h3 id="利用者食べログ情報更新apiでのレスポンスメッセージ定義成功時">利用者食べログ情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="利用者食べログ情報更新apiでのレスポンスメッセージ定義失敗時">利用者食べログ情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h2 id="店舗アカウント情報更新api">店舗アカウント情報更新API</h2>
-            <h2 id="店舗アカウント基本情報更新apiupdateinforestaurantbasic">&gt; 店舗アカウント基本情報更新API(updateInfo/restaurant/basic)</h2>
-            <h3 id="店舗アカウント基本情報更新apiでのリクエストメッセージ定義">店舗アカウント基本情報更新APIでのリクエストメッセージ定義</h3>
-            <h3 id="店舗アカウント基本情報更新apiでのレスポンスメッセージ定義成功時">店舗アカウント基本情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="店舗アカウント基本情報更新apiでのレスポンスメッセージ定義失敗時">店舗アカウント基本情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h2 id="店舗座席情報更新apiupdateinforestaurantseats">&gt; 店舗座席情報更新API(updateInfo/restaurant/seats)</h2>
-            <h3 id="店舗座席情報更新apiでのリクエストメッセージ定義">店舗座席情報更新APIでのリクエストメッセージ定義</h3>
-            <h3 id="店舗座席情報更新apiでのレスポンスメッセージ定義成功時">店舗座席情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="店舗座席情報更新apiでのレスポンスメッセージ定義失敗時">店舗座席情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h2 id="店舗座席利用状況更新apiupdateinforestaurantseatsavailability">&gt; 店舗座席利用状況更新API(updateInfo/restaurant/seatsAvailability)</h2>
-            <h3 id="店舗座席利用状況更新apiでのリクエストメッセージ定義">店舗座席利用状況更新APIでのリクエストメッセージ定義</h3>
-            <h3 id="店舗座席利用状況更新apiでのレスポンスメッセージ定義成功時">店舗座席利用状況更新APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="店舗座席利用状況更新apiでのレスポンスメッセージ定義失敗時">店舗座席利用状況更新APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h2 id="店舗予約情報削除apiupdateinforestaurantdeletereservations">&gt; 店舗予約情報削除API(updateInfo/restaurant/deleteReservations)</h2>
-            <h3 id="店舗予約情報削除apiでのリクエストメッセージ定義">店舗予約情報削除APIでのリクエストメッセージ定義</h3>
-            <h3 id="店舗予約情報削除apiでのレスポンスメッセージ定義成功時">店舗予約情報削除APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="店舗予約情報削除apiでのレスポンスメッセージ定義失敗時">店舗予約情報削除APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h2 id="店舗食べログ情報削除apiupdateinforestaurantdeleteevaluations">&gt; 店舗食べログ情報削除API(updateInfo/restaurant/deleteEvaluations)</h2>
-            <h3 id="店舗食べログ情報削除apiでのリクエストメッセージ定義">店舗食べログ情報削除APIでのリクエストメッセージ定義</h3>
-            <h3 id="店舗食べログ情報削除apiでのレスポンスメッセージ定義成功時">店舗食べログ情報削除APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="店舗食べログ情報削除apiでのレスポンスメッセージ定義失敗時">店舗食べログ情報削除APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h2 id="店舗休日情報更新apiupdateinforestaurantholidays">&gt; 店舗休日情報更新API(updateInfo/restaurant/holidays)</h2>
-            <h3 id="店舗休日情報更新apiでのリクエストメッセージ定義">店舗休日情報更新APIでのリクエストメッセージ定義</h3>
-            <h3 id="店舗休日情報更新apiでのレスポンスメッセージ定義成功時">店舗休日情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="店舗休日情報更新apiでのレスポンスメッセージ定義失敗時">店舗休日情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h2 id="管理者アカウント情報更新api">管理者アカウント情報更新API</h2>
-            <h2 id="管理者アカウント基本情報更新apiupdateinfoadminbasic">&gt; 管理者アカウント基本情報更新API(updateInfo/admin/basic)</h2>
-            <h3 id="管理者アカウント基本情報更新apiでのリクエストメッセージ定義">管理者アカウント基本情報更新APIでのリクエストメッセージ定義</h3>
-            <h3 id="管理者アカウント基本情報更新apiでのレスポンスメッセージ定義成功時">管理者アカウント基本情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="管理者アカウント基本情報更新apiでのレスポンスメッセージ定義失敗時">管理者アカウント基本情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
-            <h1 id="アカウント退会系api">アカウント退会系API</h1>
-            <h2 id="アカウント退会apiresign">アカウント退会API(resign)</h2>
-            <h3 id="アカウント退会apiでのリクエストメッセージ定義">アカウント退会APIでのリクエストメッセージ定義</h3>
-            <h3 id="アカウント退会apiでのレスポンスメッセージ定義成功時">アカウント退会APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="アカウント退会apiでのリクエストメッセージ定義失敗時">アカウント退会APIでのリクエストメッセージ定義(失敗時)</h3>
-            <h2 id="アカウント強制退会apiresignforced">アカウント強制退会API(resign/forced)</h2>
-            <h3 id="アカウント強制退会apiでのリクエストメッセージ定義">アカウント強制退会APIでのリクエストメッセージ定義</h3>
-            <h3 id="アカウント強制退会apiでのレスポンスメッセージ定義成功時">アカウント強制退会APIでのレスポンスメッセージ定義(成功時)</h3>
-            <h3 id="アカウント強制退会apiでのリクエストメッセージ定義失敗時">アカウント強制退会APIでのリクエストメッセージ定義(失敗時)</h3>
-            <h1 id="以下サンプル-書き終わったら消します">以下サンプル, 書き終わったら消します</h1>
-            <h1 id="authentication">Authentication</h1>
             <blockquote>
-               <p>To authorize, use this code:</p>
+               <p>店舗座席情報取得API-レスポンスメッセージの例(失敗時)</p>
             </blockquote>
-            <pre class="highlight ruby"><code><span class="hljs-keyword">require</span> <span class="hljs-string">&#x27;kittn&#x27;</span>
-
-api = Kittn::APIClient.authorize!(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>)</code></pre><pre class="highlight python"><code><span class="hljs-keyword">import</span> kittn
-
-api = kittn.authorize(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>)</code></pre><pre class="highlight bash"><code><span class="hljs-comment"># With shell, you can just pass the correct header with each request</span>
-curl <span class="hljs-string">&quot;api_endpoint_here&quot;</span>
-  -H <span class="hljs-string">&quot;Authorization: meowmeowmeow&quot;</span></code></pre><pre class="highlight javascript"><code><span class="hljs-keyword">import</span> { kittn } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;kittn&#x27;</span>;
-
-<span class="hljs-keyword">const</span> api = kittn.<span class="hljs-title function_">authorize</span>(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>);</code></pre>
-            <blockquote>
-               <p>Make sure to replace <code>meowmeowmeow</code> with your API key.</p>
-            </blockquote>
-            <p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="https://example.com/developers">developer portal</a>.</p>
-            <p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
-            <p><code>Authorization: meowmeowmeow</code></p>
-            <aside class=notice> You must replace <code>meowmeowmeow</code> with your personal API key. </aside>
-            <h1 id="kittens">Kittens</h1>
-            <h2 id="get-all-kittens">Get All Kittens</h2>
-            <pre class="highlight ruby"><code><span class="hljs-keyword">require</span> <span class="hljs-string">&#x27;kittn&#x27;</span>
-
-api = Kittn::APIClient.authorize!(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>)
-api.kittens.get</code></pre><pre class="highlight python"><code><span class="hljs-keyword">import</span> kittn
-
-api = kittn.authorize(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>)
-api.kittens.get()</code></pre><pre class="highlight bash"><code>curl <span class="hljs-string">&quot;https://example.com/api/kittens&quot;</span>
-  -H <span class="hljs-string">&quot;Authorization: meowmeowmeow&quot;</span></code></pre><pre class="highlight javascript"><code><span class="hljs-keyword">import</span> { kittn } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;kittn&#x27;</span>;
-
-<span class="hljs-keyword">const</span> api = kittn.<span class="hljs-title function_">authorize</span>(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>);
-<span class="hljs-keyword">const</span> kittens = api.<span class="hljs-property">kittens</span>.<span class="hljs-title function_">get</span>();</code></pre>
-            <blockquote>
-               <p>The above command returns JSON structured like this:</p>
-            </blockquote>
-            <pre class="highlight json"><code><span class="hljs-punctuation">[</span>
-   <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span>         <span class="hljs-number">1</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span>       <span class="hljs-string">&quot;Fluffums&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;breed&quot;</span><span class="hljs-punctuation">:</span>      <span class="hljs-string">&quot;calico&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;fluffiness&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">6</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;cuteness&quot;</span><span class="hljs-punctuation">:</span>   <span class="hljs-number">7</span>
-   <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span>         <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span>       <span class="hljs-string">&quot;Max&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;breed&quot;</span><span class="hljs-punctuation">:</span>      <span class="hljs-string">&quot;unknown&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;fluffiness&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;cuteness&quot;</span><span class="hljs-punctuation">:</span>   <span class="hljs-number">10</span>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;9&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;no restaurant matched&quot;</span>
    <span class="hljs-punctuation">}</span>
-<span class="hljs-punctuation">]</span></code></pre>
-            <p>This endpoint retrieves all kittens.</p>
-            <h3 id="http-request">HTTP Request</h3>
-            <p><code>GET https://example.com/api/kittens</code></p>
-            <h3 id="query-parameters">Query Parameters</h3>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>利用者食べログ情報取得APIの実行失敗時には次のようなメッセージが返却される</p>
             <table>
                <thead>
                   <tr>
-                     <th>Parameter</th>
-                     <th>Default</th>
-                     <th>Description</th>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
                   </tr>
                </thead>
                <tbody>
                   <tr>
-                     <td>include_cats</td>
-                     <td>false</td>
-                     <td>If set to true, the result will also include cats.</td>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
                   </tr>
                   <tr>
-                     <td>available</td>
-                     <td>true</td>
-                     <td>If set to false, the result will include kittens that have already been adopted.</td>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行が失敗した理由</td>
                   </tr>
                </tbody>
             </table>
-            <aside class=success> Remember — a happy kitten is an authenticated kitten! </aside>
-            <h2 id="get-a-specific-kitten">Get a Specific Kitten</h2>
-            <pre class="highlight ruby"><code><span class="hljs-keyword">require</span> <span class="hljs-string">&#x27;kittn&#x27;</span>
-
-api = Kittn::APIClient.authorize!(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>)
-api.kittens.get(<span class="hljs-number">2</span>)</code></pre><pre class="highlight python"><code><span class="hljs-keyword">import</span> kittn
-
-api = kittn.authorize(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>)
-api.kittens.get(<span class="hljs-number">2</span>)</code></pre><pre class="highlight bash"><code>curl <span class="hljs-string">&quot;https://example.com/api/kittens/2&quot;</span>
-  -H <span class="hljs-string">&quot;Authorization: meowmeowmeow&quot;</span></code></pre><pre class="highlight javascript"><code><span class="hljs-keyword">import</span> { kittn } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;kittn&#x27;</span>;
-
-<span class="hljs-keyword">const</span> api = kittn.<span class="hljs-title function_">authorize</span>(<span class="hljs-string">&#x27;meowmeowmeow&#x27;</span>);
-<span class="hljs-keyword">const</span> max = api.<span class="hljs-property">kittens</span>.<span class="hljs-title function_">get</span>(<span class="hljs-number">2</span>);</code></pre>
-            <blockquote>
-               <p>The above command returns JSON structured like this:</p>
-            </blockquote>
-            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
-   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span>         <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span>       <span class="hljs-string">&quot;Max&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;breed&quot;</span><span class="hljs-punctuation">:</span>      <span class="hljs-string">&quot;unknown&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;fluffiness&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;cuteness&quot;</span><span class="hljs-punctuation">:</span>   <span class="hljs-number">10</span>
-<span class="hljs-punctuation">}</span></code></pre>
-            <p>This endpoint retrieves a specific kitten.</p>
-            <aside class=warning> Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code. </aside>
-            <h3 id="http-request-with-id">HTTP Request (with ID)</h3>
-            <p><code>GET https://example.com/kittens/&lt;ID&gt;</code></p>
-            <h3 id="url-parameters">URL Parameters</h3>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
             <table>
                <thead>
                   <tr>
-                     <th>Parameter</th>
-                     <th>Description</th>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
                   </tr>
                </thead>
                <tbody>
                   <tr>
-                     <td>ID</td>
-                     <td>The ID of the kitten to retrieve</td>
+                     <td>店舗アカウントが見つからなかった</td>
+                     <td>&quot;no restaurant matched&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="店舗食べログ情報取得apigetinforestaurantevaluations">&gt; 店舗食べログ情報取得API(getInfo/restaurant/evaluations)</h2>
+            <p>店舗食べログ情報取得APIでは, その店舗に書き込まれた食べログ情報を返却する.</p>
+            <h3 id="店舗食べログ情報取得apiでのリクエストメッセージ定義">店舗食べログ情報取得APIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>店舗食べログ情報取得API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;19&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;getInfo/restaurant/evaluations&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123234&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗食べログ情報取得APIにおけるリクエストメッセージでは, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>restaurant_id</td>
+                     <td>string</td>
+                     <td>情報を取得したい店舗アカウントのIDを表す.</td>
+                  </tr>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗食べログ情報取得apiでのレスポンスメッセージ定義成功時">店舗食べログ情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>店舗食べログ情報取得API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;19&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;evaluations&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;evaluation_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456231231&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123234&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;12345&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;evaluation_grade&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;3&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;evaluation_comment&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;まあまあ美味しかった&quot;</span>
+         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;evaluation_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456231231&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123234&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;139834875&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;evaluation_grade&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;5&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;evaluation_comment&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;超美味しかった&quot;</span>
+         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;evaluation_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456231231&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11209423&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;12345&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;evaluation_grade&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;evaluation_comment&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;クソまずかった&quot;</span>
+         <span class="hljs-punctuation">}</span>
+      <span class="hljs-punctuation">]</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗食べログ情報取得API実行成功時には次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>evaluations</td>
+                     <td>JSONArray</td>
+                     <td>JSONオブジェクトの配列</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; evaluation_id</td>
+                     <td>string</td>
+                     <td>食べログID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; restaurant_id</td>
+                     <td>string</td>
+                     <td>常に検索したレストランのID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; user_id</td>
+                     <td>string</td>
+                     <td>投稿したユーザのIDが入る</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; evaluation_grade</td>
+                     <td>string</td>
+                     <td>5段階評価, 1-5が入る</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; evaluation_comment</td>
+                     <td>string</td>
+                     <td>食べログのコメント</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗食べログ情報取得apiでのレスポンスメッセージ定義失敗時">店舗食べログ情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>店舗食べログ情報取得API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;9&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;the restaurant has no evaluation&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>利用者食べログ情報取得APIの実行失敗時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行が失敗した理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>店舗アカウントが見つからなかった</td>
+                     <td>&quot;no restaurant matched&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>検索した店舗は食べログ情報を持っていない</td>
+                     <td>&quot;The restaurant has no evaluation&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="店舗情報検索apigetinforestaurants">&gt; 店舗情報検索API(getInfo/restaurants)</h2>
+            <p>店舗情報検索APIでは, パラメータのキーワードがDBの店舗テーブルのfeaturesに部分一致する店舗アカウントのリストを返却する.</p>
+            <h3 id="店舗情報検索apiでのリクエストメッセージ定義">店舗情報検索APIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>店舗座席情報取得API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;19&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;getInfo/restaurants&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;keyword&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;居酒屋&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗情報検索APIにおけるリクエストメッセージでは, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>restaurant_id</td>
+                     <td>string</td>
+                     <td>情報を取得したい店舗アカウントのIDを表す.</td>
+                  </tr>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗情報検索apiでのレスポンスメッセージ定義成功時">店舗情報検索APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>店舗情報検索API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;19&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;restaurants&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456789&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;restaurant_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;abcdefg焼肉店&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;email_addr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;example@example.com&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;address&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;高知県香美市土佐山田町xx番地yy&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;time_open&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;10:00&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;time_close&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;23:00&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;features&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;焼肉 ドリンクバー&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;holidays&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;2021/12/24&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2021/12/25&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2022/01/01&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2022/0102&quot;</span><span class="hljs-punctuation">]</span>
+         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;12345678123&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;restaurant_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;abcdefg居酒屋&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;email_addr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;abcdefg@example.com&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;address&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;高知県香美市土佐山田町xx番地qwer&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;time_open&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;18:00&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;time_close&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;01:00&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;features&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;酒 居酒屋 sake alcohol&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;holidays&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;2021/12/24&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2021/12/25&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2022/01/01&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2022/0102&quot;</span><span class="hljs-punctuation">]</span>
+         <span class="hljs-punctuation">}</span>
+      <span class="hljs-punctuation">]</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗情報検索API実行成功時には次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>restaurants</td>
+                     <td>JSONArray</td>
+                     <td>JSONオブジェクトの配列</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; restaurant_id</td>
+                     <td>string</td>
+                     <td>店舗のID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; restaurant_name</td>
+                     <td>string</td>
+                     <td>店舗名</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; email_addr</td>
+                     <td>string</td>
+                     <td>店舗のメールアドレス</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; address</td>
+                     <td>string</td>
+                     <td>店舗の住所</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; 店舗me_open</td>
+                     <td>string</td>
+                     <td>店舗の始業時間</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; time_close</td>
+                     <td>string</td>
+                     <td>店舗の終業時間</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; features</td>
+                     <td>string</td>
+                     <td>特徴キーワード</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; holidays</td>
+                     <td>string[]</td>
+                     <td>休日の年月日, YYYY/MM/DD形式</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗情報検索apiでのレスポンスメッセージ定義失敗時">店舗情報検索APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>店舗情報検索API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;10&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;no restaurant matched&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗情報検索APIの実行失敗時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行が失敗した理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>キーワードを含む店舗アカウントが見つからなかった</td>
+                     <td>&quot;no restaurant matched&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="管理者アカウント情報取得api">管理者アカウント情報取得API</h2>
+            <p>管理者アカウント情報取得APIでは下記の&quot;管理者アカウント基本情報取得API&quot;を提供する.</p>
+            <h2 id="管理者アカウント基本情報取得apigetinfoadminbasic">&gt; 管理者アカウント基本情報取得API(getInfo/admin/basic)</h2>
+            <p>管理者アカウント基本情報取得APIでは, 管理者の基本情報(id, 名前, 誕生日など)が返却される. なお, このAPIは管理者本人のみしか実行出来ない. 他のユーザが実行した場合は403エラーが返却される. また, このAPIは管理者ID若しくは管理者名のどちらかによって検索可能である.</p>
+            <h3 id="管理者アカウント基本情報取得apiでのリクエストメッセージ定義">管理者アカウント基本情報取得APIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>管理者アカウント基本情報取得API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;789&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;getInfo/admin/basic&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;searchBy&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;admin_id&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123452346789&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>管理者アカウント基本情報取得APIにおけるリクエストメッセージでは, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>searchBy</td>
+                     <td>string</td>
+                     <td>検索方法を表す.<br> 管理者アカウントIDによる検索 -&gt; &quot;admin_id&quot;<br> 管理者アカウント名による検索 -&gt; &quot;admin_name&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>admin_id</td>
+                     <td>string</td>
+                     <td>searchByが&quot;admin_id&quot;の場合に必須. 情報を取得したい管理者アカウントのIDを表す.</td>
+                  </tr>
+                  <tr>
+                     <td>admin_name</td>
+                     <td>string</td>
+                     <td>searchByが&quot;admin_name&quot;の場合に必須. 情報を取得したい管理者アカウントの名前を表す.</td>
+                  </tr>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="管理者アカウント基本情報取得apiでのレスポンスメッセージ定義成功時">管理者アカウント基本情報取得APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>管理者アカウント基本情報取得API-レスポンスメッセージの例(成功時, トークン発行者が検索対象の管理者である場合)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;789&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;admin_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456789&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;admin_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheAdmin&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;birthday&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2000/01/01&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;gender&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;male&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;email_addr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;example@example.com&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;address&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;高知県香美市土佐山田町宮ノ口185&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>管理者アカウント基本情報取得APIの実行成功時には次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>admin_id</td>
+                     <td>string</td>
+                     <td>管理者アカウントのID</td>
+                  </tr>
+                  <tr>
+                     <td>admin_name</td>
+                     <td>string</td>
+                     <td>管理者の名前</td>
+                  </tr>
+                  <tr>
+                     <td>birthday</td>
+                     <td>string</td>
+                     <td>管理者の誕生日, YYYY/MM/DD形式</td>
+                  </tr>
+                  <tr>
+                     <td>gender</td>
+                     <td>string</td>
+                     <td>管理者の性別</td>
+                  </tr>
+                  <tr>
+                     <td>email_addr</td>
+                     <td>string</td>
+                     <td>管理者のメールアドレス</td>
+                  </tr>
+                  <tr>
+                     <td>address</td>
+                     <td>string</td>
+                     <td>管理者の住所</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="管理者アカウント基本情報取得apiでのレスポンスメッセージ定義失敗時">管理者アカウント基本情報取得APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>管理者アカウント基本情報取得API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;789&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;no admin matched&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>管理者アカウント基本情報取得APIの実行失敗時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行が失敗した理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>パラメータsearchByがメッセージに含まれていない</td>
+                     <td>&quot;param.searchBy is not found&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>パラメータsearchByが不正</td>
+                     <td>&quot;params.searchBy is invalid. this should be &quot;admin_id&quot; or &quot;admin_name&quot; &quot;</td>
+                  </tr>
+                  <tr>
+                     <td>パラメータsearchByが&quot;admin_id&quot;であるが, パラメータに&quot;admin_id&quot;が含まれていない</td>
+                     <td>&quot;you specified &quot;admin_id&quot; in params.searchBy but there are not key(&quot;admin_id&quot;)&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>パラメータsearchByが&quot;admin_name&quot;であるが, パラメータに&quot;admin_name&quot;が含まれていない</td>
+                     <td>&quot;you specified &quot;admin_name&quot; in params.searchBy but there are not key(&quot;admin_name&quot;)&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>管理者アカウントが見つからなかった</td>
+                     <td>&quot;no admin matched&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h1 id="情報更新系api">&gt; 情報更新系API</h1>
+            <p>情報更新系APIでは, 利用者アカウント情報更新API, 店舗アカウント情報更新API, 管理者アカウント情報更新APIの3種類のAPIを提供する.</p>
+            <h2 id="利用者アカウント情報更新api">利用者アカウント情報更新API</h2>
+            <p>利用者アカウント情報更新APIでは, 利用者の基本情報の更新等を行う各種APIを提供する.</p>
+            <h2 id="利用者アカウント基本情報更新apiupdateinfouserbasic">&gt; 利用者アカウント基本情報更新API(updateInfo/user/basic)</h2>
+            <p>利用者アカウント基本情報更新APIは, DB上の利用者アカウント情報を更新することができる. ただし, 更新を行う事ができるのは利用者本人のみである. それ以外が実行しようとした場合は403エラーが返却される.</p>
+            <h3 id="利用者アカウント基本情報更新apiでのリクエストメッセージ定義">利用者アカウント基本情報更新APIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>利用者アカウント基本情報更新API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/user/basic&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;user_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheUser&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;birthday&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2000/01/01&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;gender&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;male&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;email_addr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;example@example.com&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;address&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;高知県香美市土佐山田町宮ノ口185&quot;</span>
+   <span class="hljs-punctuation">}</span> 
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたトークン</td>
+                  </tr>
+                  <tr>
+                     <td>user_name</td>
+                     <td>string</td>
+                     <td>利用者の名前</td>
+                  </tr>
+                  <tr>
+                     <td>birthday</td>
+                     <td>string</td>
+                     <td>利用者の誕生日, YYYY/MM/DD形式</td>
+                  </tr>
+                  <tr>
+                     <td>gender</td>
+                     <td>string</td>
+                     <td>利用者の性別</td>
+                  </tr>
+                  <tr>
+                     <td>email_addr</td>
+                     <td>string</td>
+                     <td>利用者のメールアドレス</td>
+                  </tr>
+                  <tr>
+                     <td>address</td>
+                     <td>string</td>
+                     <td>利用者の住所</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="利用者アカウント基本情報更新apiでのレスポンスメッセージ定義成功時">利用者アカウント基本情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>利用者アカウント基本情報更新API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>利用者アカウント基本情報更新APIの実行成功時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="利用者アカウント基本情報更新apiでのレスポンスメッセージ定義失敗時">利用者アカウント基本情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>利用者アカウント基本情報更新API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;403&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>利用者アカウント基本情報更新APIの実行失敗時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行失敗理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="店舗アカウント情報更新api">店舗アカウント情報更新API</h2>
+            <p>店舗アカウント情報更新APIでは, 店舗の基本情報, 座席情報, 座席利用状況, 休日情報の更新等を行うことができる.</p>
+            <h2 id="店舗アカウント基本情報更新apiupdateinforestaurantbasic">&gt; 店舗アカウント基本情報更新API(updateInfo/restaurant/basic)</h2>
+            <p>店舗アカウント基本情報更新APIでは, DB上の店舗アカウントの基本情報を更新することができる. ただし, このAPIを実行できるのは変更対象が店舗アカウント本人の時のみである. それ以外が実行しようとした場合は403エラーが返却される.</p>
+            <h3 id="店舗アカウント基本情報更新apiでのリクエストメッセージ定義">店舗アカウント基本情報更新APIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>店舗基本情報更新API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;10&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/restaurant/basic&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;restaurant_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;qwerty焼肉店&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;email_addr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;example2@example.com&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;address&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;高知県香美市土佐山田町xx番地zz&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;time_open&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;10:00&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;time_close&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;24:00&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;features&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;焼肉 ドリンクバー&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <h3 id="店舗アカウント基本情報更新apiでのレスポンスメッセージ定義成功時">店舗アカウント基本情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>店舗基本情報更新API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;10&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗アカウント基本情報更新APIの実行成功時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗アカウント基本情報更新apiでのレスポンスメッセージ定義失敗時">店舗アカウント基本情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>店舗基本情報更新API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;10&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;illegal time format&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗アカウント情報更新APIの実行失敗時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行が失敗した理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>時刻の形式が不正</td>
+                     <td>&quot;illegal time format&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="店舗座席情報更新apiupdateinforestaurantseat">&gt; 店舗座席情報更新API(updateInfo/restaurant/seat)</h2>
+            <p>店舗座席情報更新APIでは, 店舗の座席情報の追加・削除及び変更を行うことができる. ただし, このAPIを実行できるのは変更対象が店舗アカウント本人の時のみである. それ以外が実行しようとした場合は403エラーが返却される.</p>
+            <h3 id="店舗座席情報更新apiでのリクエストメッセージ定義座席情報追加">店舗座席情報更新APIでのリクエストメッセージ定義(座席情報追加)</h3>
+            <blockquote>
+               <p>店舗座席情報更新API-リクエストメッセージの例(座席情報追加)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/restaurant/seat&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;new&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;seatInfo&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+         <span class="hljs-attr">&quot;seat_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;10番卓&quot;</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-attr">&quot;capacity&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;4&quot;</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-attr">&quot;feature&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ボックス席&quot;</span>
+      <span class="hljs-punctuation">}</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗座席情報変更APIにおけるリクエストメッセージ(座席情報追加)では, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+                  <tr>
+                     <td>type</td>
+                     <td>string</td>
+                     <td>座席追加(&quot;new&quot;),<br> 座席情報変更(&quot;change&quot;),<br> 座席情報削除(&quot;delete&quot;)<br> を表す</td>
+                  </tr>
+                  <tr>
+                     <td>seatInfo</td>
+                     <td>JSONObject</td>
+                     <td>座席情報のJSONObject</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; seat_name</td>
+                     <td>string</td>
+                     <td>座席名</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; capacity</td>
+                     <td>string</td>
+                     <td>座席に座ることができる人数</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; feature</td>
+                     <td>string</td>
+                     <td>座席の特徴(自由記述)</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗座席情報更新apiでのリクエストメッセージ定義座席情報変更">店舗座席情報更新APIでのリクエストメッセージ定義(座席情報変更)</h3>
+            <blockquote>
+               <p>店舗座席情報更新API-リクエストメッセージの例(座席情報変更)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/restaurant/seat&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;change&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;seatInfo&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+         <span class="hljs-attr">&quot;seat_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;23456789&quot;</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-attr">&quot;seat_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;10番卓&quot;</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-attr">&quot;capacity&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;4&quot;</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-attr">&quot;feature&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ボックス席&quot;</span>
+      <span class="hljs-punctuation">}</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗座席情報更新APIにおけるリクエストメッセージ(座席情報変更)では, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+                  <tr>
+                     <td>type</td>
+                     <td>string</td>
+                     <td>座席追加(&quot;new&quot;),<br> 座席情報変更(&quot;change&quot;),<br> 座席情報削除(&quot;delete&quot;)<br> を表す</td>
+                  </tr>
+                  <tr>
+                     <td>seatInfo</td>
+                     <td>JSONObject</td>
+                     <td>座席情報のJSONObject</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; seat_id</td>
+                     <td>string</td>
+                     <td>変更したい座席ID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; seat_name</td>
+                     <td>string</td>
+                     <td>座席名</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; capacity</td>
+                     <td>string</td>
+                     <td>座席に座ることができる人数</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; feature</td>
+                     <td>string</td>
+                     <td>座席の特徴(自由記述)</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗座席情報更新apiでのリクエストメッセージ定義座席削除">店舗座席情報更新APIでのリクエストメッセージ定義(座席削除)</h3>
+            <blockquote>
+               <p>店舗座席情報取得API-リクエストメッセージの例(座席情報削除)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/restaurant/seat&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;delete&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;seat_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;23456789&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗座席情報変更APIにおけるリクエストメッセージ(座席情報変更)では, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+                  <tr>
+                     <td>type</td>
+                     <td>string</td>
+                     <td>座席追加(&quot;new&quot;),<br> 座席情報変更(&quot;change&quot;),<br> 座席情報削除(&quot;delete&quot;)<br> を表す</td>
+                  </tr>
+                  <tr>
+                     <td>seat_id</td>
+                     <td>string</td>
+                     <td>削除したい座席ID</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗座席情報更新apiでのレスポンスメッセージ定義成功時">店舗座席情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>店舗座席情報更新API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;seat_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456792&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗座席情報更新APIの実行成功時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>seat_id</td>
+                     <td>string</td>
+                     <td>追加/変更した座席ID. ただし, 座席削除の場合はこの項目は含まれない.</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗座席情報更新apiでのレスポンスメッセージ定義失敗時">店舗座席情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>店舗座席情報更新API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;the seat you want to delete/change is not yours&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗座席情報更新APIの実行失敗時には, 次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行失敗理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>自分の店舗以外の座席情報を変更/削除しようとした</td>
+                     <td>&quot;the seat you want to delete/change is not yours&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="店舗座席利用状況更新apiupdateinforestaurantseatsavailability">&gt; 店舗座席利用状況更新API(updateInfo/restaurant/seatsAvailability)</h2>
+            <p>店舗座席利用状況更新APIでは, 店舗の座席利用状況を更新することができる. ただし, このAPIを実行できるのは変更対象が店舗アカウント本人の時のみである. それ以外が実行しようとした場合は403エラーが返却される.</p>
+            <h3 id="店舗座席利用状況更新apiでのリクエストメッセージ定義">店舗座席利用状況更新APIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>店舗座席利用状況情報取得API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/restaurant/seatAvailability&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;seats&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;seat_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456789&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;is_filled&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span>
+         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;seat_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456790&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;is_filled&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span>
+         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;seat_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456791&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;is_filled&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span>
+         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-punctuation">{</span>
+            <span class="hljs-attr">&quot;seat_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456792&quot;</span><span class="hljs-punctuation">,</span>
+            <span class="hljs-attr">&quot;is_filled&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span>
+         <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-punctuation">]</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗座席利用状況変更APIにおけるリクエストメッセージでは, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+                  <tr>
+                     <td>seats</td>
+                     <td>JSONArray</td>
+                     <td>座席情報のJSONArray</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; seat_id</td>
+                     <td>string</td>
+                     <td>座席ID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; is_filled</td>
+                     <td>string</td>
+                     <td>座席が使用されているかを表す<br> true-&gt;使用されている,<br> false-&gt;使用されていない</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗座席利用状況更新apiでのレスポンスメッセージ定義成功時">店舗座席利用状況更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>店舗座席利用状況更新API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗座席利用状況更新APIの実行成功時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗座席利用状況更新apiでのレスポンスメッセージ定義失敗時">店舗座席利用状況更新APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>店舗座席利用状況更新API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;the seats that is not yours are included the request&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗座席利用状況更新APIの実行失敗時には, 次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行失敗理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>自分の店舗以外の座席利用状況を変更しようとした</td>
+                     <td>&quot;the seats that is not yours are included the request&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="店舗休日情報更新apiupdateinforestaurantholidays">&gt; 店舗休日情報更新API(updateInfo/restaurant/holidays)</h2>
+            <p>店舗休日情報更新APIでは, 店舗の休日情報を登録/削除することができる. ただし, このAPIを実行できるのは店舗アカウント本人のみである. それ以外が実行しようとした場合は403エラーが返却される. なお, 休日追加を行う場合に既に登録している休日情報を再度追加しても構わない. ただし, 登録されていない休日情報を削除するようなリクエストが送信された場合, このAPIはエラーを返却する. この場合のエラーメッセージは別途定義する.</p>
+            <h3 id="店舗休日情報更新apiでのリクエストメッセージ定義休日追加">店舗休日情報更新APIでのリクエストメッセージ定義(休日追加)</h3>
+            <blockquote>
+               <p>店舗休日情報取得API-リクエストメッセージの例(休日追加)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/restaurant/holidays&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;new&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;holidays&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;2021/12/12&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2021/12/31&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2022/01/03&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2022/01/11&quot;</span><span class="hljs-punctuation">]</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗座席情報変更APIにおけるリクエストメッセージ(座席情報追加)では, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+                  <tr>
+                     <td>type</td>
+                     <td>string</td>
+                     <td>休日情報追加(&quot;new&quot;)もしくは休日情報削除(&quot;delete&quot;)を表す</td>
+                  </tr>
+                  <tr>
+                     <td>holidays</td>
+                     <td>string[]</td>
+                     <td>休日情報(YYYY/MM/DD)の配列</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗休日情報更新apiでのリクエストメッセージ定義休日削除">店舗休日情報更新APIでのリクエストメッセージ定義(休日削除)</h3>
+            <blockquote>
+               <p>店舗休日情報取得API-リクエストメッセージの例(休日削除)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/restaurant/holidays&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;delete&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;holidays&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;2021/12/12&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2021/12/31&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2022/01/03&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;2022/01/11&quot;</span><span class="hljs-punctuation">]</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗座席情報変更APIにおけるリクエストメッセージ(座席情報追加)では, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+                  <tr>
+                     <td>type</td>
+                     <td>string</td>
+                     <td>休日情報追加(&quot;new&quot;)もしくは休日情報削除(&quot;delete&quot;)を表す</td>
+                  </tr>
+                  <tr>
+                     <td>holidays</td>
+                     <td>string[]</td>
+                     <td>休日情報(YYYY/MM/DD)の配列</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗休日情報更新apiでのレスポンスメッセージ定義成功時">店舗休日情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>店舗休日情報更新API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗休日情報更新APIの実行成功時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗休日情報更新apiでのレスポンスメッセージ定義失敗時">店舗休日情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>店舗休日情報更新API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;the holiday that you wanted to delete is not registered&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗休日情報更新APIの実行失敗時には, 次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行失敗理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>休日情報にYYYY/MM/DD形式でない情報が含まれている</td>
+                     <td>&quot;illegal format included in holidays&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>削除しようとした休日情報は登録されていない</td>
+                     <td>&quot;the holiday that you wanted to delete is not registered&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="管理者アカウント情報更新api">管理者アカウント情報更新API</h2>
+            <p>管理者アカウント情報更新APIでは, 管理者の基本情報を更新するAPIを提供する.</p>
+            <h2 id="管理者アカウント基本情報更新apiupdateinfoadminbasic">&gt; 管理者アカウント基本情報更新API(updateInfo/admin/basic)</h2>
+            <p>管理者アカウント基本情報更新APIでは, DB上の管理者テーブルにある情報を更新することができる. ただし, このAPIを実行できるのは, 管理者本人のみである.</p>
+            <h3 id="管理者アカウント基本情報更新apiでのリクエストメッセージ定義">管理者アカウント基本情報更新APIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>管理者アカウント基本情報更新API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/admin/basic&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;admin_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheUser&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;birthday&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2000/01/01&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;gender&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;male&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;email_addr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;example@example.com&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;address&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;高知県香美市土佐山田町宮ノ口185&quot;</span>
+   <span class="hljs-punctuation">}</span> 
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたトークン</td>
+                  </tr>
+                  <tr>
+                     <td>admin_name</td>
+                     <td>string</td>
+                     <td>管理者の名前</td>
+                  </tr>
+                  <tr>
+                     <td>birthday</td>
+                     <td>string</td>
+                     <td>管理者の誕生日, YYYY/MM/DD形式</td>
+                  </tr>
+                  <tr>
+                     <td>gender</td>
+                     <td>string</td>
+                     <td>管理者の性別</td>
+                  </tr>
+                  <tr>
+                     <td>email_addr</td>
+                     <td>string</td>
+                     <td>管理者のメールアドレス</td>
+                  </tr>
+                  <tr>
+                     <td>address</td>
+                     <td>string</td>
+                     <td>管理者の住所</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="管理者アカウント基本情報更新apiでのレスポンスメッセージ定義成功時">管理者アカウント基本情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>管理者アカウント基本情報更新API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>管理者アカウント基本情報更新APIの実行成功時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="管理者アカウント基本情報更新apiでのレスポンスメッセージ定義失敗時">管理者アカウント基本情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>管理者アカウント基本情報更新API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;403&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>管理者アカウント基本情報更新APIの実行失敗時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行失敗理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h1 id="共通情報更新api">&gt; 共通情報更新API</h1>
+            <p>共通情報更新APIでは, 予約情報と食べログ情報の情報更新を行うことができる. なお, このAPIが実行できるのは, 予約/食べログを登録した利用者か, 予約/食べログを登録された店舗アカウントのみである. それ以外が実行した場合は403エラーが返却される.</p>
+            <h2 id="予約情報更新apiupdateinforeservation">&gt; 予約情報更新API(updateInfo/reservation)</h2>
+            <p>予約情報更新APIでは, 予約情報の登録及び削除を行うことができる. ただし, 予約情報の登録を行うことができるのはトークン発行者が利用者アカウントのみの場合である.</p>
+            <h3 id="予約情報更新apiでのリクエストメッセージ定義予約情報登録">予約情報更新APIでのリクエストメッセージ定義(予約情報登録)</h3>
+            <blockquote>
+               <p>予約情報更新API-リクエストメッセージの例(予約情報登録)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;7895&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/reservation&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;new&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reservationData&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+         <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;49786123&quot;</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-attr">&quot;seat_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;467831&quot;</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-attr">&quot;time_start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1639636200000&quot;</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-attr">&quot;time_end&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1639643400000&quot;</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-attr">&quot;num_people&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;5&quot;</span>
+      <span class="hljs-punctuation">}</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>予約情報更新APIにおけるリクエストメッセージ(登録)では, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>type</td>
+                     <td>string</td>
+                     <td>予約情報登録(&quot;new&quot;)か, 予約情報削除(&quot;delete&quot;)を表す.</td>
+                  </tr>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+                  <tr>
+                     <td>reservationData</td>
+                     <td>JSONObject</td>
+                     <td>予約情報のJSONデータ</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; restaurant_id</td>
+                     <td>string</td>
+                     <td>予約したい店舗のID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; seat_id</td>
+                     <td>string</td>
+                     <td>予約したい座席のID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; time_start</td>
+                     <td>string</td>
+                     <td>予約開始時間</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; time_end</td>
+                     <td>string</td>
+                     <td>予約終了時間</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; num_people</td>
+                     <td>string</td>
+                     <td>一緒に行く人数</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="予約情報更新apiでのリクエストメッセージ定義予約情報削除">予約情報更新APIでのリクエストメッセージ定義(予約情報削除)</h3>
+            <blockquote>
+               <p>予約情報更新API-リクエストメッセージの例(予約情報削除)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;7895&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/reservation&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;delete&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reservation_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;23456789&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>予約情報更新APIにおけるリクエストメッセージ(削除)では, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>type</td>
+                     <td>string</td>
+                     <td>予約情報登録(&quot;new&quot;)か, 予約情報削除(&quot;delete&quot;)を表す.</td>
+                  </tr>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+                  <tr>
+                     <td>reservation=id</td>
+                     <td>string</td>
+                     <td>予約ID</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="予約情報更新apiでのレスポンスメッセージ定義成功時">予約情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>予約情報更新API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;6&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reservation_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;4674861&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>予約情報更新APIの実行成功時には次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reservation_id</td>
+                     <td>string</td>
+                     <td>登録した予約情報のID, ただし, 予約削除リクエストの場合はこの項目はメッセージに含まれない</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="予約情報更新apiでのレスポンスメッセージ定義失敗時">予約情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>予約情報更新API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;6&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;invalid reservation time&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>予約情報更新APIの実行失敗時には次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行失敗理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>削除しようとした予約IDが見つからない</td>
+                     <td>&quot;the reservation_id that you wanted to delete was not found&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>登録しようとした座席IDが見つからない</td>
+                     <td>&quot;the seat_id is invalid&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>座席に座れる人数に対して予約人数が多すぎる</td>
+                     <td>&quot;num_people is too much&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>予約しようとした時間が営業時間外である</td>
+                     <td>&quot;time of reservation is out of business hours&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>time_endがtime_startより小さい</td>
+                     <td>&quot;invalid reservation time&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>店舗アカウントが予約情報を登録しようとした</td>
+                     <td>&quot;restaurant account can not register reservation&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="食べログ情報更新apiupdateinfoevaluation">&gt; 食べログ情報更新API(updateInfo/evaluation)</h2>
+            <p>食べログ情報更新APIでは, 食べログ情報の投稿, 変更または削除を行うことができる. ただし, 食べログ情報の登録/変更ができるのは利用者アカウントのみであり, 店舗アカウントは削除のみ可能である.</p>
+            <h3 id="食べログ情報更新apiでのリクエストメッセージ定義食べログ登録">食べログ情報更新APIでのリクエストメッセージ定義(食べログ登録)</h3>
+            <blockquote>
+               <p>食べログ情報更新APIでのリクエストメッセージ定義(食べログ登録)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;7895&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/evaluation&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;new&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;evaluationData&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+         <span class="hljs-attr">&quot;restaurant_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456789&quot;</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-attr">&quot;evaluation_grade&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;3&quot;</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-attr">&quot;evaluation_comment&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;まあまあ&quot;</span>
+      <span class="hljs-punctuation">}</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>食べログ情報更新APIにおけるリクエストメッセージ(食べログ登録)では, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>type</td>
+                     <td>string</td>
+                     <td>食べログ情報登録(&quot;new&quot;)<br>食べログ情報変更(&quot;change&quot;)<br>食べログ情報削除(&quot;delete&quot;)<br>のいずれか</td>
+                  </tr>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+                  <tr>
+                     <td>evaluationData</td>
+                     <td>JSONObject</td>
+                     <td>食べログ情報のJSONデータ</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; restaurant_id</td>
+                     <td>string</td>
+                     <td>食べログを書き込む店舗ID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; evaluation_grade</td>
+                     <td>string</td>
+                     <td>5段階評価(1-5)</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; evaluation_comment</td>
+                     <td>string</td>
+                     <td>食べログ(コメント)</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="食べログ情報更新apiでのリクエストメッセージ定義食べログ変更">食べログ情報更新APIでのリクエストメッセージ定義(食べログ変更)</h3>
+            <blockquote>
+               <p>食べログ情報更新APIでのリクエストメッセージ定義(食べログ変更)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;7895&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/evaluation&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;change&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;evaluationData&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+         <span class="hljs-attr">&quot;evaluation_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456789&quot;</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-attr">&quot;evaluation_grade&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;5&quot;</span><span class="hljs-punctuation">,</span>
+         <span class="hljs-attr">&quot;evaluation_comment&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;やっぱり美味しかったかも&quot;</span>
+      <span class="hljs-punctuation">}</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>食べログ情報更新APIにおけるリクエストメッセージ(食べログ登録)では, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>type</td>
+                     <td>string</td>
+                     <td>食べログ情報登録(&quot;new&quot;)<br>食べログ情報変更(&quot;change&quot;)<br>食べログ情報削除(&quot;delete&quot;)<br>のいずれか</td>
+                  </tr>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+                  <tr>
+                     <td>evaluationData</td>
+                     <td>JSONObject</td>
+                     <td>食べログ情報のJSONデータ</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; evaluation_id</td>
+                     <td>string</td>
+                     <td>編集したい食べログID</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; evaluation_grade</td>
+                     <td>string</td>
+                     <td>5段階評価(1-5)</td>
+                  </tr>
+                  <tr>
+                     <td>&gt; evaluation_comment</td>
+                     <td>string</td>
+                     <td>食べログ(コメント)</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="食べログ情報更新apiでのリクエストメッセージ定義食べログ削除">食べログ情報更新APIでのリクエストメッセージ定義(食べログ削除)</h3>
+            <blockquote>
+               <p>食べログ情報更新APIでのリクエストメッセージ定義(食べログ削除)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;7895&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/evaluation&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;delete&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;evaluation_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456789&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>食べログ情報更新APIにおけるリクエストメッセージ(食べログ登録)では, 次のパラメータが含まれている必要がある.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>type</td>
+                     <td>string</td>
+                     <td>食べログ情報登録(&quot;new&quot;)<br>食べログ情報変更(&quot;change&quot;)<br>食べログ情報削除(&quot;delete&quot;)<br>のいずれか</td>
+                  </tr>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたtoken</td>
+                  </tr>
+                  <tr>
+                     <td>evaluation_id</td>
+                     <td>JSONObject</td>
+                     <td>削除したい食べログID</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="食べログ情報更新apiでのレスポンスメッセージ定義成功時">食べログ情報更新APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>食べログ情報更新API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;7895&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;evaluation_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;4674861&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>食べログ情報更新APIの実行成功時には次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>evaluation_id</td>
+                     <td>string</td>
+                     <td>登録/変更した食べログ情報のID, ただし, 食べログ削除リクエストの場合はこの項目はメッセージに含まれない</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="食べログ情報更新apiでのレスポンスメッセージ定義失敗時">食べログ情報更新APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>食べログ情報更新API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;7895&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;evaluation_grade is illegal&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>食べログ情報更新APIの実行失敗時には次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行失敗理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>食べログを登録しようとした店舗IDが見つからない</td>
+                     <td>&quot;there is no restaurant that you specified in params.restaurant_id &quot;</td>
+                  </tr>
+                  <tr>
+                     <td>変更/削除しようとした食べログIDが見つからない</td>
+                     <td>&quot;the evaluation_id that you wanted to delete or change was not found&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>evaluation_grade が1-5の範囲外</td>
+                     <td>&quot;evaluation_grade is illegal&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h1 id="アカウント退会系api">アカウント退会系API</h1>
+            <p>アカウント退会系APIでは, 通常のアカウント退会APIと強制退会APIの2種類が提供される.</p>
+            <h2 id="アカウント退会apiresign">アカウント退会API(resign)</h2>
+            <p>アカウント退会APIでは, 各クライアントからの要求により, DB上から各種アカウント情報を削除する. ただし, このAPIを実行することができるのは, 各アカウントの本人のみである. それ以外が実行しようとした場合は403エラーが返却される.</p>
+            <h3 id="アカウント退会apiでのリクエストメッセージ定義">アカウント退会APIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>アカウント退会API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;resign&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;YourPassWord&quot;</span>
+   <span class="hljs-punctuation">}</span> 
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行されたトークン</td>
+                  </tr>
+                  <tr>
+                     <td>password</td>
+                     <td>string</td>
+                     <td>各クライアントアカウントのパスワード(確認)</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="アカウント退会apiでのレスポンスメッセージ定義成功時">アカウント退会APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>アカウント退会API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>アカウント退会APIの実行成功時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="アカウント退会apiでのレスポンスメッセージ定義失敗時">アカウント退会APIでのレスポンスメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>アカウント退会API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;the password is wrong&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>アカウント退会APIの実行失敗時には, 次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行失敗理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>確認用パスワードが間違っている</td>
+                     <td>&quot;the password is wrong&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h2 id="アカウント強制退会apiresignforced">アカウント強制退会API(resign/forced)</h2>
+            <p>アカウント強制退会APIでは, 管理者からの要求により, DB上から各アカウント情報(ただし, 利用者アカウントと店舗アカウントのみ)を強制的に削除する. ただし, このAPIを実行することができるのは管理者アカウントのみである. それ以外が実行しようとした場合は403エラーが返却される.</p>
+            <h3 id="アカウント強制退会apiでのリクエストメッセージ定義">アカウント強制退会APIでのリクエストメッセージ定義</h3>
+            <blockquote>
+               <p>アカウント退会API-リクエストメッセージの例</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;resign&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;account_role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;account_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;123456789&quot;</span>
+   <span class="hljs-punctuation">}</span> 
+<span class="hljs-punctuation">}</span></code></pre>
+            <table>
+               <thead>
+                  <tr>
+                     <th>パラメータ</th>
+                     <th>型</th>
+                     <th>説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>token</td>
+                     <td>string</td>
+                     <td>ログイン時に発行された管理者トークン</td>
+                  </tr>
+                  <tr>
+                     <td>account_role</td>
+                     <td>string</td>
+                     <td>削除したいアカウントの種別<br>利用者 -&gt; &quot;user&quot;,<br> 店舗 -&gt; &quot;restaurant&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>account_id</td>
+                     <td>string</td>
+                     <td>削除したいアカウントID</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="アカウント強制退会apiでのレスポンスメッセージ定義成功時">アカウント強制退会APIでのレスポンスメッセージ定義(成功時)</h3>
+            <blockquote>
+               <p>アカウント強制退会API-レスポンスメッセージの例(成功時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;success&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>アカウント強制退会APIの実行成功時には次のようなメッセージが返却される</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;success&quot;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3 id="アカウント強制退会apiでのリクエストメッセージ定義失敗時">アカウント強制退会APIでのリクエストメッセージ定義(失敗時)</h3>
+            <blockquote>
+               <p>アカウント強制退会API-レスポンスメッセージの例(失敗時)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;487453&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;there is no such account&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>アカウント強制退会APIの実行失敗時には, 次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;error&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>実行失敗理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>失敗理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>account_roleが不正</td>
+                     <td>&quot;account_role is illegal&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>削除したいアカウントIDが存在しない</td>
+                     <td>&quot;there is no such account&quot;</td>
                   </tr>
                </tbody>
             </table>
