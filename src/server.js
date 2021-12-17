@@ -7,6 +7,7 @@ ws.on('connection', sock => {
     sock.id = uuid4();
 
     sock.on("message", msg => {
+        console.log("=============================");
         console.log("msg from: " + sock.id);
 
         msg = isValidJSON(msg);
@@ -87,6 +88,7 @@ function resultSender(sock, result){
 function methodExecuter(sock, msg){
     methodName = getMethodName(msg);
     if(methodName == false){
+        console.log("invalid method");
         errorSender(sock, "404");
         return false;
     }else{
@@ -106,7 +108,7 @@ function methodExecuter(sock, msg){
  */
 function getMethodName(msg){
     console.log(msg);
-    if(msg.hasOwnProperty(msg) == false){
+    if(msg.hasOwnProperty("method") == false){
         return false;
     }
 
@@ -122,10 +124,12 @@ function getMethodName(msg){
 
     let isMethodFound = false;
     for(let i = 0; i < methodList.length; i++){
+        console.log(method + "  :  " + methodList[i]);
         if(method == methodList[i]){
+            console.log("valid method");
             return method;
         }
     }
 
-    return isMethodFound;
+    return false;
 }
