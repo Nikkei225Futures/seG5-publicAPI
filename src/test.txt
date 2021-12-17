@@ -1,0 +1,7 @@
+current clients
+clientID: eae033d5-1630-4e2a-8697-66007fe5fec4
+----------------------
+msg from: eae033d5-1630-4e2a-8697-66007fe5fec4
+msg: {"jsonrpc":"2.0"}
+valid Data
+undefined
