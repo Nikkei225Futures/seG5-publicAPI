@@ -1,30 +1,20 @@
 const server = require('ws').Server;
 const ws = new server({port: 8889});
 let uuid4 = require('uuid4');
-let numMsg = 0;
 
 ws.on('connection', sock => {
 
     sock.id = uuid4();
 
-    console.log("current clients");
-    ws.clients.forEach(client => {
-        console.log("clientID: " + client.id);
-    });
-
-    console.log("----------------------");
-
     sock.on("message", msg => {
         console.log("msg from: " + sock.id);
-        console.log("msg: " + msg);
-        numMsg++
 
         msg = isValidJSON(msg);
+        console.log("msg: " + msg);
         //if msg can not parse, return errorMsg(400 bad req)
         if(msg == false){
             errorSender(sock, "400");
         }else{
-            console.log("valid Data");
             result = methodExecuter(sock, msg);
             if(result != false){
                 resultSender(sock, result);
@@ -53,6 +43,7 @@ function isValidJSON(msg){
         }
         return false;
     }
+    console.log("valid json");
     return parsedMsg;
 }
 
@@ -94,10 +85,12 @@ function resultSender(sock, result){
  * @returns {JSONObject | false} メソッドが存在し, 実行が成功すれば結果を返却する, エラーの場合はfalse.
  */
 function methodExecuter(sock, msg){
-    if(isMethodExists(msg) == false){
+    methodName = getMethodName(msg);
+    if(methodName == false){
         errorSender(sock, "404");
         return false;
     }else{
+        console.log("methodName: " + methodName);
         let result = {
            "status": "success",
            "msg": "you specified valid method"
@@ -109,11 +102,11 @@ function methodExecuter(sock, msg){
 /**
  * メソッドが存在するかどうかを返却する
  * @param {JSONObject} msg JSONデータ
- * @returns {boolean} if false -> メソッドが存在しない, true -> 存在する
+ * @returns {boolean | string} 存在しない->false, 存在する->メソッド名を返却する
  */
-function isMethodExists(msg){
+function getMethodName(msg){
     console.log(msg);
-    if("method" in msg == false){
+    if(msg.hasOwnProperty(msg) == false){
         return false;
     }
 
@@ -130,8 +123,7 @@ function isMethodExists(msg){
     let isMethodFound = false;
     for(let i = 0; i < methodList.length; i++){
         if(method == methodList[i]){
-            isMethodFound = true;
-            break;
+            return method;
         }
     }
 
