@@ -34,7 +34,7 @@ ws.on('connection', sock => {
     });
 
     sock.on("close", msg => {
-        
+        sock.send("byebye");
     });
 });
 
@@ -43,7 +43,6 @@ ws.on('connection', sock => {
  * @param {string} msg 受信したメッセージ
  * @returns {false | JSONObject} JSONに変換できるならメッセージが, 変換できないならfalseが返却される
  */
-
 function isValidJSON(msg){
     try{
         parsedMsg = JSON.parse(msg);
