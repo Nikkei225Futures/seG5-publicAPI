@@ -24,8 +24,14 @@ ws.on('connection', sock => {
 
     });
 
-    sock.on("close", msg => {
-        sock.send("byebye");
+    sock.on("close", () => {
+        let clsMsg = {
+            "jsonrpc": "2.0",
+            "result": {
+                "greeting": "byebye"
+            }
+        }
+        sock.send(JSON.stringify(clsMsg));
     });
 });
 
@@ -88,7 +94,7 @@ function resultSender(sock, result){
 function methodExecuter(sock, msg){
     methodName = getMethodName(msg);
     if(methodName == false){
-        console.log("invalid method");
+        console.log("404 - not found");
         errorSender(sock, "404");
         return false;
     }else{
@@ -122,7 +128,6 @@ function getMethodName(msg){
         "updateInfo/reservation", "updateInfo/evaluation", "resign", "resign/forced"
     ];
 
-    let isMethodFound = false;
     for(let i = 0; i < methodList.length; i++){
         console.log(method + "  :  " + methodList[i]);
         if(method == methodList[i]){

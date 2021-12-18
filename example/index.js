@@ -7,7 +7,7 @@ svr.addEventListener("open", () => {
 
 svr.addEventListener("message", msg => {
     msg = JSON.parse(msg.data);
-    log.innerHTML = msg;
+    log.innerHTML = JSON.stringify(msg);
     
     console.log(msg);
 });
