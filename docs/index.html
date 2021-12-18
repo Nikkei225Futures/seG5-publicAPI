@@ -38,7 +38,7 @@
             <h1 id="introduction">Introduction</h1>
             <p>これは, ソフトウェア工学でのG5-ちらSeatの公開APIドキュメントである.</p>
             <h1 id="overview">Overview</h1>
-            <p>この公開APIでは, APIにアクセスするためにWebsocketを用いる. また, APIはJSON-RPCのメッセージ形式でデータの送受信を行う. この公開APIでは, 主にアカウント登録系, ログイン/ログアウト系, 情報参照系, 情報取得系APIの5種類が提供される. 特に, 情報参照, 情報変更系APIへのアクセスはトークンによる認証を行うため, ログインAPIを1番最初に実行してトークンを手に入れる必要がある.</p>
+            <p>この公開APIでは, APIにアクセスするためにWebsocketを用いる. また, APIはJSON-RPCのメッセージ形式でデータの送受信を行う. この公開APIでは, 主にアカウント登録系, ログイン/ログアウト系, 情報参照系, 情報取得系APIの4種類が提供される. アカウント登録以外のほとんどのAPIへのアクセスはトークンによる認証を行うため, ログインAPIを1番最初に実行してトークンを手に入れる必要がある.</p>
             <h2 id="json-rpc">JSON-RPC</h2>
             <p>JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルである. JSON-RPCでは, クライアント-サーバ間で送受信されるデータ構造とそのルールを定義する.</p>
             <h3 id="関数を呼び出すリクエスト">関数を呼び出す(リクエスト)</h3>
@@ -51,7 +51,7 @@
    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;12345&quot;</span><span class="hljs-punctuation">,</span>
    <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;login&quot;</span><span class="hljs-punctuation">,</span>
    <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">&quot;userName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheUser&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;user_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheUser&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myPasswordIsPASSWORD&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;restaurant&quot;</span>
    <span class="hljs-punctuation">}</span>
@@ -164,7 +164,7 @@
                </thead>
                <tbody>
                   <tr>
-                     <td>userName</td>
+                     <td>user_name</td>
                      <td>string</td>
                      <td>ユーザ名</td>
                   </tr>
@@ -279,7 +279,7 @@
                </thead>
                <tbody>
                   <tr>
-                     <td>restaurantName</td>
+                     <td>restaurant_name</td>
                      <td>string</td>
                      <td>店舗名</td>
                   </tr>
@@ -395,7 +395,7 @@
                </thead>
                <tbody>
                   <tr>
-                     <td>adminName</td>
+                     <td>admin_name</td>
                      <td>string</td>
                      <td>管理者名</td>
                   </tr>
@@ -405,7 +405,7 @@
                      <td>パスワード</td>
                   </tr>
                   <tr>
-                     <td>adminPassword</td>
+                     <td>admin_password</td>
                      <td>string</td>
                      <td>管理者アカウントを作成するためのパスワード</td>
                   </tr>
@@ -448,7 +448,7 @@
    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;4&quot;</span><span class="hljs-punctuation">,</span>
    <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
       <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;You don&#x27;t have permission to create admin account. adminPassword is wrong.&quot;</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;You don&#x27;t have permission to create admin account. admin_password is wrong.&quot;</span>
    <span class="hljs-punctuation">}</span>
 <span class="hljs-punctuation">}</span></code></pre>
             <p>リクエストの処理に失敗した場合は次のようなレスポンスが返却される.</p>
@@ -488,8 +488,8 @@
                </thead>
                <tbody>
                   <tr>
-                     <td>adminPasswordが間違っている</td>
-                     <td>&quot;You don&#39;t have permission to create admin account. adminPassword is wrong.&quot;</td>
+                     <td>admin_passwordが間違っている</td>
+                     <td>&quot;You don&#39;t have permission to create admin account. admin_password is wrong.&quot;</td>
                   </tr>
                   <tr>
                      <td>admin_nameが他のユーザと重複している</td>
@@ -3623,7 +3623,7 @@
                   </tr>
                </tbody>
             </table>
-            <h1 id="アカウント退会系api">アカウント退会系API</h1>
+            <h1 id="アカウント退会系api">&gt; アカウント退会系API</h1>
             <p>アカウント退会系APIでは, 通常のアカウント退会APIと強制退会APIの2種類が提供される.</p>
             <h2 id="アカウント退会apiresign">アカウント退会API(resign)</h2>
             <p>アカウント退会APIでは, 各クライアントからの要求により, DB上から各種アカウント情報を削除する. ただし, このAPIを実行することができるのは, 各アカウントの本人のみである. それ以外が実行しようとした場合は403エラーが返却される.</p>

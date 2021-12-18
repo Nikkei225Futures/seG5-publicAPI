@@ -2,8 +2,8 @@
 これは, ソフトウェア工学でのG5-ちらSeatの公開APIドキュメントである.
 
 # Overview
-この公開APIでは, APIにアクセスするためにWebsocketを用いる. また, APIはJSON-RPCのメッセージ形式でデータの送受信を行う. この公開APIでは, 主にアカウント登録系, ログイン/ログアウト系, 情報参照系, 情報取得系APIの5種類が提供される.
-特に, 情報参照, 情報変更系APIへのアクセスはトークンによる認証を行うため, ログインAPIを1番最初に実行してトークンを手に入れる必要がある.
+この公開APIでは, APIにアクセスするためにWebsocketを用いる. また, APIはJSON-RPCのメッセージ形式でデータの送受信を行う. この公開APIでは, 主にアカウント登録系, ログイン/ログアウト系, 情報参照系, 情報取得系APIの4種類が提供される.
+アカウント登録以外のほとんどのAPIへのアクセスはトークンによる認証を行うため, ログインAPIを1番最初に実行してトークンを手に入れる必要がある.
 
 ## JSON-RPC
 JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルである. JSON-RPCでは, クライアント-サーバ間で送受信されるデータ構造とそのルールを定義する.
@@ -21,7 +21,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
    "id": "12345",
    "method": "login",
    "params": {
-      "userName": "IAmTheUser",
+      "user_name": "IAmTheUser",
       "password": "myPasswordIsPASSWORD",
       "role": "restaurant"
    }
@@ -95,7 +95,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 
 | パラメータ | 型 | 説明 |
 | --------- | --- | --- |
-| userName | string | ユーザ名 |
+| user_name | string | ユーザ名 |
 | password | string | パスワード |
 
 ### 利用者アカウント登録APIでのレスポンスメッセージ
@@ -161,7 +161,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 
 | パラメータ | 型 | 説明 |
 | --------- | --- | --- |
-| restaurantName | string | 店舗名 |
+| restaurant_name | string | 店舗名 |
 | password | string | パスワード |
 
 
@@ -229,9 +229,9 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 
 | パラメータ | 型 | 説明 |
 | --------- | --- | --- |
-| adminName | string | 管理者名 |
+| admin_name | string | 管理者名 |
 | password | string | パスワード |
-| adminPassword | string | 管理者アカウントを作成するためのパスワード |
+| admin_password | string | 管理者アカウントを作成するためのパスワード |
 
 ### 管理者アカウント登録成功時のレスポンスメッセージ定義
 > 管理者アカウント登録API-レスポンスメッセージの例(成功時)
@@ -258,7 +258,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
    "id": "4",
    "result": {
       "status": "error",
-      "reason": "You don't have permission to create admin account. adminPassword is wrong."
+      "reason": "You don't have permission to create admin account. admin_password is wrong."
    }
 }
 ```
@@ -272,7 +272,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 このメソッドには共通エラーメッセージの他に次のエラーメッセージ(reason)が含まれる場合がある. これは次の表の通りである.
 | 失敗理由 | reasonの内容 |
 | ----------- | -------- |
-| adminPasswordが間違っている | "You don't have permission to create admin account. adminPassword is wrong." |
+| admin_passwordが間違っている | "You don't have permission to create admin account. admin_password is wrong." |
 | admin_nameが他のユーザと重複している | "admin_name has already taken by other user" |
 
 
@@ -1929,7 +1929,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 
 
 
-# アカウント退会系API
+# > アカウント退会系API
 アカウント退会系APIでは, 通常のアカウント退会APIと強制退会APIの2種類が提供される.
 ## アカウント退会API(resign)
 アカウント退会APIでは, 各クライアントからの要求により, DB上から各種アカウント情報を削除する. ただし, このAPIを実行することができるのは, 各アカウントの本人のみである. それ以外が実行しようとした場合は403エラーが返却される.
