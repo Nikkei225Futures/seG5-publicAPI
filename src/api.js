@@ -44,8 +44,14 @@ function registerUser(params, errSock, msgId){
  */
  function methodExecuter(sock, msg, msgId){
     methodName = getMethodName(msg);
-
     console.log("methodName: " + methodName);
+
+    //get msg.params, if no params=>err
+    params = paramParser(msg);
+    if(params == false){
+        errorSender(sock, "453", msgId);
+        return false;
+    }
 
     let result = {
         "status": "success",
@@ -53,14 +59,7 @@ function registerUser(params, errSock, msgId){
     }
 
     if(methodName == "register/user"){
-        params = paramParser(msg);
-        if(params == false){
-            errorSender(sock, "453", msgId);
-            return false;
-        }else{
-            result = registerUser(params, sock, msgId);
-            return result;
-        }
+        result = registerUser(params, sock, msgId);
 
     }else if(methodName == "register/admin"){
 
@@ -133,8 +132,6 @@ function registerUser(params, errSock, msgId){
     console.log("valid json");
     return parsedMsg;
 }
-
-
 
 /**
  * パラメータが存在するかチェックし, 存在するならオブジェクトを返す
