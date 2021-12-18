@@ -25,6 +25,7 @@ reason | Meaning
 418 | I'm a teapot -- pouring coffee with teapot is unacceptable. respect teapot and the humanity.
 429 | Too Many Requests -- リクエストが多すぎる.
 452 | No token included -- トークンによる認証が必要なAPIにおいてパラメータにトークンが含まれていない
+453 | No parameter included -- パラメータが無い
 500 | Internal Server Error -- 何等かの理由で処理が実行できなかった.
 512 | DB connection failed -- DBへ接続できなかった.
 
