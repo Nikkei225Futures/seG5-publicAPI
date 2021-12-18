@@ -1,4 +1,6 @@
-exports.isValidJSON = isValidJSON;
+const { triggerAsyncId } = require("async_hooks");
+
+exports.jsonParser = jsonParser;
 exports.errorSender = errorSender;
 exports.resultSender = resultSender;
 exports.getMethodName = getMethodName;
@@ -33,30 +35,121 @@ exports.resignForced;
 
 exports.paramParser = paramParser;
 
-function registerUser(params){
+/**
+ * ユーザ登録APIを実行する. パラメータ不足などのエラーがあればクライアントに
+ * エラーメッセージを送信し, 関数はfalseを返却する.
+ * @param {JSONObject} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | JSONObject} 実行が成功 -> JSONObject, else -> false
+ */
+function registerUser(params, errSock, msgId){
+    if(params.hasOwnProperty("user_name") == false){
+        errorSender(errSock, "params.user_name is not included", msgId);
+        return false;
+    }
+    if(params.hasOwnProperty("password") == false){
+        errorSender(errSock, "params.password is not included", msgId);
+        return false;
+    }
 
+    let userName = params.user_name;
+    let password = params.password;
+
+    let result = {
+        "status": "success",
+    }
+
+    return result;
 }
 
 /**
- * パラメータが存在するかチェックし, 存在するならオブジェクトを返す
- * @param {JSONObject} msg JSON message
- * @param {ws.sock} errSock 
- * @returns {JSONObject | false} メッセージにパラメータが含まれていない->false, else -> パラメータのJSONデータ
+ * メソッドが存在し, 実行が成功すれば結果を返却する. 実行に失敗した場合は
+ * クライアントにエラー情報を返却し, 関数自体はfalseを返却する.
+ * @param {ws.sock} sock socket
+ * @param {JSONObject} msg JSONデータ 
+ * @param {JSONObject} msgId メッセージのID 
+ * @returns {JSONObject | false} メソッドが存在し, 実行が成功すれば結果を返却する, エラーの場合はfalse.
  */
-function paramParser(msg, errSock){
-    if(msg.hasOwnProperty("params") == false){
+ function methodExecuter(sock, msg, msgId){
+    methodName = getMethodName(msg);
+
+    console.log("methodName: " + methodName);
+
+    let result = {
+        "status": "success",
+        "msg": "you specified valid method"
+    }
+
+    if(methodName == "register/user"){
+        params = paramParser(msg);
+        if(params == false){
+            errorSender(sock, "453", msgId);
+            return false;
+        }else{
+            result = registerUser(params, sock, msgId);
+            return result;
+        }
+
+    }else if(methodName == "register/admin"){
+
+    }else if(methodName == "login"){
+
+    }else if(methodName == "logout"){
+
+    }else if(methodName == "getInfo/user/basic"){
+
+    }else if(methodName == "getInfo/user/reservations"){
+
+    }else if(methodName == "getInfo/user/evaluations"){
+
+    }else if(methodName == "getInfo/restaurant/basic"){
+
+    }else if(methodName == "getInfo/restaurant/seats"){
+
+    }else if(methodName == "getInfo/restaurant/evaluations"){
+
+    }else if(methodName == "getInfo/restaurants"){
+
+    }else if(methodName == "getInfo/admin/basic"){
+
+    }else if(methodName == "updateInfo/user/basic"){
+
+    }else if(methodName == "updateInfo/restaurant/basic"){
+
+    }else if(methodName == "updateInfo/restaurant/seat"){
+
+    }else if(methodName == "updateInfo/restaurant/seatAvailability"){
+
+    }else if(methodName == "updateInfo/restaurant/holidays"){
+
+    }else if(methodName == "updateInfo/admin/basic"){
+
+    }else if(methodName == "updateInfo/reservation"){
+
+    }else if(methodName == "updateInfo/evaluation"){
+
+    }else if(methodName == "resign"){
+
+    }else if(methodName == "resign/forced"){
+
+    }else{
+        // no valid method found
+        console.log("404 - not found");
+        errorSender(sock, "404", msgId);
         return false;
     }
+    return result;
     
-    return msg.params;
 }
+
 
 /**
  * 受信したメッセージが正しくJSONに変換できるか
  * @param {string} msg 受信したメッセージ
  * @returns {false | JSONObject} JSONに変換できるならメッセージが, 変換できないならfalseが返却される
  */
- function isValidJSON(msg){
+ function jsonParser(msg){
     try{
         parsedMsg = JSON.parse(msg);
     }catch(error){
@@ -70,44 +163,28 @@ function paramParser(msg, errSock){
     return parsedMsg;
 }
 
-/**
- * エラーが発生した場合にクライアントにエラー情報を返却
- * @param {ws.sock} sock socket
- * @param {string} reason エラーメッセージ
- */
-function errorSender(sock, reason){
-    let errMsg = {
-        "jsonrpc": "2.0",
-        "result": {
-            "status": "error",
-            "reason": reason
-        }
-    }
-    sock.send(JSON.stringify(errMsg));
-}
+
 
 /**
- * クライアントに実行結果を返却する
- * @param {ws.sock} sock socket
- * @param {JSONObject} result 実行結果
+ * パラメータが存在するかチェックし, 存在するならオブジェクトを返す
+ * @param {JSONObject} msg JSON message
+ * @param {ws.sock} errSock 
+ * @returns {JSONObject | false} メッセージにパラメータが含まれていない->false, else -> パラメータのJSONデータ
  */
-function resultSender(sock, result, msgId){
-    let msg = {
-        "jsonrpc": "2.0",
-        "id": msgId,
-        "result": result
+ function paramParser(msg){
+    if(msg.hasOwnProperty("params") == false){
+        return false;
     }
-
-    sock.send(JSON.stringify(msg));
+    
+    return msg.params;
 }
-
 
 /**
  * 呼び出し関数名を返却する.
  * @param {JSONObject} msg JSONデータ
  * @returns {boolean | string} 存在しない->false, 存在する->メソッド名を返却する
  */
-function getMethodName(msg){
+ function getMethodName(msg){
     console.log(msg);
     if(msg.hasOwnProperty("method") == false){
         return false;
@@ -129,76 +206,37 @@ function getMsgID(msg){
     return msg.id;
 }
 
+
 /**
- * メソッドが存在し, 実行が成功すれば結果を返却する. 実行に失敗した場合は
- * クライアントにエラー情報を返却し, 関数自体はfalseを返却する.
+ * エラーが発生した場合にクライアントにエラー情報を返却
  * @param {ws.sock} sock socket
- * @param {JSONObject} msg JSONデータ 
- * @returns {JSONObject | false} メソッドが存在し, 実行が成功すれば結果を返却する, エラーの場合はfalse.
+ * @param {string} reason エラーメッセージ
+ * @param {string | int} id メッセージのID
  */
- function methodExecuter(sock, msg){
-    methodName = getMethodName(msg);
-    if(methodName == false){
-        console.log("404 - not found");
-        errorSender(sock, "404");
-        return false;
-    }else{
-        console.log("methodName: " + methodName);
-        let sucResult = {
-           "status": "success",
-           "msg": "you specified valid method"
+ function errorSender(sock, reason, id){
+    let errMsg = {
+        "jsonrpc": "2.0",
+        "id": id,
+        "result": {
+            "status": "error",
+            "reason": reason
         }
-
-        if(methodName == "register/user"){
-
-        }else if(methodName == "register/admin"){
-
-        }else if(methodName == "login"){
-
-        }else if(methodName == "logout"){
-
-        }else if(methodName == "getInfo/user/basic"){
-
-        }else if(methodName == "getInfo/user/reservations"){
-
-        }else if(methodName == "getInfo/user/evaluations"){
-
-        }else if(methodName == "getInfo/restaurant/basic"){
-
-        }else if(methodName == "getInfo/restaurant/seats"){
-
-        }else if(methodName == "getInfo/restaurant/evaluations"){
-
-        }else if(methodName == "getInfo/restaurants"){
-
-        }else if(methodName == "getInfo/admin/basic"){
-
-        }else if(methodName == "updateInfo/user/basic"){
-
-        }else if(methodName == "updateInfo/restaurant/basic"){
-
-        }else if(methodName == "updateInfo/restaurant/seat"){
-
-        }else if(methodName == "updateInfo/restaurant/seatAvailability"){
-
-        }else if(methodName == "updateInfo/restaurant/holidays"){
-
-        }else if(methodName == "updateInfo/admin/basic"){
-
-        }else if(methodName == "updateInfo/reservation"){
-
-        }else if(methodName == "updateInfo/evaluation"){
-
-        }else if(methodName == "resign"){
-
-        }else if(methodName == "resign/forced"){
-
-        }else{
-            // no valid method found
-            errorSender(sock, "404");
-            return false;
-        }
-
-        return sucResult;
     }
+    sock.send(JSON.stringify(errMsg));
+}
+
+/**
+ * クライアントに実行結果を返却する
+ * @param {ws.sock} sock socket
+ * @param {JSONObject} result 実行結果
+ * @param {string | int} msgId メッセージのID
+ */
+function resultSender(sock, result, msgId){
+    let msg = {
+        "jsonrpc": "2.0",
+        "id": msgId,
+        "result": result
+    }
+
+    sock.send(JSON.stringify(msg));
 }

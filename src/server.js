@@ -12,18 +12,20 @@ ws.on('connection', sock => {
         console.log("=============================");
         console.log("msg from: " + sock.id);
 
-        msg = api.isValidJSON(msg);
+        msg = api.jsonParser(msg);
         msgId = api.getMsgID(msg);
 
         console.log("msg: " + msg);
         //if msg can not parse, return errorMsg(400 bad req)
         if(msg == false){
-            api.errorSender(sock, "400");
+            api.errorSender(sock, "400", msgId);
         }else{
-            result = api.methodExecuter(sock, msg);
+            result = api.methodExecuter(sock, msg, msgId);
+
             if(result != false){
                 api.resultSender(sock, result, msgId);
             }
+
         }
 
     });
