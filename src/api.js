@@ -1,5 +1,3 @@
-const { triggerAsyncId } = require("async_hooks");
-
 exports.jsonParser = jsonParser;
 exports.errorSender = errorSender;
 exports.resultSender = resultSender;
@@ -7,33 +5,6 @@ exports.getMethodName = getMethodName;
 exports.methodExecuter = methodExecuter;
 exports.getMsgID = getMsgID;
 
-exports.registerUser;
-exports.registerRestaurant;
-exports.registerAdmin;
-
-exports.login;
-exports.logout;
-
-exports.getInfoUserBasic;
-exports.getInfoUserReservations;
-exports.getInfoUserEvaluations;
-exports.getInfoRestaurantBasic;
-exports.getInfoRestaurantSeats;
-exports.getInfoRestaurantEvaluations;
-exports.getInfoRestaurants;
-exports.getInfoAdminBasic;
-
-exports.updateInfoUserBasic;
-exports.updateInfoRestaurantBasic;
-exports.updateInfoRestaurantSeat;
-exports.updateInfoRestaurantSeatAvailability;
-exports.updateInfoRestaurantHolidays;
-exports.updateInfoAdminBasic;
-
-exports.resign;
-exports.resignForced;
-
-exports.paramParser = paramParser;
 
 /**
  * ユーザ登録APIを実行する. パラメータ不足などのエラーがあればクライアントに
