@@ -25,5 +25,3 @@ exports.queryExecuter = async function queryExecuter(query){
     }
     return result;
 }
-
-

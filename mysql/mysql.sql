@@ -9,7 +9,7 @@ CREATE TABLE `user` (
     -- name of user
     `user_name` text  NOT NULL ,
     -- birthday of user
-    `birthday` int  NOT NULL ,
+    `birthday` CHAR(10)  NOT NULL ,
     -- gender of user
     `gender` text  NOT NULL ,
     -- user mail address
@@ -36,10 +36,10 @@ CREATE TABLE `restaurant` (
     `email_addr` text  NOT NULL ,
     -- restaurant real address
     `address` text  NOT NULL ,
-    -- time of opening
-    `time_open` time  NOT NULL ,
-    -- time of closing
-    `time_close` time  NOT NULL ,
+    -- time of opening, HH:MM
+    `time_open` CHAR(10)  NOT NULL ,
+    -- time of closing, HH:MM
+    `time_close` CHAR(10)  NOT NULL ,
     -- day of holidays, YYYY/MM/DD, represented in json
     `holidays_json` text  NOT NULL ,
     -- feature of restaurant.
@@ -53,18 +53,18 @@ CREATE TABLE `seat` (
     -- unique seat id
     `seat_id` int  NOT NULL ,
     -- seat identifier which is used in the restaurant
-    `seat_name` int  NOT NULL ,
+    `seat_name` text  NOT NULL ,
     `restaurant_id` int  NOT NULL ,
     -- number of people who can sit in the seat
     `capacity` int  NOT NULL ,
-    -- the seat is filled or not. if true: filled, false: not filled.
-    `is_filled` boolean  NOT NULL ,
+    -- the seat is filled or not. if 1-9: filled, 0: not filled.
+    `is_filled` tinyint(1)  NOT NULL ,
     -- if isFilled==true, this is start time(timestamp) of filled, if isFilled==false, this = 0
     `time_start` int  NOT NULL ,
     -- store time to stayed time, for calc avg_stay_time, represented in json
     `staying_times_json` text  NOT NULL ,
-    -- time of average staying time on the seat
-    `avg_stay_time` text  NOT NULL ,
+    -- time of average staying time on the seat, HH:MM:SS
+    `avg_stay_time` CHAR(8)  NOT NULL ,
     -- feature of the seat
     `feature` text  NOT NULL ,
     PRIMARY KEY (
@@ -98,8 +98,8 @@ CREATE TABLE `reservation` (
     `time_end` int  NOT NULL ,
     -- number of people to go restaurant
     `num_people` int  NOT NULL ,
-    -- the reservation is expired or not, if true->expired, false->active
-    `is_expired` boolean  NOT NULL ,
+    -- the reservation is expired or not, if 1-9: expired, 0 -> active
+    `is_expired` tinyint(1)  NOT NULL ,
     PRIMARY KEY (
         `reservation_id`
     )
@@ -111,7 +111,7 @@ CREATE TABLE `administrator` (
     -- name of admin
     `admin_name` text  NOT NULL ,
     -- birthday of admin
-    `birthday` int  NOT NULL ,
+    `birthday` CHAR(10)  NOT NULL ,
     -- password(hashed) for admin
     `password` text  NOT NULL ,
     -- gender of admin

@@ -19,17 +19,12 @@ ws.on('connection', sock => {
         msg = api.jsonParser(msg);      // if can not parse msg, msg == false
         msgId = api.getMsgID(msg);      // if id not included, msgId == -1
 
-        console.log("msg: " + msg);
+        console.log("msg: " + JSON.stringify(msg));
         //if msg can not parse, return errorMsg(400 bad req)
         if(msg == false){
             api.errorSender(sock, "400", msgId);
         }else{
             result = api.methodExecuter(sock, msg, msgId);
-
-            if(result != false){
-                api.resultSender(sock, result, msgId);
-            }
-
         }
 
     });
@@ -39,4 +34,3 @@ ws.on('connection', sock => {
         console.log("disconnected: " + sock.id);
     });
 });
-

@@ -20,7 +20,7 @@ const method = require("./methods.js");
  * @param {JSONObject} msgId メッセージのID 
  * @returns {JSONObject | false} メソッドが存在し, 実行が成功すれば結果を返却する, エラーの場合はfalse.
  */
- function methodExecuter(sock, msg, msgId){
+async function methodExecuter(sock, msg, msgId){
     //get msg.method, ignore method is valid or not here.
     methodName = getMethodName(msg);
     console.log("methodName: " + methodName);
@@ -32,16 +32,14 @@ const method = require("./methods.js");
         return false;
     }
 
-    let result = {
-        "status": "success",
-        "msg": "you specified valid method"
-    }
+    let result;
 
     if(methodName == "register/user"){
-        result = method.registerUser(params, sock, msgId);
+        result = await method.registerUser(params, sock, msgId);
+        console.log("result: " + JSON.stringify(result));
 
     }else if(methodName == "register/restaurant"){
-        result = method.registerRestaurant(params, sock, msgId);
+        result = await method.registerRestaurant(params, sock, msgId);
 
     }else if(methodName == "register/admin"){
 
@@ -91,7 +89,11 @@ const method = require("./methods.js");
         errorSender(sock, "404", msgId);
         return false;
     }
-    return result;
+
+    if(result != false){
+        console.log("result on methodExecuter: " + JSON.stringify(result));
+        resultSender(sock, result, msgId);
+    }
 }
 
 
