@@ -8,6 +8,8 @@ exports.registerUser = registerUser;
 exports.registerRestaurant = registerRestaurant;
 
 const api = require("./api.js");
+const db = require("./db.js");
+
 
 /**
  * 利用者アカウント登録APIを実行する. パラメータ不足などのエラーがあればクライアントに
@@ -17,7 +19,7 @@ const api = require("./api.js");
  * @param {int | string} msgId メッセージに含まれていたID
  * @returns {false | JSONObject} 実行が成功 -> JSONObject, else -> false
  */
- function registerUser(params, errSock, msgId){
+ async function registerUser(params, errSock, msgId){
     if(params.hasOwnProperty("user_name") == false){
         api.errorSender(errSock, "params.user_name is not included", msgId);
         return false;
@@ -29,6 +31,18 @@ const api = require("./api.js");
 
     let userName = params.user_name;
     let password = params.password;
+
+    query = "select * from auth_token;";
+    console.log(query);
+
+    res = await db.queryExecuter(query);
+
+    if(res == false){
+        console.error("error on query executer");
+    }else{
+        await console.log(res[0]);
+    }
+    
 
     let result = {
         "status": "success",
