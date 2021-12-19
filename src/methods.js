@@ -1,12 +1,13 @@
 /**
  * @file 公開APIの各メソッド(呼び出し関数).
+ *     メソッド内でエラーが発生した場合, 各メソッドはクライアントへエラーメッセージを送信する.
+ *     その後, falseを返却する.
  */
 
 exports.registerUser = registerUser;
 exports.registerRestaurant = registerRestaurant;
 
-// if error exists, method has duty to send error message to clients.
-// then return false;
+const api = require("./api.js");
 
 /**
  * 利用者アカウント登録APIを実行する. パラメータ不足などのエラーがあればクライアントに
@@ -18,11 +19,11 @@ exports.registerRestaurant = registerRestaurant;
  */
  function registerUser(params, errSock, msgId){
     if(params.hasOwnProperty("user_name") == false){
-        errorSender(errSock, "params.user_name is not included", msgId);
+        api.errorSender(errSock, "params.user_name is not included", msgId);
         return false;
     }
     if(params.hasOwnProperty("password") == false){
-        errorSender(errSock, "params.password is not included", msgId);
+        api.errorSender(errSock, "params.password is not included", msgId);
         return false;
     }
 
@@ -46,11 +47,11 @@ exports.registerRestaurant = registerRestaurant;
  */
 function registerRestaurant(params, errSock, msgId){
     if(params.hasOwnProperty("restaurant_name") == false){
-        errorSender(errSock, "params.restaurant_name is not included", msgId);
+        api.errorSender(errSock, "params.restaurant_name is not included", msgId);
         return false;
     }
     if(params.hasOwnProperty("password") == false){
-        errorSender(errSock, "params.password is not included", msgId);
+        api.errorSender(errSock, "params.password is not included", msgId);
         return false;
     }
 
