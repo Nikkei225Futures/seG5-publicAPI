@@ -1,3 +1,7 @@
+/**
+ * @file APIで使用するモジュール, 関数実行モジュール, パラメータ抽出, 実行結果返却モジュール等が含まれる.
+ */
+
 exports.jsonParser = jsonParser;
 exports.errorSender = errorSender;
 exports.resultSender = resultSender;
@@ -5,34 +9,8 @@ exports.getMethodName = getMethodName;
 exports.methodExecuter = methodExecuter;
 exports.getMsgID = getMsgID;
 
+const method = require("./methods.js");
 
-/**
- * ユーザ登録APIを実行する. パラメータ不足などのエラーがあればクライアントに
- * エラーメッセージを送信し, 関数はfalseを返却する.
- * @param {JSONObject} params メッセージに含まれていたパラメータ
- * @param {ws.sock} errSock エラー時に使用するソケット
- * @param {int | string} msgId メッセージに含まれていたID
- * @returns {false | JSONObject} 実行が成功 -> JSONObject, else -> false
- */
-function registerUser(params, errSock, msgId){
-    if(params.hasOwnProperty("user_name") == false){
-        errorSender(errSock, "params.user_name is not included", msgId);
-        return false;
-    }
-    if(params.hasOwnProperty("password") == false){
-        errorSender(errSock, "params.password is not included", msgId);
-        return false;
-    }
-
-    let userName = params.user_name;
-    let password = params.password;
-
-    let result = {
-        "status": "success",
-    }
-
-    return result;
-}
 
 /**
  * メソッドが存在し, 実行が成功すれば結果を返却する. 実行に失敗した場合は
@@ -43,6 +21,7 @@ function registerUser(params, errSock, msgId){
  * @returns {JSONObject | false} メソッドが存在し, 実行が成功すれば結果を返却する, エラーの場合はfalse.
  */
  function methodExecuter(sock, msg, msgId){
+    //get msg.method, ignore method is valid or not here.
     methodName = getMethodName(msg);
     console.log("methodName: " + methodName);
 
@@ -59,7 +38,10 @@ function registerUser(params, errSock, msgId){
     }
 
     if(methodName == "register/user"){
-        result = registerUser(params, sock, msgId);
+        result = method.registerUser(params, sock, msgId);
+
+    }else if(methodName == "register/restaurant"){
+        result = method.registerRestaurant(params, sock, msgId);
 
     }else if(methodName == "register/admin"){
 
@@ -110,7 +92,6 @@ function registerUser(params, errSock, msgId){
         return false;
     }
     return result;
-    
 }
 
 

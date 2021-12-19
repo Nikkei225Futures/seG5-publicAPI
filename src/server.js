@@ -1,3 +1,7 @@
+/**
+ * @file サーバ全体を制御するモジュール, クライアントからのメッセージによって各モジュールを呼び出す.
+ */
+
 const server = require('ws').Server;
 const ws = new server({port: 8889});
 const api = require('./api.js');
@@ -12,8 +16,8 @@ ws.on('connection', sock => {
         console.log("=============================");
         console.log("msg from: " + sock.id);
 
-        msg = api.jsonParser(msg);
-        msgId = api.getMsgID(msg);
+        msg = api.jsonParser(msg);      // if can not parse msg, msg == false
+        msgId = api.getMsgID(msg);      // if id not included, msgId == -1
 
         console.log("msg: " + msg);
         //if msg can not parse, return errorMsg(400 bad req)
