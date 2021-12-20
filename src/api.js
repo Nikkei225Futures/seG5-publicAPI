@@ -200,7 +200,7 @@ function resultSender(sock, result, msgId){
  * @returns {boolean} false->SQLインジェクションの可能性がある, true->正当な文字列
  */
 function isNotSQLInjection(param){
-    let checkStrs = ["=", "<", ">", ";", "'", "*", "?", ":", "/", "|"];
+    let checkStrs = ["=", "<", ">", ";", "'", "*", "?", ":", "|"];
     
     for(let i = 0; i < checkStrs.length; i++){
         if(param.indexOf(checkStrs[i]) != -1){
