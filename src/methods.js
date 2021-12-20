@@ -29,6 +29,12 @@ const db = require("./db.js");
         return false;
     }
 
+    if(api.isNotSQLInjection(params.user_name) == false){
+        api.errorSender(errSock, "params.user_name contains suspicious character, you can not register such name");
+        return false;
+    }
+
+
     //get usernames from db;
     query_getUserNames = "select * from user;";
     console.log("getName qry: " + query_getUserNames);
@@ -88,6 +94,10 @@ async function registerRestaurant(params, errSock, msgId){
     }
     if(params.hasOwnProperty("password") == false){
         api.errorSender(errSock, "params.password is not included", msgId);
+        return false;
+    }
+    if(api.isNotSQLInjection(params.restaurant_name) == false){
+        api.errorSender(errSock, "params.restaurant_name contains suspicious character, you can not register such name");
         return false;
     }
 

@@ -8,7 +8,9 @@ exports.resultSender = resultSender;
 exports.getMethodName = getMethodName;
 exports.methodExecuter = methodExecuter;
 exports.getMsgID = getMsgID;
+exports.isNotSQLInjection = isNotSQLInjection;
 
+const { truncateSync } = require("fs");
 const method = require("./methods.js");
 
 
@@ -190,4 +192,21 @@ function resultSender(sock, result, msgId){
     }
 
     sock.send(JSON.stringify(msg));
+}
+
+/**
+ * SQLインジェクションの可能性のある文字列を検出する.
+ * @param {string} param SQL文を組み立てる際に使用する各パラメータ
+ * @returns {boolean} false->SQLインジェクションの可能性がある, true->正当な文字列
+ */
+function isNotSQLInjection(param){
+    let checkStrs = ["=", "<", ">", ";", "'", "*", "?", ":", "/", "|"];
+    
+    for(let i = 0; i < checkStrs.length; i++){
+        if(param.indexOf(checkStrs[i]) != -1){
+            return false;
+        }
+    }
+    console.log("param has no problem");
+    return true;
 }
