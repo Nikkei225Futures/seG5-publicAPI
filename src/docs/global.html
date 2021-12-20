@@ -254,7 +254,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line165">line 165</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line167">line 167</a>
     </li></ul></dd>
     
 
@@ -391,7 +391,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line136">line 136</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line138">line 138</a>
     </li></ul></dd>
     
 
@@ -553,7 +553,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line150">line 150</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line152">line 152</a>
     </li></ul></dd>
     
 
@@ -715,7 +715,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line103">line 103</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line105">line 105</a>
     </li></ul></dd>
     
 
@@ -776,7 +776,7 @@
     
 
     
-    <h4 class="name" id="methodExecuter"><span class="type-signature"></span>methodExecuter<span class="signature">(sock, msg, msgId)</span><span class="type-signature"> &rarr; {JSONObject|false}</span></h4>
+    <h4 class="name" id="methodExecuter"><span class="type-signature">(async) </span>methodExecuter<span class="signature">(sock, msg, msgId)</span><span class="type-signature"> &rarr; {false}</span></h4>
     
 
     
@@ -784,7 +784,7 @@
 
 
 <div class="description">
-    メソッドが存在し, 実行が成功すれば結果を返却する. 実行に失敗した場合はクライアントにエラー情報を返却し, 関数自体はfalseを返却する.
+    メソッドが存在し, 実行が成功すれば結果をクライアントに送信する. 実行に失敗した場合は各メソッド内でクライアントにエラーメッセージを送信する.
 </div>
 
 
@@ -952,7 +952,7 @@
 
         
 <div class="param-desc">
-    メソッドが存在し, 実行が成功すれば結果を返却する, エラーの場合はfalse.
+    エラーの場合のみ返却する.
 </div>
 
 
@@ -963,9 +963,6 @@
     </dt>
     <dd>
         
-<span class="param-type">JSONObject</span>
-|
-
 <span class="param-type">false</span>
 
 
@@ -1108,7 +1105,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line123">line 123</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
@@ -1169,7 +1166,166 @@
     
 
     
-    <h4 class="name" id="registerRestaurant"><span class="type-signature"></span>registerRestaurant<span class="signature">(params, errSock, msgId)</span><span class="type-signature"> &rarr; {false|JSONObject}</span></h4>
+    <h4 class="name" id="queryExecuter"><span class="type-signature"></span>queryExecuter<span class="signature">(query)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    同期的にSQL文を実行して結果を返却する
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>query</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">実行するSQL文</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="db.js.html">db.js</a>, <a href="db.js.html#line21">line 21</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    実行結果
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="registerRestaurant"><span class="type-signature">(async) </span>registerRestaurant<span class="signature">(params, errSock, msgId)</span><span class="type-signature"> &rarr; {false|JSONObject}</span></h4>
     
 
     
@@ -1319,7 +1475,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line47">line 47</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line84">line 84</a>
     </li></ul></dd>
     
 
@@ -1380,7 +1536,7 @@
     
 
     
-    <h4 class="name" id="registerUser"><span class="type-signature"></span>registerUser<span class="signature">(params, errSock, msgId)</span><span class="type-signature"> &rarr; {false|JSONObject}</span></h4>
+    <h4 class="name" id="registerUser"><span class="type-signature">(async) </span>registerUser<span class="signature">(params, errSock, msgId)</span><span class="type-signature"> &rarr; {false|JSONObject}</span></h4>
     
 
     
@@ -1530,7 +1686,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line19">line 19</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -1741,7 +1897,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line183">line 183</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line185">line 185</a>
     </li></ul></dd>
     
 
@@ -1787,13 +1943,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#errorSender">errorSender</a></li><li><a href="global.html#getMethodName">getMethodName</a></li><li><a href="global.html#getMsgID">getMsgID</a></li><li><a href="global.html#jsonParser">jsonParser</a></li><li><a href="global.html#methodExecuter">methodExecuter</a></li><li><a href="global.html#paramParser">paramParser</a></li><li><a href="global.html#registerRestaurant">registerRestaurant</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resultSender">resultSender</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#errorSender">errorSender</a></li><li><a href="global.html#getMethodName">getMethodName</a></li><li><a href="global.html#getMsgID">getMsgID</a></li><li><a href="global.html#jsonParser">jsonParser</a></li><li><a href="global.html#methodExecuter">methodExecuter</a></li><li><a href="global.html#paramParser">paramParser</a></li><li><a href="global.html#queryExecuter">queryExecuter</a></li><li><a href="global.html#registerRestaurant">registerRestaurant</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resultSender">resultSender</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Dec 19 2021 16:21:24 GMT+0900 (Japan Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Dec 20 2021 14:52:18 GMT+0900 (Japan Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

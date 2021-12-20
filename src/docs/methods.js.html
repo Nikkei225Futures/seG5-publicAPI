@@ -28,13 +28,16 @@
         <article>
             <pre class="prettyprint source linenums"><code>/**
  * @file 公開APIの各メソッド(呼び出し関数).
+ *     メソッド内でエラーが発生した場合, 各メソッドはクライアントへエラーメッセージを送信する.
+ *     その後, falseを返却する.
  */
 
 exports.registerUser = registerUser;
 exports.registerRestaurant = registerRestaurant;
 
-// if error exists, method has duty to send error message to clients.
-// then return false;
+const api = require("./api.js");
+const db = require("./db.js");
+
 
 /**
  * 利用者アカウント登録APIを実行する. パラメータ不足などのエラーがあればクライアントに
@@ -44,18 +47,52 @@ exports.registerRestaurant = registerRestaurant;
  * @param {int | string} msgId メッセージに含まれていたID
  * @returns {false | JSONObject} 実行が成功 -> JSONObject, else -> false
  */
- function registerUser(params, errSock, msgId){
+ async function registerUser(params, errSock, msgId){
     if(params.hasOwnProperty("user_name") == false){
-        errorSender(errSock, "params.user_name is not included", msgId);
+        api.errorSender(errSock, "params.user_name is not included", msgId);
         return false;
     }
     if(params.hasOwnProperty("password") == false){
-        errorSender(errSock, "params.password is not included", msgId);
+        api.errorSender(errSock, "params.password is not included", msgId);
         return false;
+    }
+
+    //get usernames from db;
+    query_getUserNames = "select * from user;";
+    console.log("getName qry: " + query_getUserNames);
+    res = await db.queryExecuter(query_getUserNames);
+    if(res == false){
+        console.error("error on query executer");
+        api.errorSender(errSock, "error while reading user", msgId);
+        return false;
+    }else{
+        res = res[0];
     }
 
     let userName = params.user_name;
     let password = params.password;
+    let maxId = 0;
+    //search name duplication
+    for(let i = 0; i &lt; res.length; i++){
+        if(res[i].user_name == userName){
+            console.log("username dupulicated: " + userName);
+            api.errorSender(errSock, "user_name has already taken by other user", msgId);
+            return false;
+        }
+        if(maxId &lt; res[i].user_id){
+            maxId = res[i].user_id;
+        }
+    }
+
+    query_insertUser = `insert into user(user_id, user_name, birthday, gender, email_addr, address, password, num_vicious_cancels) values (${maxId+1}, '${userName}', '1900/01/01', 'no gender set', 'no email_addr set', 'no address set', '${password}', 0)`;
+    console.log("insert qry: " + query_insertUser);
+    res = await db.queryExecuter(query_insertUser);
+
+    if(res == false){
+        console.error("error while inserting data");
+        api.errorSender(errSock, "error while inserting data", msgId);
+        return false;
+    }
 
     let result = {
         "status": "success",
@@ -72,23 +109,58 @@ exports.registerRestaurant = registerRestaurant;
  * @param {int | string} msgId メッセージに含まれていたID
  * @returns {false | JSONObject} 実行が成功 -> JSONObject, else -> false
  */
-function registerRestaurant(params, errSock, msgId){
+async function registerRestaurant(params, errSock, msgId){
     if(params.hasOwnProperty("restaurant_name") == false){
-        errorSender(errSock, "params.restaurant_name is not included", msgId);
+        api.errorSender(errSock, "params.restaurant_name is not included", msgId);
         return false;
     }
     if(params.hasOwnProperty("password") == false){
-        errorSender(errSock, "params.password is not included", msgId);
+        api.errorSender(errSock, "params.password is not included", msgId);
         return false;
+    }
+
+    //get restaurantNames from db;
+    query_getRestaurantNames = "select * from restaurant;";
+    console.log("getName qry: " + query_getRestaurantNames);
+    res = await db.queryExecuter(query_getRestaurantNames);
+    if(res == false){
+        console.error("error on query executer");
+        api.errorSender(errSock, "error while reading restaurant", msgId);
+        return false;
+    }else{
+        res = res[0];
     }
 
     let restaurantName = params.restaurant_name;
     let password = params.password;
-
-    let result = {
-        "status": "success"
+    let maxId = 0;
+    //search name duplication
+    for(let i = 0; i &lt; res.length; i++){
+        if(res[i].restaurant_name == restaurantName){
+            console.log("restaurant_name dupulicated: " + restaurantName);
+            api.errorSender(errSock, "restaurant_name has already taken by other user", msgId);
+            return false;
+        }
+        if(maxId &lt; res[i].restaurant_id){
+            maxId = res[i].restaurant_id;
+        }
     }
 
+    query_insertRestaurant = `insert into restaurant(restaurant_id, restaurant_name, password, email_addr, address, time_open, time_close, holidays_json, features) \
+    values (${maxId+1}, '${restaurantName}', '${password}', 'no email_addr set', 'no address set', '00:00', '00:00', '{[]}', 'no features set')`;
+    
+    console.log("insert qry: " + query_insertRestaurant);
+    res = await db.queryExecuter(query_insertRestaurant);
+
+    if(res == false){
+        console.error("error while inserting data");
+        api.errorSender(errSock, "error while inserting data", msgId);
+        return false;
+    }
+
+    let result = {
+        "status": "success",
+    }
     return result;
 }</code></pre>
         </article>
@@ -100,13 +172,13 @@ function registerRestaurant(params, errSock, msgId){
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#errorSender">errorSender</a></li><li><a href="global.html#getMethodName">getMethodName</a></li><li><a href="global.html#getMsgID">getMsgID</a></li><li><a href="global.html#jsonParser">jsonParser</a></li><li><a href="global.html#methodExecuter">methodExecuter</a></li><li><a href="global.html#paramParser">paramParser</a></li><li><a href="global.html#registerRestaurant">registerRestaurant</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resultSender">resultSender</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#errorSender">errorSender</a></li><li><a href="global.html#getMethodName">getMethodName</a></li><li><a href="global.html#getMsgID">getMsgID</a></li><li><a href="global.html#jsonParser">jsonParser</a></li><li><a href="global.html#methodExecuter">methodExecuter</a></li><li><a href="global.html#paramParser">paramParser</a></li><li><a href="global.html#queryExecuter">queryExecuter</a></li><li><a href="global.html#registerRestaurant">registerRestaurant</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resultSender">resultSender</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Dec 19 2021 16:21:24 GMT+0900 (Japan Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Dec 20 2021 14:52:18 GMT+0900 (Japan Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

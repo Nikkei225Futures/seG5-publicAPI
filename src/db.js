@@ -1,3 +1,7 @@
+/**
+ * @file DBにクエリを実行させるモジュール.
+ */
+
 "use strict;"
 
 const mysql = require('mysql2/promise');
@@ -9,6 +13,11 @@ const dbConfig = {
     database: "testdb"
 }
 
+/**
+ * 同期的にSQL文を実行して結果を返却する
+ * @param {Object} query 実行するSQL文
+ * @returns {string} 実行結果
+ */
 exports.queryExecuter = async function queryExecuter(query){
     const pool = await mysql.createPool(dbConfig);
     let result;

@@ -13,12 +13,12 @@ const method = require("./methods.js");
 
 
 /**
- * メソッドが存在し, 実行が成功すれば結果を返却する. 実行に失敗した場合は
- * クライアントにエラー情報を返却し, 関数自体はfalseを返却する.
+ * メソッドが存在し, 実行が成功すれば結果をクライアントに送信する. 
+ * 実行に失敗した場合は各メソッド内でクライアントにエラーメッセージを送信する.
  * @param {ws.sock} sock socket
  * @param {JSONObject} msg JSONデータ 
  * @param {JSONObject} msgId メッセージのID 
- * @returns {JSONObject | false} メソッドが存在し, 実行が成功すれば結果を返却する, エラーの場合はfalse.
+ * @returns {false} エラーの場合のみ返却する.
  */
 async function methodExecuter(sock, msg, msgId){
     //get msg.method, ignore method is valid or not here.
