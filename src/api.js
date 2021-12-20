@@ -10,7 +10,6 @@ exports.methodExecuter = methodExecuter;
 exports.getMsgID = getMsgID;
 exports.isNotSQLInjection = isNotSQLInjection;
 
-const { truncateSync } = require("fs");
 const method = require("./methods.js");
 
 
@@ -38,12 +37,15 @@ async function methodExecuter(sock, msg, msgId){
 
     if(methodName == "register/user"){
         result = await method.registerUser(params, sock, msgId);
-        console.log("result: " + JSON.stringify(result));
+        console.log("result-register/user: " + JSON.stringify(result));
 
     }else if(methodName == "register/restaurant"){
         result = await method.registerRestaurant(params, sock, msgId);
+        console.log("result-register/restaurant: " + JSON.stringify(result));
 
     }else if(methodName == "register/admin"){
+        result = await method.registerAdmin(params, sock, msgId);
+        console.log("result-register/admin: " + JSON.stringify(result));
 
     }else if(methodName == "login"){
 

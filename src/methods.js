@@ -6,10 +6,11 @@
 
 exports.registerUser = registerUser;
 exports.registerRestaurant = registerRestaurant;
+exports.registerAdmin = registerAdmin;
 
 const api = require("./api.js");
 const db = require("./db.js");
-
+const sha256 = require("crypto-js/sha256");
 
 /**
  * 利用者アカウント登録APIを実行する. パラメータ不足などのエラーがあればクライアントに
@@ -30,7 +31,7 @@ const db = require("./db.js");
     }
 
     if(api.isNotSQLInjection(params.user_name) == false){
-        api.errorSender(errSock, "params.user_name contains suspicious character, you can not register such name");
+        api.errorSender(errSock, "params.user_name contains suspicious character, you can not register such name", msgId);
         return false;
     }
 
@@ -48,7 +49,8 @@ const db = require("./db.js");
     }
 
     let userName = params.user_name;
-    let password = params.password;
+    let password = sha256(params.password);
+    console.log("password: " + password);
     let maxId = 0;
     //search name duplication
     for(let i = 0; i < res.length; i++){
@@ -114,7 +116,7 @@ async function registerRestaurant(params, errSock, msgId){
     }
 
     let restaurantName = params.restaurant_name;
-    let password = params.password;
+    let password = sha256(params.password);
     let maxId = 0;
     //search name duplication
     for(let i = 0; i < res.length; i++){
@@ -133,6 +135,84 @@ async function registerRestaurant(params, errSock, msgId){
     
     console.log("insert qry: " + query_insertRestaurant);
     res = await db.queryExecuter(query_insertRestaurant);
+
+    if(res == false){
+        console.error("error while inserting data");
+        api.errorSender(errSock, "error while inserting data", msgId);
+        return false;
+    }
+
+    let result = {
+        "status": "success",
+    }
+    return result;
+}
+
+/**
+ * 管理者アカウント登録APIを実行する. パラメータ不足などのエラーがあればクライアントに
+ * エラーメッセージを送信し, 関数はfalseを返却する.
+ * @param {JSONObject} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | JSONObject} 実行が成功 -> JSONObject, else -> false
+ */
+ async function registerAdmin(params, errSock, msgId){
+    if(params.hasOwnProperty("admin_name") == false){
+        api.errorSender(errSock, "params.admin_name is not included", msgId);
+        return false;
+    }
+    if(params.hasOwnProperty("password") == false){
+        api.errorSender(errSock, "params.password is not included", msgId);
+        return false;
+    }
+    if(params.hasOwnProperty("admin_password") == false){
+        api.errorSender(errSock, "params.admin_password is not included", msgId);
+        return false;
+    }
+
+    if(sha256(params.admin_password) != "b397288f3f5368c343157d541f4d1f096fcbc4c7a3152f1092bb34b36f631461"){
+        api.errorSender(errSock, "You don't have permission to create admin account. admin_password is wrong.", msgId);
+        return false;
+    }
+
+    if(api.isNotSQLInjection(params.admin_name) == false){
+        api.errorSender(errSock, "params.admin_name contains suspicious character, you can not register such name");
+        return false;
+    }
+
+    //get admin names from db;
+    query_getAdminNames = "select * from administrator;";
+    console.log("getName qry: " + query_getAdminNames);
+    res = await db.queryExecuter(query_getAdminNames);
+    if(res == false){
+        console.error("error on query executer");
+        api.errorSender(errSock, "error while reading admin", msgId);
+        return false;
+    }else{
+        res = res[0];
+    }
+
+    let adminName = params.admin_name;
+    let password = sha256(params.password);
+    let maxId = 0;
+
+    //search name duplication
+    for(let i = 0; i < res.length; i++){
+        if(res[i].admin_name == adminName){
+            console.log("admin_name dupulicated: " + adminName);
+            api.errorSender(errSock, "admin_name has already taken by other user", msgId);
+            return false;
+        }
+        if(maxId < res[i].admin_id){
+            maxId = res[i].admin_id;
+        }
+    }
+
+    query_insertAdmin = `insert into administrator(admin_id, admin_name, birthday, password, gender, address, email_addr) \
+    values ('${maxId+1}', '${adminName}', '1900/01/01', '${password}', 'no gender set', 'no address set', 'no email_addr set')`;
+
+    console.log("insert qry: " + query_insertAdmin);
+    res = await db.queryExecuter(query_insertAdmin);
 
     if(res == false){
         console.error("error while inserting data");
