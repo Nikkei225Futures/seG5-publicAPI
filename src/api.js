@@ -9,6 +9,7 @@ exports.getMethodName = getMethodName;
 exports.methodExecuter = methodExecuter;
 exports.getMsgID = getMsgID;
 exports.isNotSQLInjection = isNotSQLInjection;
+exports.isObjectEmpty = isObjectEmpty;
 
 const method = require("./methods.js");
 
@@ -48,8 +49,12 @@ async function methodExecuter(sock, msg, msgId){
         console.log("result-register/admin: " + JSON.stringify(result));
 
     }else if(methodName == "login"){
+        result = await method.login(params, sock, msgId);
+        console.log("result-login: " + JSON.stringify(result));
 
     }else if(methodName == "logout"){
+        result = await method.logout(params, sock, msgId);
+        console.log("result-logout: " + JSON.stringify(result));
 
     }else if(methodName == "getInfo/user/basic"){
 
@@ -95,7 +100,6 @@ async function methodExecuter(sock, msg, msgId){
     }
 
     if(result != false){
-        console.log("result on methodExecuter: " + JSON.stringify(result));
         resultSender(sock, result, msgId);
     }
 }
@@ -212,3 +216,17 @@ function isNotSQLInjection(param){
     console.log("param has no problem");
     return true;
 }
+
+/**
+ * オブジェクトが空かどうか判定する
+ * @param {Object} obj 判定したいオブジェクト
+ * @returns {boolean} true->空, false->空でない
+ */
+function isObjectEmpty(obj) {
+    for (var key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        return false;
+      }
+    }
+    return true;
+  }

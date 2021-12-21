@@ -7,10 +7,13 @@
 exports.registerUser = registerUser;
 exports.registerRestaurant = registerRestaurant;
 exports.registerAdmin = registerAdmin;
+exports.login = login;
+exports.logout = logout;
 
 const api = require("./api.js");
 const db = require("./db.js");
 const sha256 = require("crypto-js/sha256");
+const uuid4 = require('uuid4');
 
 /**
  * 利用者アカウント登録APIを実行する. パラメータ不足などのエラーがあればクライアントに
@@ -37,9 +40,9 @@ const sha256 = require("crypto-js/sha256");
 
 
     //get usernames from db;
-    query_getUserNames = "select * from user;";
+    let query_getUserNames = "select * from user;";
     console.log("getName qry: " + query_getUserNames);
-    res = await db.queryExecuter(query_getUserNames);
+    let res = await db.queryExecuter(query_getUserNames);
     if(res == false){
         console.error("error on query executer");
         api.errorSender(errSock, "error while reading user", msgId);
@@ -104,7 +107,7 @@ async function registerRestaurant(params, errSock, msgId){
     }
 
     //get restaurantNames from db;
-    query_getRestaurantNames = "select * from restaurant;";
+    let query_getRestaurantNames = "select * from restaurant;";
     console.log("getName qry: " + query_getRestaurantNames);
     res = await db.queryExecuter(query_getRestaurantNames);
     if(res == false){
@@ -130,7 +133,7 @@ async function registerRestaurant(params, errSock, msgId){
         }
     }
 
-    query_insertRestaurant = `insert into restaurant(restaurant_id, restaurant_name, password, email_addr, address, time_open, time_close, holidays_json, features) \
+    let query_insertRestaurant = `insert into restaurant(restaurant_id, restaurant_name, password, email_addr, address, time_open, time_close, holidays_json, features) \
     values (${maxId+1}, '${restaurantName}', '${password}', 'no email_addr set', 'no address set', '00:00', '00:00', '{[]}', 'no features set')`;
     
     console.log("insert qry: " + query_insertRestaurant);
@@ -181,9 +184,9 @@ async function registerRestaurant(params, errSock, msgId){
     }
 
     //get admin names from db;
-    query_getAdminNames = "select * from administrator;";
+    let query_getAdminNames = "select * from administrator;";
     console.log("getName qry: " + query_getAdminNames);
-    res = await db.queryExecuter(query_getAdminNames);
+    let res = await db.queryExecuter(query_getAdminNames);
     if(res == false){
         console.error("error on query executer");
         api.errorSender(errSock, "error while reading admin", msgId);
@@ -208,7 +211,7 @@ async function registerRestaurant(params, errSock, msgId){
         }
     }
 
-    query_insertAdmin = `insert into administrator(admin_id, admin_name, birthday, password, gender, address, email_addr) \
+    let query_insertAdmin = `insert into administrator(admin_id, admin_name, birthday, password, gender, address, email_addr) \
     values ('${maxId+1}', '${adminName}', '1900/01/01', '${password}', 'no gender set', 'no address set', 'no email_addr set')`;
 
     console.log("insert qry: " + query_insertAdmin);
@@ -224,4 +227,145 @@ async function registerRestaurant(params, errSock, msgId){
         "status": "success",
     }
     return result;
+}
+
+/**
+ * ログインAPI
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {Object | false} 実行に失敗した場合はfalseを返却する. 成功した場合はObjectを返却する.
+ */
+async function login(params, errSock, msgId){
+    //check params
+    if(params.hasOwnProperty("user_name") == false){
+        api.errorSender(errSock, "params.user_name is not included", msgId);
+        return false;
+    }
+    if(params.hasOwnProperty("password") == false){
+        api.errorSender(errSock, "params.password is not included", msgId);
+        return false;
+    }
+    if(params.hasOwnProperty("role") == false){
+        api.errorSender(errSock, "params.role is not included", msgId);
+        return false;
+    }
+
+    //check sql injection
+    if(api.isNotSQLInjection(params.user_name) == false){
+        api.errorSender(errSock, "params.user_name contains suspicious character, you can not specify such name", msgId);
+        return false;
+    }
+    if(api.isNotSQLInjection(params.role) == false){
+        api.errorSender(errSock, "params.user_name contains suspicious character, you can not specify such role", msgId);
+        return false;
+    }
+
+    //get user info from db;
+    let tableName = 0;
+    if(params.role == "user"){
+        tableName = "user";
+    }else if(params.role == "restaurant"){
+        tableName = "restaurant";
+    }else if(params.role == "admin"){
+        tableName = "administrator";
+    }else{
+        api.errorSender(errSock, "invalid parameter(params.role at login request)", msgId);
+        return false;
+    }
+
+    // get user information from user table;
+    let query_getUserInfo = `select * from ${tableName} where ${params.role}_name = '${params.user_name}';`;
+    let userInfo = await db.queryExecuter(query_getUserInfo);
+    if(userInfo == false){
+        console.error("error on query executer");
+        api.errorSender(errSock, "error while reading table", msgId);
+        return false;
+    }else{
+        userInfo = userInfo[0][0];
+        if(api.isObjectEmpty(userInfo)){
+            api.errorSender(errSock, "no such user exists", msgId);
+            return false;
+        }
+    }
+
+    //verify password
+    if(sha256(params.password) != userInfo.password){
+        console.log("DB: " + userInfo.password);
+        console.log("pm: " + sha256(params.password));
+        api.errorSender(errSock, "wrong password", msgId);
+        return false;
+    }
+    
+    // determine id;
+    let issuer_id = "no id";
+    if(params.role == "user"){
+        issuer_id = userInfo.user_id;
+    }else if(params.role == "restaurant"){
+        issuer_id = userInfo.restaurant_id;
+    }else if(params.role == "admin"){
+        issuer_id = userInfo.restaurant_id;
+    }
+    
+    if(issuer_id == "no id"){
+        api.errorSender(errSock, "systen could not get user id", msgId);
+        return false;
+    }
+
+    let token = uuid4();
+    const DAYSEC = 86400;
+    let expriry = Math.round((new Date()).getTime() / 1000) + DAYSEC;
+
+    let query_addToken = `insert into auth_token(token_id, token_issuer_id, token_permission, expiry) \
+    values ('${token}', ${issuer_id}, '${params.role}', ${expriry});`;
+    console.log("query: " + query_addToken);
+    let addTokenResult = await db.queryExecuter(query_addToken);
+    if(addTokenResult == false){
+        api.errorSender(errSock, "error while inserting token", msgId);
+        return false;
+    }
+
+    let result = {
+        "status": "success",
+        "token": token,
+        "issuer_role": params.role,
+        "expire": expriry 
+    }
+
+    return result;
+}
+
+/**
+ * ログアウトAPI
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {Object | false} 実行失敗時にfalseを返却する.
+ */
+async function logout(params, errSock, msgId){
+    if(params.hasOwnProperty("token") == false){
+        api.errorSender(errSock, "params.token is not included", msgId);
+        return false;
+    }
+
+    if(api.isNotSQLInjection(params.token) == false){
+        api.errorSender(errSock, "params.token contains suspicious character, you can not register such name");
+        return false;
+    }
+
+    let query_deleteToken = `delete from auth_token where token_id = '${params.token}';`;
+    let deleteResult = await db.queryExecuter(query_deleteToken);
+    deleteResult = deleteResult[0];
+
+    if(deleteResult.affectedRows == 0){
+        api.errorSender(errSock, "invalid token", msgId);
+        return false;
+    }
+
+    let result = {
+        "status": "success"
+    }
+    
+    return result;
+
 }
