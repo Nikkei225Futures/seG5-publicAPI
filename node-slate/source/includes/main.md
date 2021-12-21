@@ -518,7 +518,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 | token | string | ログイン時に発行されたtoken |
 
 ### 利用者予約情報取得APIでのレスポンスメッセージ定義(成功時)
-> 利用者アカウント基本情報取得API-レスポンスメッセージの例(成功時)
+> 利用者アカウント予約情報取得API-レスポンスメッセージの例(成功時)
 ```json
 {
    "jsonrpc": "2.0",
@@ -531,8 +531,8 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
             "restaurant_id": "123456789",
             "user_id": "55795132",
             "seat_id": "7894561230",
-            "time_start": "1639494000000",
-            "time_end": "1639497600000",
+            "time_start": "1639494000",
+            "time_end": "1639497600",
             "num_people": "4",
             "is_expired": false
          },
@@ -541,8 +541,8 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
             "restaurant_id": "123456789",
             "user_id": "55795132",
             "seat_id": "7894561237",
-            "time_start": "1639594000000",
-            "time_end": "1639597600000",
+            "time_start": "1639594000",
+            "time_end": "1639597600",
             "num_people": "2",
             "is_expired": false
          },
@@ -551,8 +551,8 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
             "restaurant_id": "1234567114",
             "user_id": "55795132",
             "seat_id": "7894467982",
-            "time_start": "1639494000000",
-            "time_end": "1639497600000",
+            "time_start": "1639494000",
+            "time_end": "1639497600",
             "num_people": "4",
             "is_expired": false
          }
@@ -569,8 +569,8 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 | > restaurant_id | string | 予約したレストランのID |
 | > user_id | string | 常に検索したユーザのIDが入る |
 | > seat_id | string | 予約した席のID |
-| > time_start | string | 予約した開始時間 |
-| > time_end | string | 予約した終了時間 |
+| > time_start | string | 予約した開始時間, timestamp(秒単位) |
+| > time_end | string | 予約した終了時間, timestamp(秒単位) |
 | > num_people | string | 一緒に行く人数 |
 | > is_expired | boolean | 予約が失効しているかどうか, これは常にfalse |
 
@@ -1711,8 +1711,8 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
       "reservationData": {
          "restaurant_id": "49786123",
          "seat_id": "467831",
-         "time_start": "1639636200000",
-         "time_end": "1639643400000",
+         "time_start": "1639636200",
+         "time_end": "1639643400",
          "num_people": "5"
       }
    }
@@ -1726,8 +1726,8 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 | reservationData | JSONObject | 予約情報のJSONデータ |
 | > restaurant_id | string | 予約したい店舗のID |
 | > seat_id | string | 予約したい座席のID |
-| > time_start | string | 予約開始時間 |
-| > time_end | string | 予約終了時間 |
+| > time_start | string | 予約開始時間, timestamp(秒単位) |
+| > time_end | string | 予約終了時間, timestamp(秒単位) |
 | > num_people | string | 一緒に行く人数 |
 
 ### 予約情報更新APIでのリクエストメッセージ定義(予約情報削除)
