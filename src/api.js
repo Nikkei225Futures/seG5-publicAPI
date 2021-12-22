@@ -57,6 +57,8 @@ async function methodExecuter(sock, msg, msgId){
         console.log("result-logout: " + JSON.stringify(result));
 
     }else if(methodName == "getInfo/user/basic"){
+        result = await method.getInfoUserBasic(params, sock, msgId);
+        console.log("result-getInfo/user/basic: " + JSON.stringify(result));
 
     }else if(methodName == "getInfo/user/reservations"){
 

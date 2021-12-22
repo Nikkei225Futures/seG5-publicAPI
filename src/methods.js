@@ -9,6 +9,7 @@ exports.registerRestaurant = registerRestaurant;
 exports.registerAdmin = registerAdmin;
 exports.login = login;
 exports.logout = logout;
+exports.getInfoUserBasic = getInfoUserBasic;
 
 const api = require("./api.js");
 const db = require("./db.js");
@@ -368,4 +369,125 @@ async function logout(params, errSock, msgId){
     
     return result;
 
+}
+
+/**
+ * 利用者アカウント基本情報取得API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->error, Object->success
+ */
+async function getInfoUserBasic(params, errSock, msgId){
+    //check params
+    if(params.hasOwnProperty("searchBy") == false){
+        api.errorSender(errSock, "params.searchBy is not included", msgId);
+        return false;
+    }
+    if(params.searchBy == "user_id"){        
+        if(params.hasOwnProperty("user_id") == false){
+            api.errorSender(errSock, "params.user_id is not included", msgId);
+            return false;
+        }
+        if(api.isNotSQLInjection(params.user_id) == false){
+            api.errorSender(errSock, "params.user_id contains suspicious character, you can not register such name");
+            return false;
+        }
+    }else if(params.searchBy == "user_name"){
+        if(params.hasOwnProperty("user_name") == false){
+            api.errorSender(errSock, "params.user_name is not included", msgId);
+            return false;
+        }
+        if(api.isNotSQLInjection(params.user_name) == false){
+            api.errorSender(errSock, "params.user_name contains suspicious character, you can not register such name");
+            return false;
+        }
+    }else{
+        api.errorSender(errSock, "params.searchBy is invalid.");
+    }
+
+    if(params.hasOwnProperty("token") == false){
+        api.errorSender(errSock, "params.token is not included", msgId);
+        return false;
+    }
+    if(api.isNotSQLInjection(params.token) == false){
+        api.errorSender(errSock, "params.token contains suspicious character, you can not register such name");
+        return false;
+    }
+    
+    let userInfo = -1;
+    let query_getUser;
+    if(params.searchBy == "user_id"){
+        query_getUser = `select * from user where user_id = ${params.user_id};`;
+    }else if(params.searchBy == "user_name"){
+        query_getUser = `select * from user where user_name = ${params.user_name};`;
+    }
+    
+    userInfo = await db.queryExecuter(query_getUser);
+    if(userInfo == false){
+        console.error("error on query executer");
+        api.errorSender(errSock, "error while reading table", msgId);
+        return false;
+    }else{
+        userInfo = userInfo[0];
+        if(api.isObjectEmpty(userInfo)){
+            api.errorSender(errSock, "no such user exists", msgId);
+            return false;
+        }
+    }
+
+    let query_getTokenInfo = `select * from auth_token where token_id = ${params.token}`;
+    let tokenInfo = await db.queryExecuter(query_getTokenInfo);
+    if(tokenInfo == false){
+        console.error("error on query executer: " + query_getTokenInfo);
+        api.errorSender(errSock, "error while reading table", msgId);
+        return false;
+    }else{
+        tokenInfo = tokenInfo[0];
+        if(api.isObjectEmpty(tokenInfo)){
+            api.errorSender(errSock, "401", msgId);
+            return false;
+        }
+    }
+
+    let result;
+
+    if(tokenInfo.token_permission == "user"){
+        if(tokenInfo.token_issuer_id != userInfo.user_id){
+            api.errorSender(errSock, "you don't have permission to see the user information", msgId);
+            return false;
+        }
+        result = {
+            "status": "success",
+            "user_id": userInfo.user_id,
+            "user_name": userInfo.user_name,
+            "birthday": userInfo.birthday,
+            "gender": userInfo.gender,
+            "email_addr": userInfo.email_addr,
+            "address": userInfo.address,
+            "num_vicious_cancels": userInfo.num_vicious_cancels
+        }
+    }else if(tokenInfo.token_permission == "restaurant"){
+        result = {
+            "status": "success",
+            "user_id": userInfo.user_id,
+            "user_name": userInfo.user_name,
+            "birthday": userInfo.birthday,
+            "gender": userInfo.gender,
+            "num_vicious_cancels": userInfo.num_vicious_cancels
+        }
+    }else if(tokenInfo.token_permission == "admin"){
+        result = {
+            "status": "success",
+            "user_id": userInfo.user_id,
+            "user_name": userInfo.user_name,
+            "birthday": userInfo.birthday,
+            "gender": userInfo.gender,
+            "email_addr": userInfo.email_addr,
+            "address": userInfo.address,
+            "num_vicious_cancels": userInfo.num_vicious_cancels
+        }
+    }
+
+    return result;
 }
