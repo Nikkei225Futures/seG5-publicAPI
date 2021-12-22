@@ -38,31 +38,43 @@ async function methodExecuter(sock, msg, msgId){
 
     if(methodName == "register/user"){
         result = await method.registerUser(params, sock, msgId);
-        console.log("result-register/user: " + JSON.stringify(result));
+        console.log("result-register/user");
+        console.log(result);
 
     }else if(methodName == "register/restaurant"){
         result = await method.registerRestaurant(params, sock, msgId);
-        console.log("result-register/restaurant: " + JSON.stringify(result));
+        console.log("result-register/restaurant");
+        console.log(result);
 
     }else if(methodName == "register/admin"){
         result = await method.registerAdmin(params, sock, msgId);
-        console.log("result-register/admin: " + JSON.stringify(result));
+        console.log("result-register/admin");
+        console.log(result);
 
     }else if(methodName == "login"){
         result = await method.login(params, sock, msgId);
-        console.log("result-login: " + JSON.stringify(result));
+        console.log("result-login");
+        console.log(result);
 
     }else if(methodName == "logout"){
         result = await method.logout(params, sock, msgId);
-        console.log("result-logout: " + JSON.stringify(result));
+        console.log("result-logout");
+        console.log(result);
 
     }else if(methodName == "getInfo/user/basic"){
         result = await method.getInfoUserBasic(params, sock, msgId);
-        console.log("result-getInfo/user/basic: " + JSON.stringify(result));
+        console.log("result-getInfo/user/basic");
+        console.log(result);
 
     }else if(methodName == "getInfo/user/reservations"){
+        result = await method.getInfoUserReservations(params, sock, msgId);
+        console.log("result-getInfo/user/reservations");
+        console.log(result);
 
     }else if(methodName == "getInfo/user/evaluations"){
+        result = await method.getInfoUserEvaluations(params, sock, msgId);
+        console.log("result-getInfo/user/evaluations");
+        console.log(result);
 
     }else if(methodName == "getInfo/restaurant/basic"){
 
@@ -209,6 +221,11 @@ function resultSender(sock, result, msgId){
  */
 function isNotSQLInjection(param){
     let checkStrs = ["=", "<", ">", ";", "'", "*", "?", ":", "|"];
+
+    //if input = false = number, return true;
+    if(isNaN(param) == false){
+        return true;
+    }
     
     for(let i = 0; i < checkStrs.length; i++){
         if(param.indexOf(checkStrs[i]) != -1){
@@ -231,4 +248,4 @@ function isObjectEmpty(obj) {
       }
     }
     return true;
-  }
+}

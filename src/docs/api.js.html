@@ -66,29 +66,43 @@ async function methodExecuter(sock, msg, msgId){
 
     if(methodName == "register/user"){
         result = await method.registerUser(params, sock, msgId);
-        console.log("result-register/user: " + JSON.stringify(result));
+        console.log("result-register/user");
+        console.log(result);
 
     }else if(methodName == "register/restaurant"){
         result = await method.registerRestaurant(params, sock, msgId);
-        console.log("result-register/restaurant: " + JSON.stringify(result));
+        console.log("result-register/restaurant");
+        console.log(result);
 
     }else if(methodName == "register/admin"){
         result = await method.registerAdmin(params, sock, msgId);
-        console.log("result-register/admin: " + JSON.stringify(result));
+        console.log("result-register/admin");
+        console.log(result);
 
     }else if(methodName == "login"){
         result = await method.login(params, sock, msgId);
-        console.log("result-login: " + JSON.stringify(result));
+        console.log("result-login");
+        console.log(result);
 
     }else if(methodName == "logout"){
         result = await method.logout(params, sock, msgId);
-        console.log("result-logout: " + JSON.stringify(result));
+        console.log("result-logout");
+        console.log(result);
 
     }else if(methodName == "getInfo/user/basic"){
+        result = await method.getInfoUserBasic(params, sock, msgId);
+        console.log("result-getInfo/user/basic");
+        console.log(result);
 
     }else if(methodName == "getInfo/user/reservations"){
+        result = await method.getInfoUserReservations(params, sock, msgId);
+        console.log("result-getInfo/user/reservations");
+        console.log(result);
 
     }else if(methodName == "getInfo/user/evaluations"){
+        result = await method.getInfoUserEvaluations(params, sock, msgId);
+        console.log("result-getInfo/user/evaluations");
+        console.log(result);
 
     }else if(methodName == "getInfo/restaurant/basic"){
 
@@ -235,6 +249,11 @@ function resultSender(sock, result, msgId){
  */
 function isNotSQLInjection(param){
     let checkStrs = ["=", "&lt;", ">", ";", "'", "*", "?", ":", "|"];
+
+    //if input = false = number, return true;
+    if(isNaN(param) == false){
+        return true;
+    }
     
     for(let i = 0; i &lt; checkStrs.length; i++){
         if(param.indexOf(checkStrs[i]) != -1){
@@ -257,7 +276,7 @@ function isObjectEmpty(obj) {
       }
     }
     return true;
-  }</code></pre>
+}</code></pre>
         </article>
     </section>
 
@@ -267,13 +286,13 @@ function isObjectEmpty(obj) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#errorSender">errorSender</a></li><li><a href="global.html#getMethodName">getMethodName</a></li><li><a href="global.html#getMsgID">getMsgID</a></li><li><a href="global.html#isNotSQLInjection">isNotSQLInjection</a></li><li><a href="global.html#isObjectEmpty">isObjectEmpty</a></li><li><a href="global.html#jsonParser">jsonParser</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#methodExecuter">methodExecuter</a></li><li><a href="global.html#paramParser">paramParser</a></li><li><a href="global.html#queryExecuter">queryExecuter</a></li><li><a href="global.html#registerAdmin">registerAdmin</a></li><li><a href="global.html#registerRestaurant">registerRestaurant</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resultSender">resultSender</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkToken">checkToken</a></li><li><a href="global.html#errorSender">errorSender</a></li><li><a href="global.html#getInfoUserBasic">getInfoUserBasic</a></li><li><a href="global.html#getInfoUserEvaluations">getInfoUserEvaluations</a></li><li><a href="global.html#getInfoUserReservations">getInfoUserReservations</a></li><li><a href="global.html#getMethodName">getMethodName</a></li><li><a href="global.html#getMsgID">getMsgID</a></li><li><a href="global.html#isNotSQLInjection">isNotSQLInjection</a></li><li><a href="global.html#isObjectEmpty">isObjectEmpty</a></li><li><a href="global.html#jsonParser">jsonParser</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#methodExecuter">methodExecuter</a></li><li><a href="global.html#paramParser">paramParser</a></li><li><a href="global.html#queryExecuter">queryExecuter</a></li><li><a href="global.html#registerAdmin">registerAdmin</a></li><li><a href="global.html#registerRestaurant">registerRestaurant</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resultSender">resultSender</a></li><li><a href="global.html#tokenManager">tokenManager</a></li><li><a href="global.html#unmute">unmute</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Dec 22 2021 02:27:26 GMT+0900 (Japan Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Dec 23 2021 01:49:21 GMT+0900 (Japan Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

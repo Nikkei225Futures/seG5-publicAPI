@@ -19,6 +19,7 @@ const dbConfig = {
  * @returns {string} 実行結果
  */
 exports.queryExecuter = async function queryExecuter(query){
+    console.log("query: " + query);
     const pool = await mysql.createPool(dbConfig);
     let result;
     try{
