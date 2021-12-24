@@ -3,6 +3,7 @@ let dstRmt = "3.143.243.86"
 
 let svr = new WebSocket(`ws://${dstLcl}:8889`);
 let log = document.getElementById("log");
+let res;
 
 svr.addEventListener("open", () => {
     log.innerHTML = "sock open";
@@ -13,6 +14,7 @@ svr.addEventListener("message", msg => {
     if(msg.id == 987){
         console.warn(msg);
     }else{
+        res = msg.result;
         log.innerHTML = JSON.stringify(msg);
         console.log(msg);
     }

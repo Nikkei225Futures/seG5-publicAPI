@@ -6,25 +6,25 @@ insert into user (user_id, user_name, birthday, gender, email_addr, address, pas
 insert into user (user_id, user_name, birthday, gender, email_addr, address, password, num_vicious_cancels) values (1, 'testUser1', '2000/12/31', 'female', 'example@example.com', 'Japan', 'testPassword1', 0);
 insert into user (user_id, user_name, birthday, gender, email_addr, address, password, num_vicious_cancels) values (2, 'testUser2', '2000/06/15', 'male', 'example@example.com', 'China', 'testPassworder', 0);
 
-insert into restaurant(restaurant_id, restaurant_name, password, email_addr, address, time_open, time_close, holidays_json, features) values (0, 'testRestaurant', 'testPass', 'example@abc.com', 'Japan', '06:00', '18:00', '{["2021/12/31", "2022/01/01"]}', 'tasty');
-insert into restaurant(restaurant_id, restaurant_name, password, email_addr, address, time_open, time_close, holidays_json, features) values (1, 'testRestaurant1', 'testPass1', 'example@abcdefg.com', 'China', '10:00', '21:00', '{["2021/12/03", "2022/01/05"]}', 'not so tasty');
-insert into restaurant(restaurant_id, restaurant_name, password, email_addr, address, time_open, time_close, holidays_json, features) values (2, 'testRestaurant2', 'testPass2', 'example@abg.com', 'United States', '18:00', '03:00', '{["2021/12/03", "2022/01/05"]}', 'bit tasty');
+insert into restaurant(restaurant_id, restaurant_name, password, email_addr, address, time_open, time_close, holidays_array, features) values (0, 'testRestaurant', 'testPass', 'example@abc.com', 'Japan', '06:00', '18:00', '["2021/12/31", "2022/01/01"]', 'tasty');
+insert into restaurant(restaurant_id, restaurant_name, password, email_addr, address, time_open, time_close, holidays_array, features) values (1, 'testRestaurant1', 'testPass1', 'example@abcdefg.com', 'China', '10:00', '21:00', '["2021/12/03", "2022/01/05"]', 'not so tasty');
+insert into restaurant(restaurant_id, restaurant_name, password, email_addr, address, time_open, time_close, holidays_array, features) values (2, 'testRestaurant2', 'testPass2', 'example@abg.com', 'United States', '18:00', '03:00', '["2021/12/03", "2022/01/05"]', 'bit tasty');
 
 insert into administrator(admin_id, admin_name, birthday, password, gender, address, email_addr) values (0, 'testAdmin', '2000/02/01', 'password', 'female', 'United States', 'admin@admin.com');
 insert into administrator(admin_id, admin_name, birthday, password, gender, address, email_addr) values (1, 'testAdmin1', '2000/02/11', 'password1', 'male', 'China', 'admin1@admin.com');
 insert into administrator(admin_id, admin_name, birthday, password, gender, address, email_addr) values (2, 'testAdmin2', '2000/02/21', 'password2', 'female', 'England', 'admin2@admin.com');
 
-insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_json, avg_stay_time, feature) values (0, 'a-counter', 0, 1, 0, 0, '{["00:30:00", "00:35:00", "01:00:00", "01:30:00"]}', '00:53:45', 'counter');
-insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_json, avg_stay_time, feature) values (1, 'b-table', 0, 3, 1, 1639901943, '{["00:30:00", "00:35:00", "01:00:00", "01:30:00"]}', '00:53:45', 'near a door');
-insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_json, avg_stay_time, feature) values (2, 'c-table', 0, 5, 0, 0, '{["00:30:00", "00:35:00", "01:00:00", "01:30:00"]}', '00:53:45', 'near a window');
+insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_array, avg_stay_time, feature) values (0, 'a-counter', 0, 1, 0, 0, '["00:30:00", "00:35:00", "01:00:00", "01:30:00"]', '00:53:45', 'counter');
+insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_array, avg_stay_time, feature) values (1, 'b-table', 0, 3, 1, 1639901943, '["00:30:00", "00:35:00", "01:00:00", "01:30:00"]', '00:53:45', 'near a door');
+insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_array, avg_stay_time, feature) values (2, 'c-table', 0, 5, 0, 0, '["00:30:00", "00:35:00", "01:00:00", "01:30:00"]', '00:53:45', 'near a window');
 
-insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_json, avg_stay_time, feature) values (3, 'a-counter', 1, 1, 1, 1639901943, '{["00:30:00", "00:35:00", "01:00:00", "01:30:00"]}', '00:53:45', 'counter');
-insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_json, avg_stay_time, feature) values (4, 'b-table', 1, 3, 1, 1639901943, '{["00:30:00", "00:35:00", "01:00:00", "01:30:00"]}', '00:53:45', 'near a door');
-insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_json, avg_stay_time, feature) values (5, 'c-table', 1, 5, 0, 0, '{["00:30:00", "00:35:00", "01:00:00", "01:30:00"]}', '00:53:45', 'near a window');
+insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_array, avg_stay_time, feature) values (3, 'a-counter', 1, 1, 1, 1639901943, '["00:30:00", "00:35:00", "01:00:00", "01:30:00"]', '00:53:45', 'counter');
+insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_array, avg_stay_time, feature) values (4, 'b-table', 1, 3, 1, 1639901943, '["00:30:00", "00:35:00", "01:00:00", "01:30:00"]', '00:53:45', 'near a door');
+insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_array, avg_stay_time, feature) values (5, 'c-table', 1, 5, 0, 0, '["00:30:00", "00:35:00", "01:00:00", "01:30:00"]', '00:53:45', 'near a window');
 
-insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_json, avg_stay_time, feature) values (6, 'a-table', 2, 5, 0, 0, '{["00:30:00", "00:35:00", "01:00:00", "01:30:00"]}', '00:53:45', 'counter');
-insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_json, avg_stay_time, feature) values (7, 'b-counter', 2, 1, 1, 1639901943, '{["00:30:00", "00:35:00", "01:00:00", "01:30:00"]}', '00:53:45', 'near a door');
-insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_json, avg_stay_time, feature) values (8, 'c-table', 2, 10, 0, 0, '{["00:30:00", "00:35:00", "01:00:00", "01:30:00"]}', '00:53:45', 'near a window');
+insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_array, avg_stay_time, feature) values (6, 'a-table', 2, 5, 0, 0, '["00:30:00", "00:35:00", "01:00:00", "01:30:00"]', '00:53:45', 'counter');
+insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_array, avg_stay_time, feature) values (7, 'b-counter', 2, 1, 1, 1639901943, '["00:30:00", "00:35:00", "01:00:00", "01:30:00"]', '00:53:45', 'near a door');
+insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_array, avg_stay_time, feature) values (8, 'c-table', 2, 10, 0, 0, '["00:30:00", "00:35:00", "01:00:00", "01:30:00"]', '00:53:45', 'near a window');
 
 insert into restaurant_evaluation(evaluation_id, restaurant_id, user_id, evaluation_grade, evaluation_comment) values (0, 0, 0, 2, 'not so tasty');
 insert into restaurant_evaluation(evaluation_id, restaurant_id, user_id, evaluation_grade, evaluation_comment) values (1, 0, 1, 3, 'bit tasty');

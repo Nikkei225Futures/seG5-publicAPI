@@ -12,6 +12,9 @@ exports.logout = logout;
 exports.getInfoUserBasic = getInfoUserBasic;
 exports.getInfoUserReservations = getInfoUserReservations;
 exports.getInfoUserEvaluations = getInfoUserEvaluations;
+exports.getInfoRestaurantBasic = getInfoRestaurantBasic;
+exports.getInfoRestaurantSeats = getInfoRestaurantSeats;
+
 exports.pong = pong;
 
 const api = require("./api.js");
@@ -28,12 +31,8 @@ const uuid4 = require('uuid4');
  * @returns {false | JSONObject} 実行が成功 -> JSONObject, else -> false
  */
 async function registerUser(params, errSock, msgId) {
-    if (params.hasOwnProperty("user_name") == false) {
-        api.errorSender(errSock, "params.user_name is not included", msgId);
-        return false;
-    }
-    if (params.hasOwnProperty("password") == false) {
-        api.errorSender(errSock, "params.password is not included", msgId);
+    let requiredParams = ["user_name", "password"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
         return false;
     }
 
@@ -97,16 +96,13 @@ async function registerUser(params, errSock, msgId) {
  * @returns {false | JSONObject} 実行が成功 -> JSONObject, else -> false
  */
 async function registerRestaurant(params, errSock, msgId) {
-    if (params.hasOwnProperty("restaurant_name") == false) {
-        api.errorSender(errSock, "params.restaurant_name is not included", msgId);
+    let requiredParams = ["restaurant_name", "password"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
         return false;
     }
-    if (params.hasOwnProperty("password") == false) {
-        api.errorSender(errSock, "params.password is not included", msgId);
-        return false;
-    }
+
     if (api.isNotSQLInjection(params.restaurant_name) == false) {
-        api.errorSender(errSock, "params.restaurant_name contains suspicious character, you can not register such name");
+        api.errorSender(errSock, "params.restaurant_name contains suspicious character, you can not register such name", msgId);
         return false;
     }
 
@@ -164,16 +160,8 @@ async function registerRestaurant(params, errSock, msgId) {
  * @returns {false | JSONObject} 実行が成功 -> JSONObject, else -> false
  */
 async function registerAdmin(params, errSock, msgId) {
-    if (params.hasOwnProperty("admin_name") == false) {
-        api.errorSender(errSock, "params.admin_name is not included", msgId);
-        return false;
-    }
-    if (params.hasOwnProperty("password") == false) {
-        api.errorSender(errSock, "params.password is not included", msgId);
-        return false;
-    }
-    if (params.hasOwnProperty("admin_password") == false) {
-        api.errorSender(errSock, "params.admin_password is not included", msgId);
+    let requiredParams = ["admin_name", "password", "admin_password"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
         return false;
     }
 
@@ -183,7 +171,7 @@ async function registerAdmin(params, errSock, msgId) {
     }
 
     if (api.isNotSQLInjection(params.admin_name) == false) {
-        api.errorSender(errSock, "params.admin_name contains suspicious character, you can not register such name");
+        api.errorSender(errSock, "params.admin_name contains suspicious character, you can not register such name", msgId);
         return false;
     }
 
@@ -241,17 +229,8 @@ async function registerAdmin(params, errSock, msgId) {
  * @returns {Object | false} 実行に失敗した場合はfalseを返却する. 成功した場合はObjectを返却する.
  */
 async function login(params, errSock, msgId) {
-    //check params
-    if (params.hasOwnProperty("user_name") == false) {
-        api.errorSender(errSock, "params.user_name is not included", msgId);
-        return false;
-    }
-    if (params.hasOwnProperty("password") == false) {
-        api.errorSender(errSock, "params.password is not included", msgId);
-        return false;
-    }
-    if (params.hasOwnProperty("role") == false) {
-        api.errorSender(errSock, "params.role is not included", msgId);
+    let requiredParams = ["user_name", "password", "role"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
         return false;
     }
 
@@ -347,13 +326,13 @@ async function login(params, errSock, msgId) {
  * @returns {Object | false} 実行失敗時にfalseを返却する.
  */
 async function logout(params, errSock, msgId) {
-    if (params.hasOwnProperty("token") == false) {
-        api.errorSender(errSock, "params.token is not included", msgId);
+    let requiredParams = ["token"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
         return false;
     }
 
     if (api.isNotSQLInjection(params.token) == false) {
-        api.errorSender(errSock, "params.token contains suspicious character, you can not register such name");
+        api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
         return false;
     }
 
@@ -393,7 +372,7 @@ async function getInfoUserBasic(params, errSock, msgId) {
             return false;
         }
         if (api.isNotSQLInjection(params.user_id) == false) {
-            api.errorSender(errSock, "params.user_id contains suspicious character, you can not register such name");
+            api.errorSender(errSock, "params.user_id contains suspicious character, you can not register such name", msgId);
             return false;
         }
     } else if (params.searchBy == "user_name") {
@@ -402,11 +381,11 @@ async function getInfoUserBasic(params, errSock, msgId) {
             return false;
         }
         if (api.isNotSQLInjection(params.user_name) == false) {
-            api.errorSender(errSock, "params.user_name contains suspicious character, you can not register such name");
+            api.errorSender(errSock, "params.user_name contains suspicious character, you can not register such name", msgId);
             return false;
         }
     } else {
-        api.errorSender(errSock, "params.searchBy is invalid.");
+        api.errorSender(errSock, "params.searchBy is invalid.", msgId);
     }
 
     if (params.hasOwnProperty("token") == false) {
@@ -414,7 +393,7 @@ async function getInfoUserBasic(params, errSock, msgId) {
         return false;
     }
     if (api.isNotSQLInjection(params.token) == false) {
-        api.errorSender(errSock, "params.token contains suspicious character, you can not register such name");
+        api.errorSender(errSock, "params.token contains suspicious character, you can not register such name", msgId);
         return false;
     }
 
@@ -479,21 +458,17 @@ async function getInfoUserBasic(params, errSock, msgId) {
  * @returns {false | Object} false->エラー, Object->成功
  */
 async function getInfoUserReservations(params, errSock, msgId) {
-    //check params
-    if (params.hasOwnProperty("user_id") == false) {
-        api.errorSender(errSock, "params.user_id is not included", msgId);
+    let requiredParams = ["user_id", "token"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
         return false;
     }
-    if (params.hasOwnProperty("token") == false) {
-        api.errorSender(errSock, "params.token is not included", msgId);
-        return false;
-    }
+
     if (api.isNotSQLInjection(params.user_id) == false) {
-        api.errorSender(errSock, "params.user_id contains suspicious character, you can not register such name");
+        api.errorSender(errSock, "params.user_id contains suspicious character, you can not register such name", msgId);
         return false;
     }
     if (api.isNotSQLInjection(params.token) == false) {
-        api.errorSender(errSock, "params.token contains suspicious character, you can not register such name");
+        api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
         return false;
     }
 
@@ -545,21 +520,16 @@ async function getInfoUserReservations(params, errSock, msgId) {
  * @returns {false | Object} false->エラー, Object->成功
  */
 async function getInfoUserEvaluations(params, errSock, msgId) {
-    //check params
-    if (params.hasOwnProperty("user_id") == false) {
-        api.errorSender(errSock, "params.user_id is not included", msgId);
-        return false;
-    }
-    if (params.hasOwnProperty("token") == false) {
-        api.errorSender(errSock, "params.token is not included", msgId);
+    let requiredParams = ["user_id", "token"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
         return false;
     }
     if (api.isNotSQLInjection(params.user_id) == false) {
-        api.errorSender(errSock, "params.user_id contains suspicious character, you can not register such name");
+        api.errorSender(errSock, "params.user_id contains suspicious character, you can not register such name", msgId);
         return false;
     }
     if (api.isNotSQLInjection(params.token) == false) {
-        api.errorSender(errSock, "params.token contains suspicious character, you can not register such name");
+        api.errorSender(errSock, "params.token contains suspicious character, you can not register such name", msgId);
         return false;
     }
 
@@ -592,6 +562,179 @@ async function getInfoUserEvaluations(params, errSock, msgId) {
 
 }
 
+/**
+ * 店舗基本情報取得API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function getInfoRestaurantBasic(params, errSock, msgId) {
+    //check params
+    if (params.hasOwnProperty("searchBy") == false) {
+        api.errorSender(errSock, "params.searchBy is not included", msgId);
+        return false;
+    }
+    if (params.searchBy == "restaurant_id") {
+        if (params.hasOwnProperty("restaurant_id") == false) {
+            api.errorSender(errSock, "params.restaurant_id is not included", msgId);
+            return false;
+        }
+        if (api.isNotSQLInjection(params.restaurant_id) == false) {
+            api.errorSender(errSock, "params.restaurant_id contains suspicious character, you can not register such name", msgId);
+            return false;
+        }
+    } else if (params.searchBy == "restaurant_name") {
+        if (params.hasOwnProperty("restaurant_name") == false) {
+            api.errorSender(errSock, "params.restaurant_name is not included", msgId);
+            return false;
+        }
+        if (api.isNotSQLInjection(params.restaurant_name) == false) {
+            api.errorSender(errSock, "params.restaurant_name contains suspicious character, you can not register such name", msgId);
+            return false;
+        }
+    } else {
+        api.errorSender(errSock, "params.searchBy is invalid.", msgId);
+    }
+
+    if (params.hasOwnProperty("token") == false) {
+        api.errorSender(errSock, "params.token is not included", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.token) == false) {
+        api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    let query_getRestaurant;
+    if (params.searchBy == "restaurant_id") {
+        query_getRestaurant = `select * from restaurant where restaurant_id = ${params.restaurant_id};`;
+    } else if (params.searchBy == "restaurant_name") {
+        query_getRestaurant = `select * from user where restaurant_name = '${params.restaurant_name}';`;
+    }
+
+    let restaurantInfo = -1;
+    restaurantInfo = await db.queryExecuter(query_getRestaurant);
+    if (restaurantInfo == false) {
+        console.error("error on query executer");
+        api.errorSender(errSock, "error while reading table", msgId);
+        return false;
+    } else {
+        restaurantInfo = restaurantInfo[0][0];
+        if (api.isObjectEmpty(restaurantInfo)) {
+            api.errorSender(errSock, "no such restaurant exists", msgId);
+            return false;
+        }
+    }
+
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+
+    console.log("holidays");
+    console.log(JSON.parse(restaurantInfo.holidays_array));
+    
+
+    let result = {
+        "jsonrpc": "2.0",
+        "id": msgId,
+        "result": {
+           "status": "success",
+           "restaurant_id": restaurantInfo.restaurant_id,
+           "restaurant_name": restaurantInfo.restaurant_name,
+           "email_addr": restaurantInfo.email_addr,
+           "address": restaurantInfo.address,
+           "time_open": restaurantInfo.time_open,
+           "time_close": restaurantInfo.time_close,
+           "features": restaurantInfo.features,
+           "holidays": JSON.parse(restaurantInfo.holidays_array)
+        }
+     }
+
+    return result;
+}
+
+
+/**
+ * 店舗座席情報取得API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function getInfoRestaurantSeats(params, errSock, msgId){
+    let requiredParams = ["restaurant_id", "token"];
+    if(checkParamsAreEnough(params,requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if (api.isNotSQLInjection(params.restaurant_id) == false) {
+        api.errorSender(errSock, "params.restaurant_id contains suspicious character, you can not register such name", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.token) == false) {
+        api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }    
+    
+    //check token
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+
+    let query_getRestaurantSeats = `select * from seat where restaurant_id = ${params.restaurant_id}`;
+    let seats = await db.queryExecuter(query_getRestaurantSeats);
+    seats = seats[0];
+
+    // get reservation data
+    let seatReservations = [];
+    let reservationInfo = [];
+    for(let i = 0; i < seats.length; i++){
+        query_getSeatReservation = `select * from reservation where seat_id = ${seats[i].seat_id} and is_expired = 0`;
+        reservationInfo[i] = await db.queryExecuter(query_getSeatReservation);
+        seatReservations.push(reservationInfo[i][0]);
+    }
+
+    //see each seat info
+    for(let i = 0; i < seats.length; i++){   
+        //cast tinyint -> boolean
+        if(seats[i].is_filled == 0){
+            seats[i].is_filled = false;
+        }else{
+            seats[i].is_filled = true;
+        }
+        seats[i].staying_times_array = JSON.parse(seats[i].staying_times_array);
+
+        seats[i].reservations = [];
+        console.log("seat_id: " + seats[i].seat_id);
+
+        for(let j = 0; j < seatReservations.length; j++){
+            let reservationData = seatReservations[j];
+
+            if(reservationData.length > 0){
+                if(seats[i].seat_id == reservationData[0].seat_id){
+                    for(let k = 0; k < reservationData.length; k++){
+                        seats[i].reservations.push(reservationData[k]);
+                    }
+                }
+            }
+
+        }
+    }
+
+    result = {
+        "status": "success",
+        "seats": seats
+    }
+
+    return result;
+
+}
+
+
+
+
 
 /**
  * pingに対してメッセージを返却するAPI
@@ -605,6 +748,30 @@ async function pong(params, errSock, msgId){
         "status": "success",
         "pong": "pong"
     }
+}
+
+
+/**
+ * パラメータが十分かチェックする
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {string[]} checkParamNames チェックするパラメータの配列
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {boolean} true->パラメータが全て含まれている. false->パラメータが足りない
+ */
+function checkParamsAreEnough(params, checkParamNames, errSock, msgId){
+    let numErr = 0;
+    for(let i = 0; i < checkParamNames.length; i++){
+        if(params.hasOwnProperty(checkParamNames[i]) == false){
+            api.errorSender(errSock, `params.${checkParamNames[i]} is not included`, msgId);
+            numErr++;
+        }
+    }
+    
+    if(numErr != 0){
+        return false;
+    }
+    return true;
 }
 
 

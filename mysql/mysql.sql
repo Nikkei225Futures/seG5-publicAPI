@@ -40,8 +40,8 @@ CREATE TABLE `restaurant` (
     `time_open` CHAR(10)  NOT NULL ,
     -- time of closing, HH:MM
     `time_close` CHAR(10)  NOT NULL ,
-    -- day of holidays, YYYY/MM/DD, represented in json
-    `holidays_json` text  NOT NULL ,
+    -- day of holidays, YYYY/MM/DD, represented in array
+    `holidays_array` text  NOT NULL ,
     -- feature of restaurant.
     `features` text  NOT NULL ,
     PRIMARY KEY (
@@ -61,8 +61,8 @@ CREATE TABLE `seat` (
     `is_filled` tinyint(1)  NOT NULL ,
     -- if isFilled==true, this is start time(timestamp) of filled, if isFilled==false, this = 0
     `time_start` int  NOT NULL ,
-    -- store time to stayed time, for calc avg_stay_time, represented in json
-    `staying_times_json` text  NOT NULL ,
+    -- store time to stayed time, for calc avg_stay_time, represented in array
+    `staying_times_array` text  NOT NULL ,
     -- time of average staying time on the seat, HH:MM:SS
     `avg_stay_time` CHAR(8)  NOT NULL ,
     -- feature of the seat
