@@ -14,6 +14,8 @@ exports.getInfoUserReservations = getInfoUserReservations;
 exports.getInfoUserEvaluations = getInfoUserEvaluations;
 exports.getInfoRestaurantBasic = getInfoRestaurantBasic;
 exports.getInfoRestaurantSeats = getInfoRestaurantSeats;
+exports.getInfoRestaurantEvaluations = getInfoRestaurantEvaluations;
+exports.getInfoRestaurants = getInfoRestaurants;
 
 exports.pong = pong;
 
@@ -732,6 +734,79 @@ async function getInfoRestaurantSeats(params, errSock, msgId){
 
 }
 
+/**
+ * 店舗食べログ情報取得API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function getInfoRestaurantEvaluations(params, errSock, msgId){
+    let requiredParams = ["restaurant_id", "token"];
+    if(checkParamsAreEnough(params,requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if (api.isNotSQLInjection(params.restaurant_id) == false) {
+        api.errorSender(errSock, "params.restaurant_id contains suspicious character, you can not register such name", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.token) == false) {
+        api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    let query_getRestaurantEvaluations = `select * from restaurant_evaluation where restaurant_id = ${params.restaurant_id};`;
+    let evaluations = await db.queryExecuter(query_getRestaurantEvaluations);
+    evaluations = evaluations[0];
+    
+    let result = {
+        "status": "success",
+        "evaluations": evaluations
+    }
+
+    return result;
+}
+
+/**
+ * 店舗情報検索API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function getInfoRestaurants(params, errSock, msgId){
+    let requiredParams = ["keyword", "token"];
+    if(checkParamsAreEnough(params,requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if (api.isNotSQLInjection(params.keyword) == false) {
+        api.errorSender(errSock, "params.restaurant_id contains suspicious character, you can not register such name", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.token) == false) {
+        api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    let query_getRestaurants = `select * from restaurant where features like '%${params.keyword}%';`;
+    let restaurants = await db.queryExecuter(query_getRestaurants);
+    restaurants = restaurants[0];
+    if(restaurants.length == 0){
+        api.errorSender(errSock, "no restaurant matched", msgId);
+        return false;
+    }
+
+    for(let i = 0; i < restaurants.length; i++){
+        restaurants[i].holidays_array = JSON.parse(restaurants[i].holidays_array);
+    }
+
+    let result = {
+        "status": "success",
+        "restaurants": restaurants
+    }
+
+    return result;
+}
 
 
 

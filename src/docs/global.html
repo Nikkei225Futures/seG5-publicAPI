@@ -277,7 +277,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line762">line 762</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line837">line 837</a>
     </li></ul></dd>
     
 
@@ -485,7 +485,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line786">line 786</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line861">line 861</a>
     </li></ul></dd>
     
 
@@ -696,7 +696,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line200">line 200</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line206">line 206</a>
     </li></ul></dd>
     
 
@@ -882,7 +882,429 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line572">line 572</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line574">line 574</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    false->エラー, Object->成功
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">false</span>
+|
+
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getInfoRestaurantEvaluations"><span class="type-signature">(async) </span>getInfoRestaurantEvaluations<span class="signature">(params, errSock, msgId)</span><span class="type-signature"> &rarr; {false|Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    店舗食べログ情報取得API
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたパラメータ</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errSock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ws.sock</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">エラー時に使用するソケット</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msgId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line744">line 744</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    false->エラー, Object->成功
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">false</span>
+|
+
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getInfoRestaurants"><span class="type-signature">(async) </span>getInfoRestaurants<span class="signature">(params, errSock, msgId)</span><span class="type-signature"> &rarr; {false|Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    店舗情報検索API
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたパラメータ</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errSock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ws.sock</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">エラー時に使用するソケット</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msgId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line777">line 777</a>
     </li></ul></dd>
     
 
@@ -1093,7 +1515,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line666">line 666</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line668">line 668</a>
     </li></ul></dd>
     
 
@@ -1304,7 +1726,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line363">line 363</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line365">line 365</a>
     </li></ul></dd>
     
 
@@ -1515,7 +1937,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line522">line 522</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line524">line 524</a>
     </li></ul></dd>
     
 
@@ -1726,7 +2148,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line460">line 460</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line462">line 462</a>
     </li></ul></dd>
     
 
@@ -1888,7 +2310,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line171">line 171</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line177">line 177</a>
     </li></ul></dd>
     
 
@@ -2050,7 +2472,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line185">line 185</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line191">line 191</a>
     </li></ul></dd>
     
 
@@ -2212,7 +2634,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line233">line 233</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line239">line 239</a>
     </li></ul></dd>
     
 
@@ -2371,7 +2793,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line255">line 255</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line261">line 261</a>
     </li></ul></dd>
     
 
@@ -2530,7 +2952,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line138">line 138</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line144">line 144</a>
     </li></ul></dd>
     
 
@@ -2741,7 +3163,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line231">line 231</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line233">line 233</a>
     </li></ul></dd>
     
 
@@ -2952,7 +3374,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line328">line 328</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line330">line 330</a>
     </li></ul></dd>
     
 
@@ -3342,7 +3764,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line158">line 158</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line164">line 164</a>
     </li></ul></dd>
     
 
@@ -3553,7 +3975,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line746">line 746</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line821">line 821</a>
     </li></ul></dd>
     
 
@@ -3920,7 +4342,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line162">line 162</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line164">line 164</a>
     </li></ul></dd>
     
 
@@ -4131,7 +4553,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line98">line 98</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line100">line 100</a>
     </li></ul></dd>
     
 
@@ -4342,7 +4764,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line33">line 33</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line35">line 35</a>
     </li></ul></dd>
     
 
@@ -4553,7 +4975,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line218">line 218</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line224">line 224</a>
     </li></ul></dd>
     
 
@@ -4775,13 +5197,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkParamsAreEnough">checkParamsAreEnough</a></li><li><a href="global.html#checkToken">checkToken</a></li><li><a href="global.html#errorSender">errorSender</a></li><li><a href="global.html#getInfoRestaurantBasic">getInfoRestaurantBasic</a></li><li><a href="global.html#getInfoRestaurantSeats">getInfoRestaurantSeats</a></li><li><a href="global.html#getInfoUserBasic">getInfoUserBasic</a></li><li><a href="global.html#getInfoUserEvaluations">getInfoUserEvaluations</a></li><li><a href="global.html#getInfoUserReservations">getInfoUserReservations</a></li><li><a href="global.html#getMethodName">getMethodName</a></li><li><a href="global.html#getMsgID">getMsgID</a></li><li><a href="global.html#isNotSQLInjection">isNotSQLInjection</a></li><li><a href="global.html#isObjectEmpty">isObjectEmpty</a></li><li><a href="global.html#jsonParser">jsonParser</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#methodExecuter">methodExecuter</a></li><li><a href="global.html#paramParser">paramParser</a></li><li><a href="global.html#pong">pong</a></li><li><a href="global.html#queryExecuter">queryExecuter</a></li><li><a href="global.html#registerAdmin">registerAdmin</a></li><li><a href="global.html#registerRestaurant">registerRestaurant</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resultSender">resultSender</a></li><li><a href="global.html#tokenManager">tokenManager</a></li><li><a href="global.html#unmute">unmute</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkParamsAreEnough">checkParamsAreEnough</a></li><li><a href="global.html#checkToken">checkToken</a></li><li><a href="global.html#errorSender">errorSender</a></li><li><a href="global.html#getInfoRestaurantBasic">getInfoRestaurantBasic</a></li><li><a href="global.html#getInfoRestaurantEvaluations">getInfoRestaurantEvaluations</a></li><li><a href="global.html#getInfoRestaurants">getInfoRestaurants</a></li><li><a href="global.html#getInfoRestaurantSeats">getInfoRestaurantSeats</a></li><li><a href="global.html#getInfoUserBasic">getInfoUserBasic</a></li><li><a href="global.html#getInfoUserEvaluations">getInfoUserEvaluations</a></li><li><a href="global.html#getInfoUserReservations">getInfoUserReservations</a></li><li><a href="global.html#getMethodName">getMethodName</a></li><li><a href="global.html#getMsgID">getMsgID</a></li><li><a href="global.html#isNotSQLInjection">isNotSQLInjection</a></li><li><a href="global.html#isObjectEmpty">isObjectEmpty</a></li><li><a href="global.html#jsonParser">jsonParser</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#methodExecuter">methodExecuter</a></li><li><a href="global.html#paramParser">paramParser</a></li><li><a href="global.html#pong">pong</a></li><li><a href="global.html#queryExecuter">queryExecuter</a></li><li><a href="global.html#registerAdmin">registerAdmin</a></li><li><a href="global.html#registerRestaurant">registerRestaurant</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resultSender">resultSender</a></li><li><a href="global.html#tokenManager">tokenManager</a></li><li><a href="global.html#unmute">unmute</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Dec 25 2021 08:06:41 GMT+0900 (Japan Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Dec 25 2021 08:38:38 GMT+0900 (Japan Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -87,8 +87,14 @@ async function methodExecuter(sock, msg, msgId){
         console.log(result);
 
     }else if(methodName == "getInfo/restaurant/evaluations"){
+        result = await method.getInfoRestaurantEvaluations(params, sock, msgId);
+        console.log("result-getInfo/restaurant/evaluations");
+        console.log(result);
 
     }else if(methodName == "getInfo/restaurants"){
+        result = await method.getInfoRestaurants(params, sock, msgId);
+        console.log("result-getInfo/restaurants");
+        console.log(result);
 
     }else if(methodName == "getInfo/admin/basic"){
 
