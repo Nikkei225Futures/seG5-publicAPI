@@ -106,6 +106,11 @@ async function methodExecuter(sock, msg, msgId){
 
     }else if(methodName == "resign/forced"){
 
+    }else if(methodName == "ping"){
+        result = await method.pong(params, sock, msgId);
+        console.log("pong");
+        console.log(result);
+
     }else{
         // no valid method found
         console.log("404 - not found");

@@ -1,4 +1,4 @@
-let svr = new WebSocket('ws://localhost:8889');
+let svr = new WebSocket('ws://3.143.243.86:8889');
 let log = document.getElementById("log");
 
 svr.addEventListener("open", () => {

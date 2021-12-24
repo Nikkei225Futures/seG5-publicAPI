@@ -12,6 +12,7 @@ exports.logout = logout;
 exports.getInfoUserBasic = getInfoUserBasic;
 exports.getInfoUserReservations = getInfoUserReservations;
 exports.getInfoUserEvaluations = getInfoUserEvaluations;
+exports.pong = pong;
 
 const api = require("./api.js");
 const db = require("./db.js");
@@ -592,7 +593,12 @@ async function getInfoUserEvaluations(params, errSock, msgId) {
 }
 
 
-
+async function pong(params, errSock, msgId){
+    return result = {
+        "status": "success",
+        "pong": "pong"
+    }
+}
 
 
 
