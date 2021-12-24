@@ -593,6 +593,13 @@ async function getInfoUserEvaluations(params, errSock, msgId) {
 }
 
 
+/**
+ * pingに対してメッセージを返却するAPI
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {Object} 常にObjectが返却される.
+ */
 async function pong(params, errSock, msgId){
     return result = {
         "status": "success",
