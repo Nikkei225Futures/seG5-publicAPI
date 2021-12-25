@@ -97,12 +97,24 @@ async function methodExecuter(sock, msg, msgId){
         console.log(result);
 
     }else if(methodName == "getInfo/admin/basic"){
+        result = await method.getInfoAdminBasic(params, sock, msgId);
+        console.log("result-getInfo/admin/basic");
+        console.log(result);
 
     }else if(methodName == "updateInfo/user/basic"){
+        result = await method.updateInfoUserBasic(params, sock, msgId);
+        console.log("result-updateInfo/user/basic");
+        console.log(result);
 
     }else if(methodName == "updateInfo/restaurant/basic"){
+        result = await method.updateInfoRestaurantBasic(params, sock, msgId);
+        console.log("result-updateInfo/restaurant/basic");
+        console.log(result);
 
     }else if(methodName == "updateInfo/restaurant/seat"){
+        result = await method.updateInfoRestaurantSeat(params, sock, msgId);
+        console.log("result-updateInfo/restaurant/seat");
+        console.log(result);
 
     }else if(methodName == "updateInfo/restaurant/seatAvailability"){
 
@@ -237,7 +249,7 @@ function resultSender(sock, result, msgId){
  * @returns {boolean} false->SQLインジェクションの可能性がある, true->正当な文字列
  */
 function isNotSQLInjection(param){
-    let checkStrs = ["=", "<", ">", ";", "'", "*", "?", ":", "|"];
+    let checkStrs = ["=", "<", ">", ";", "'", "*", "?", "|"];
 
     //if input = false = number, return true;
     if(isNaN(param) == false){

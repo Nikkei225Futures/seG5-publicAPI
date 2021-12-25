@@ -104,6 +104,214 @@
     
 
     
+    <h4 class="name" id="checkBirthdaySyntax"><span class="type-signature"></span>checkBirthdaySyntax<span class="signature">(birthday, errSock, msgId)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    誕生日の形式が正しいか判断する. 正しくなければクライアントにエラーを送信する
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>birthday</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">パラメータの誕生日</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errSock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ws.sock</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">エラー時に使用するソケット</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msgId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line1333">line 1333</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    正しい->true, 正しくない->false
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="checkParamsAreEnough"><span class="type-signature"></span>checkParamsAreEnough<span class="signature">(params, checkParamNames, errSock, msgId)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
@@ -277,7 +485,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line837">line 837</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line1374">line 1374</a>
     </li></ul></dd>
     
 
@@ -307,6 +515,214 @@
         
 <div class="param-desc">
     true->パラメータが全て含まれている. false->パラメータが足りない
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="checkTimeSyntax"><span class="type-signature"></span>checkTimeSyntax<span class="signature">(time, errSock, msgId)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    時間(HH:MM)の形式が正しいか判断する. 正しくなければクライアントにエラーを送信する.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">パラメータの時間</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errSock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ws.sock</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">エラー時に使用するソケット</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msgId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line1303">line 1303</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    正しい->true, 正しくない->false
 </div>
 
 
@@ -485,7 +901,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line861">line 861</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line1396">line 1396</a>
     </li></ul></dd>
     
 
@@ -515,6 +931,428 @@
         
 <div class="param-desc">
     false->エラー, object->成功
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">false</span>
+|
+
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createSeatInfo"><span class="type-signature">(async) </span>createSeatInfo<span class="signature">(params, errSock, msgId)</span><span class="type-signature"> &rarr; {false|Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    店舗座席情報更新API-new
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたパラメータ</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errSock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ws.sock</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">エラー時に使用するソケット</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msgId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line1091">line 1091</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    false->エラー, Object->成功
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">false</span>
+|
+
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteSeatInfo"><span class="type-signature">(async) </span>deleteSeatInfo<span class="signature">(params, errSock, msgId)</span><span class="type-signature"> &rarr; {false|Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    店舗座席情報更新API-delete
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたパラメータ</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errSock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ws.sock</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">エラー時に使用するソケット</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msgId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line1234">line 1234</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    false->エラー, Object->成功
 </div>
 
 
@@ -696,7 +1534,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line206">line 206</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line218">line 218</a>
     </li></ul></dd>
     
 
@@ -721,6 +1559,217 @@
 
 
 
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getInfoAdminBasic"><span class="type-signature">(async) </span>getInfoAdminBasic<span class="signature">(params, errSock, msgId)</span><span class="type-signature"> &rarr; {false|Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    管理者アカウント基本情報取得APIAPI
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたパラメータ</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errSock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ws.sock</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">エラー時に使用するソケット</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msgId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line822">line 822</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    false->エラー, Object->成功
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">false</span>
+|
+
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -882,7 +1931,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line574">line 574</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line578">line 578</a>
     </li></ul></dd>
     
 
@@ -1093,7 +2142,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line744">line 744</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line748">line 748</a>
     </li></ul></dd>
     
 
@@ -1304,7 +2353,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line777">line 777</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line781">line 781</a>
     </li></ul></dd>
     
 
@@ -1515,7 +2564,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line668">line 668</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line672">line 672</a>
     </li></ul></dd>
     
 
@@ -1726,7 +2775,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line365">line 365</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line369">line 369</a>
     </li></ul></dd>
     
 
@@ -1937,7 +2986,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line524">line 524</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line528">line 528</a>
     </li></ul></dd>
     
 
@@ -2148,7 +3197,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line462">line 462</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line466">line 466</a>
     </li></ul></dd>
     
 
@@ -2310,7 +3359,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line177">line 177</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line189">line 189</a>
     </li></ul></dd>
     
 
@@ -2472,7 +3521,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line191">line 191</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line203">line 203</a>
     </li></ul></dd>
     
 
@@ -2634,7 +3683,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line239">line 239</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line251">line 251</a>
     </li></ul></dd>
     
 
@@ -2793,7 +3842,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line261">line 261</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line273">line 273</a>
     </li></ul></dd>
     
 
@@ -2952,7 +4001,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line144">line 144</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line156">line 156</a>
     </li></ul></dd>
     
 
@@ -3163,7 +4212,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line233">line 233</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line237">line 237</a>
     </li></ul></dd>
     
 
@@ -3374,7 +4423,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line330">line 330</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line334">line 334</a>
     </li></ul></dd>
     
 
@@ -3764,7 +4813,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line164">line 164</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line176">line 176</a>
     </li></ul></dd>
     
 
@@ -3975,7 +5024,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line821">line 821</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line1288">line 1288</a>
     </li></ul></dd>
     
 
@@ -4342,7 +5391,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line164">line 164</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line168">line 168</a>
     </li></ul></dd>
     
 
@@ -4553,7 +5602,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line100">line 100</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line104">line 104</a>
     </li></ul></dd>
     
 
@@ -4764,7 +5813,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line35">line 35</a>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line39">line 39</a>
     </li></ul></dd>
     
 
@@ -4975,7 +6024,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api.js.html">api.js</a>, <a href="api.js.html#line224">line 224</a>
+        <a href="api.js.html">api.js</a>, <a href="api.js.html#line236">line 236</a>
     </li></ul></dd>
     
 
@@ -5182,6 +6231,850 @@
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="updateInfoRestaurantBasic"><span class="type-signature">(async) </span>updateInfoRestaurantBasic<span class="signature">(params, errSock, msgId)</span><span class="type-signature"> &rarr; {false|Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    店舗アカウント基本情報更新API
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたパラメータ</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errSock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ws.sock</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">エラー時に使用するソケット</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msgId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line987">line 987</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    false->エラー, Object->成功
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">false</span>
+|
+
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateInfoRestaurantSeat"><span class="type-signature">(async) </span>updateInfoRestaurantSeat<span class="signature">(params, errSock, msgId)</span><span class="type-signature"> &rarr; {false|Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    店舗座席情報更新API
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたパラメータ</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errSock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ws.sock</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">エラー時に使用するソケット</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msgId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line1059">line 1059</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    false->エラー, Object->成功
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">false</span>
+|
+
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateInfoUserBasic"><span class="type-signature">(async) </span>updateInfoUserBasic<span class="signature">(params, errSock, msgId)</span><span class="type-signature"> &rarr; {false|Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    利用者アカウント基本情報更新API
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたパラメータ</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errSock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ws.sock</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">エラー時に使用するソケット</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msgId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line923">line 923</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    false->エラー, Object->成功
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">false</span>
+|
+
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateSeatInfo"><span class="type-signature">(async) </span>updateSeatInfo<span class="signature">(params, errSock, msgId)</span><span class="type-signature"> &rarr; {false|Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    店舗座席情報更新API-change
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたパラメータ</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errSock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ws.sock</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">エラー時に使用するソケット</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msgId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">メッセージに含まれていたID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="methods.js.html">methods.js</a>, <a href="methods.js.html#line1158">line 1158</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    false->エラー, Object->成功
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">false</span>
+|
+
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
@@ -5197,13 +7090,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkParamsAreEnough">checkParamsAreEnough</a></li><li><a href="global.html#checkToken">checkToken</a></li><li><a href="global.html#errorSender">errorSender</a></li><li><a href="global.html#getInfoRestaurantBasic">getInfoRestaurantBasic</a></li><li><a href="global.html#getInfoRestaurantEvaluations">getInfoRestaurantEvaluations</a></li><li><a href="global.html#getInfoRestaurants">getInfoRestaurants</a></li><li><a href="global.html#getInfoRestaurantSeats">getInfoRestaurantSeats</a></li><li><a href="global.html#getInfoUserBasic">getInfoUserBasic</a></li><li><a href="global.html#getInfoUserEvaluations">getInfoUserEvaluations</a></li><li><a href="global.html#getInfoUserReservations">getInfoUserReservations</a></li><li><a href="global.html#getMethodName">getMethodName</a></li><li><a href="global.html#getMsgID">getMsgID</a></li><li><a href="global.html#isNotSQLInjection">isNotSQLInjection</a></li><li><a href="global.html#isObjectEmpty">isObjectEmpty</a></li><li><a href="global.html#jsonParser">jsonParser</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#methodExecuter">methodExecuter</a></li><li><a href="global.html#paramParser">paramParser</a></li><li><a href="global.html#pong">pong</a></li><li><a href="global.html#queryExecuter">queryExecuter</a></li><li><a href="global.html#registerAdmin">registerAdmin</a></li><li><a href="global.html#registerRestaurant">registerRestaurant</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resultSender">resultSender</a></li><li><a href="global.html#tokenManager">tokenManager</a></li><li><a href="global.html#unmute">unmute</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkBirthdaySyntax">checkBirthdaySyntax</a></li><li><a href="global.html#checkParamsAreEnough">checkParamsAreEnough</a></li><li><a href="global.html#checkTimeSyntax">checkTimeSyntax</a></li><li><a href="global.html#checkToken">checkToken</a></li><li><a href="global.html#createSeatInfo">createSeatInfo</a></li><li><a href="global.html#deleteSeatInfo">deleteSeatInfo</a></li><li><a href="global.html#errorSender">errorSender</a></li><li><a href="global.html#getInfoAdminBasic">getInfoAdminBasic</a></li><li><a href="global.html#getInfoRestaurantBasic">getInfoRestaurantBasic</a></li><li><a href="global.html#getInfoRestaurantEvaluations">getInfoRestaurantEvaluations</a></li><li><a href="global.html#getInfoRestaurants">getInfoRestaurants</a></li><li><a href="global.html#getInfoRestaurantSeats">getInfoRestaurantSeats</a></li><li><a href="global.html#getInfoUserBasic">getInfoUserBasic</a></li><li><a href="global.html#getInfoUserEvaluations">getInfoUserEvaluations</a></li><li><a href="global.html#getInfoUserReservations">getInfoUserReservations</a></li><li><a href="global.html#getMethodName">getMethodName</a></li><li><a href="global.html#getMsgID">getMsgID</a></li><li><a href="global.html#isNotSQLInjection">isNotSQLInjection</a></li><li><a href="global.html#isObjectEmpty">isObjectEmpty</a></li><li><a href="global.html#jsonParser">jsonParser</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#methodExecuter">methodExecuter</a></li><li><a href="global.html#paramParser">paramParser</a></li><li><a href="global.html#pong">pong</a></li><li><a href="global.html#queryExecuter">queryExecuter</a></li><li><a href="global.html#registerAdmin">registerAdmin</a></li><li><a href="global.html#registerRestaurant">registerRestaurant</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#resultSender">resultSender</a></li><li><a href="global.html#tokenManager">tokenManager</a></li><li><a href="global.html#unmute">unmute</a></li><li><a href="global.html#updateInfoRestaurantBasic">updateInfoRestaurantBasic</a></li><li><a href="global.html#updateInfoRestaurantSeat">updateInfoRestaurantSeat</a></li><li><a href="global.html#updateInfoUserBasic">updateInfoUserBasic</a></li><li><a href="global.html#updateSeatInfo">updateSeatInfo</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Dec 25 2021 08:38:38 GMT+0900 (Japan Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Dec 25 2021 20:00:59 GMT+0900 (Japan Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

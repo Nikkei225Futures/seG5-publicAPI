@@ -16,6 +16,10 @@ exports.getInfoRestaurantBasic = getInfoRestaurantBasic;
 exports.getInfoRestaurantSeats = getInfoRestaurantSeats;
 exports.getInfoRestaurantEvaluations = getInfoRestaurantEvaluations;
 exports.getInfoRestaurants = getInfoRestaurants;
+exports.getInfoAdminBasic = getInfoAdminBasic;
+exports.updateInfoUserBasic = updateInfoUserBasic;
+exports.updateInfoRestaurantBasic = updateInfoRestaurantBasic;
+exports.updateInfoRestaurantSeat = updateInfoRestaurantSeat;
 
 exports.pong = pong;
 
@@ -135,8 +139,8 @@ async function registerRestaurant(params, errSock, msgId) {
         }
     }
 
-    let query_insertRestaurant = `insert into restaurant(restaurant_id, restaurant_name, password, email_addr, address, time_open, time_close, holidays_json, features) \
-    values (${maxId + 1}, '${restaurantName}', '${password}', 'no email_addr set', 'no address set', '00:00', '00:00', '{[]}', 'no features set')`;
+    let query_insertRestaurant = `insert into restaurant(restaurant_id, restaurant_name, password, email_addr, address, time_open, time_close, holidays_array, features) \
+    values (${maxId + 1}, '${restaurantName}', '${password}', 'no email_addr set', 'no address set', '00:00', '00:00', '[]', 'no features set')`;
 
     console.log("insert qry: " + query_insertRestaurant);
     res = await db.queryExecuter(query_insertRestaurant);
@@ -612,7 +616,7 @@ async function getInfoRestaurantBasic(params, errSock, msgId) {
     if (params.searchBy == "restaurant_id") {
         query_getRestaurant = `select * from restaurant where restaurant_id = ${params.restaurant_id};`;
     } else if (params.searchBy == "restaurant_name") {
-        query_getRestaurant = `select * from user where restaurant_name = '${params.restaurant_name}';`;
+        query_getRestaurant = `select * from restaurant where restaurant_name = '${params.restaurant_name}';`;
     }
 
     let restaurantInfo = -1;
@@ -808,6 +812,469 @@ async function getInfoRestaurants(params, errSock, msgId){
     return result;
 }
 
+/**
+ * 管理者アカウント基本情報取得APIAPI
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+ async function getInfoAdminBasic(params, errSock, msgId) {
+    //check params
+    if (params.hasOwnProperty("searchBy") == false) {
+        api.errorSender(errSock, "params.searchBy is not included", msgId);
+        return false;
+    }
+    if (params.searchBy == "admin_id") {
+        if (params.hasOwnProperty("admin_id") == false) {
+            api.errorSender(errSock, "params.admin_id is not included", msgId);
+            return false;
+        }
+        if (api.isNotSQLInjection(params.admin_id) == false) {
+            api.errorSender(errSock, "params.admin_id contains suspicious character, you can not register such name", msgId);
+            return false;
+        }
+    } else if (params.searchBy == "admin_name") {
+        if (params.hasOwnProperty("admin_name") == false) {
+            api.errorSender(errSock, "params.admin_name is not included", msgId);
+            return false;
+        }
+        if (api.isNotSQLInjection(params.admin_name) == false) {
+            api.errorSender(errSock, "params.admin_name contains suspicious character, you can not register such name", msgId);
+            return false;
+        }
+    } else {
+        api.errorSender(errSock, "params.searchBy is invalid.", msgId);
+    }
+
+    if (params.hasOwnProperty("token") == false) {
+        api.errorSender(errSock, "params.token is not included", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.token) == false) {
+        api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+
+    let query_getAdmin;
+    if (params.searchBy == "admin_id") {
+        query_getAdmin = `select * from administrator where admin_id = ${params.admin_id};`;
+    } else if (params.searchBy == "admin_name") {
+        query_getAdmin = `select * from administrator where admin_name = '${params.admin_name}';`;
+    }
+
+    let adminInfo = false;
+    adminInfo = await db.queryExecuter(query_getAdmin);
+    if (adminInfo == false) {
+        console.error("error on query executer");
+        api.errorSender(errSock, "error while reading table", msgId);
+        return false;
+    } else {
+        adminInfo = adminInfo[0][0];
+        if (api.isObjectEmpty(adminInfo)) {
+            api.errorSender(errSock, "no admin matched", msgId);
+            return false;
+        }
+    }    
+
+    if(tokenInfo.token_permission != "admin"){
+        api.errorSender(errSock, "you don't have permission to see the admin information", msgId);
+        return false;
+    }
+
+    if(tokenInfo.token_issuer_id != adminInfo.admin_id){
+        api.errorSender(errSock, "you don't have permission to see the admin information", msgId);
+        return false;
+    }
+
+    let result = {
+        "jsonrpc": "2.0",
+        "id": msgId,
+        "result": {
+           "status": "success",      
+           "admin_id": adminInfo.admin_id,
+           "admin_name": adminInfo.admin_name,
+           "birthday": adminInfo.birthday,
+           "gender": adminInfo.gender,
+           "email_addr": adminInfo.email_addr,
+           "address": adminInfo.adress
+        }
+    }
+
+    console.log("adminInfo");
+    console.log(result);
+
+    return result;
+}
+
+
+/**
+ * 利用者アカウント基本情報更新API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+ async function updateInfoUserBasic(params, errSock, msgId){
+    let requiredParams = ["token", "user_name", "birthday", "gender", "email_addr", "address"];
+    if(checkParamsAreEnough(params,requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if (api.isNotSQLInjection(params.token) == false) {
+        api.errorSender(errSock, "params.token contains suspicious character, you can not register such name", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.user_name) == false) {
+        api.errorSender(errSock, "params.user_name contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.birthday) == false) {
+        api.errorSender(errSock, "params.birthday contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.gender) == false) {
+        api.errorSender(errSock, "params.gender contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.email_addr) == false) {
+        api.errorSender(errSock, "params.email_addr contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.address) == false) {
+        api.errorSender(errSock, "params.address contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    if(checkBirthdaySyntax(params.birthday, errSock, msgId) == false){
+        return false;
+    }
+    
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+    if(tokenInfo.token_permission != "user"){
+        api.errorSender(errSock, "you are not user", msgId);
+        return false;
+    }
+
+    let query_updateUserInfo = `update user set \
+    user_name='${params.user_name}', birthday='${params.birthday}', gender='${params.gender}', email_addr='${params.email_addr}', address='${params.address}'\
+    where user_id = ${tokenInfo.token_issuer_id};`
+
+    let insertRes = await db.queryExecuter(query_updateUserInfo);
+    console.log(insertRes);
+    
+    let result = {
+        "status": "success",
+    }
+
+    return result;
+}
+
+/**
+ * 店舗アカウント基本情報更新API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+ async function updateInfoRestaurantBasic(params, errSock, msgId){
+    let requiredParams = ["token", "restaurant_name", "email_addr", "address", "time_open", "time_close", "features"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if (api.isNotSQLInjection(params.token) == false) {
+        api.errorSender(errSock, "params.token contains suspicious character, you can not register specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.restaurant_name) == false) {
+        api.errorSender(errSock, "params.restaurant_name contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.email_addr) == false) {
+        api.errorSender(errSock, "params.email_addr contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.address) == false) {
+        api.errorSender(errSock, "params.address contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.time_open) == false) {
+        api.errorSender(errSock, "params.time_open contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.time_close) == false) {
+        api.errorSender(errSock, "params.time_close contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.features) == false) {
+        api.errorSender(errSock, "params.features contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    if(checkTimeSyntax(params.time_open, errSock, msgId) == false){
+        return false;
+    }
+    if(checkTimeSyntax(params.time_close, errSock, msgId) == false){
+        return false;
+    }
+    
+    
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+    if(tokenInfo.token_permission != "restaurant"){
+        api.errorSender(errSock, "you are not restaurant", msgId);
+        return false;
+    }
+
+    let query_updateRestaurantInfo = `update restaurant set \
+    restaurant_name='${params.restaurant_name}', email_addr='${params.email_addr}', address='${params.address}', time_open='${params.time_open}', time_close='${params.time_close}', features = '${params.features}'\
+    where restaurant_id = ${tokenInfo.token_issuer_id};`
+
+    let insertRes = await db.queryExecuter(query_updateRestaurantInfo);
+    console.log(insertRes);
+    
+    let result = {
+        "status": "success",
+    }
+
+    return result;
+}
+
+/**
+ * 店舗座席情報更新API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+ async function updateInfoRestaurantSeat(params, errSock, msgId){
+    let requiredParams = ["token", "type"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if (api.isNotSQLInjection(params.token) == false) {
+        api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    let result;
+    if(params.type == "new"){
+        result = await createSeatInfo(params, errSock, msgId);
+    }else if(params.type == "change"){
+        result = await updateSeatInfo(params, errSock, msgId);
+    }else if(params.type == "delete"){
+        result = await deleteSeatInfo(params, errSock, msgId);
+    }else {
+        api.errorSender(errSock, "params.type is invalid");
+        return false
+    }
+
+    return result;
+}
+
+/**
+ * 店舗座席情報更新API-new
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function createSeatInfo(params, errSock, msgId){
+    if(checkParamsAreEnough(params, ["seatInfo"], errSock, msgId) == false){
+        return false;
+    }
+
+    let seatInfo = params.seatInfo;
+    let requiredParams = ["seat_name", "capacity", "feature"];
+    if(checkParamsAreEnough(seatInfo, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if (api.isNotSQLInjection(params.seatInfo.seat_name) == false) {
+        api.errorSender(errSock, "params.seatInfo.seat_name contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.seatInfo.capacity) == false) {
+        api.errorSender(errSock, "params.seatInfo.capacity contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.seatInfo.feature) == false) {
+        api.errorSender(errSock, "params.seatInfo.feature contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    // if capacity is string
+    if(isNaN(params.seatInfo.capacity)){
+        api.errorSender(errSock, "params.seatInfo.capacity should be int", msgId);
+        return false;
+    }
+
+    let query_getSeatInfo = "select * from seat";
+    let wholeSeatInfo = await db.queryExecuter(query_getSeatInfo);
+    wholeSeatInfo = wholeSeatInfo[0];
+    let maxId = 0;
+    for(let i = 0; i < wholeSeatInfo.length; i++){
+        if(maxId < wholeSeatInfo[i].seat_id){
+            maxId = wholeSeatInfo[i].seat_id;
+        }
+    }
+
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+    if(tokenInfo.token_permission != "restaurant"){
+        api.errorSender(errSock, "you are not restaurant", msgId);
+        return false;
+    }
+
+    let query_insertSeatInfo = `insert into seat(seat_id, seat_name, restaurant_id, capacity, is_filled, time_start, staying_times_array, avg_stay_time, feature)\
+    values (${maxId+1}, '${params.seatInfo.seat_name}', ${tokenInfo.token_issuer_id}, ${params.seatInfo.capacity}, 0, 0, '[]', '00:00:00', '${params.seatInfo.feature}')`;
+
+    let insertRes = await db.queryExecuter(query_insertSeatInfo);
+    console.log(insertRes[0]);
+
+    let result = {
+        "status": "success",
+        "seat_id": maxId+1
+    }
+    return result;
+}
+
+/**
+ * 店舗座席情報更新API-change
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+ async function updateSeatInfo(params, errSock, msgId){
+    if(checkParamsAreEnough(params, ["seatInfo"], errSock, msgId) == false){
+        return false;
+    }
+
+    let seatInfo = params.seatInfo;
+    let requiredParams = ["seat_id", "seat_name", "capacity", "feature"];
+    if(checkParamsAreEnough(seatInfo, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if (api.isNotSQLInjection(params.seatInfo.seat_id) == false) {
+        api.errorSender(errSock, "params.seatInfo.seat_id contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.seatInfo.seat_name) == false) {
+        api.errorSender(errSock, "params.seatInfo.seat_name contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.seatInfo.capacity) == false) {
+        api.errorSender(errSock, "params.seatInfo.capacity contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.seatInfo.feature) == false) {
+        api.errorSender(errSock, "params.seatInfo.feature contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    // if capacity is string
+    if(isNaN(params.seatInfo.capacity)){
+        api.errorSender(errSock, "params.seatInfo.capacity should be int", msgId);
+        return false;
+    }
+
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+    if(tokenInfo.token_permission != "restaurant"){
+        api.errorSender(errSock, "you are not restaurant", msgId);
+        return false;
+    }
+
+    let query_getSeatInfo = `select * from seat where seat_id = ${params.seatInfo.seat_id}`;
+    let registeredSeatInfo = await db.queryExecuter(query_getSeatInfo);
+    console.log(registeredSeatInfo[0]);
+    if(registeredSeatInfo[0].length == 0){
+        api.errorSender(errSock, "the seat you want to change is not exist", msgId);
+        return false;
+    }
+
+    registeredSeatInfo = registeredSeatInfo[0][0];
+
+    if(registeredSeatInfo.restaurant_id != tokenInfo.token_issuer_id){
+        api.errorSender(errSock, "the seat you want to change is not yours", msgId);
+        return false;
+    }
+
+    let query_updateSeatInfo = `update seat set\
+    seat_name = '${params.seatInfo.seat_name}', capacity = '${params.seatInfo.capacity}', feature = '${params.seatInfo.feature}'\
+    where seat_id = ${params.seatInfo.seat_id};`;
+
+    let updateRes = await db.queryExecuter(query_updateSeatInfo);
+
+    let result = {
+        "status": "success",
+        "seat_id": params.seatInfo.seat_id
+    }
+    return result;
+}
+
+/**
+ * 店舗座席情報更新API-delete
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+ async function deleteSeatInfo(params, errSock, msgId){
+    let requiredParams = ["seat_id"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if (api.isNotSQLInjection(params.seat_id) == false) {
+        api.errorSender(errSock, "params.seat_id contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+    if(tokenInfo.token_permission != "restaurant"){
+        api.errorSender(errSock, "you are not restaurant", msgId);
+        return false;
+    }
+
+    let query_getSeatInfo = `select * from seat where seat_id = ${params.seat_id}`;
+    let registeredSeatInfo = await db.queryExecuter(query_getSeatInfo);
+    if(registeredSeatInfo[0].length == 0){
+        api.errorSender(errSock, "the seat you want to delete is not exist", msgId);
+        return false;
+    }
+
+    registeredSeatInfo = registeredSeatInfo[0][0];
+
+    if(registeredSeatInfo.restaurant_id != tokenInfo.token_issuer_id){
+        api.errorSender(errSock, "the seat you want to delete is not yours", msgId);
+        return false;
+    }
+
+    let query_updateSeatInfo = `delete from seat where seat_id = ${params.seat_id}`;
+
+    let updateRes = await db.queryExecuter(query_updateSeatInfo);
+
+    let result = {
+        "status": "success"
+    }
+    return result;
+}
+
+
 
 
 
@@ -825,6 +1292,76 @@ async function pong(params, errSock, msgId){
     }
 }
 
+
+/**
+ * 時間(HH:MM)の形式が正しいか判断する. 正しくなければクライアントにエラーを送信する.
+ * @param {string} time パラメータの時間
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {boolean} 正しい->true, 正しくない->false
+ */
+function checkTimeSyntax(time, errSock, msgId){
+    let splitTime = time.split(':');
+    if(splitTime.length != 2){
+        api.errorSender(errSock, "invalid time syntax", msgId);
+        return false;
+    }
+    for(let i = 0; i < splitTime.length; i++){
+        if(splitTime[i].length != 2){
+            api.errorSender(errSock, "invalid time syntax", msgId);
+            return false;
+        }
+    }
+    if(splitTime[0] >= 24 || splitTime[0] < 0){
+        api.errorSender(errSock, "invalid time syntax(hour is out of range)", msgId);
+        return false;
+    }
+    if(splitTime[1] >= 60 || splitTime[0] < 0){
+        api.errorSender(errSock, "invalid time syntax(minute is out of range)", msgId);
+        return false;
+    }
+    return true;
+}
+
+/**
+ * 誕生日の形式が正しいか判断する. 正しくなければクライアントにエラーを送信する
+ * @param {string} birthday パラメータの誕生日
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {string | int} msgId メッセージに含まれていたID
+ * @returns {boolean} 正しい->true, 正しくない->false
+ */
+function checkBirthdaySyntax(birthday, errSock, msgId){
+    let splitBirthday = birthday.split('/');
+    for(let i = 0; i < splitBirthday.length; i++){
+        console.log(i + ": " + splitBirthday[i]);
+    }
+    if(splitBirthday.length != 3){
+        api.errorSender(errSock, "param.birthday is invalid", msgId);
+        return false;
+    }
+    if(splitBirthday[0].length != 4 || splitBirthday[1].length != 2 || splitBirthday[2].length != 2){
+        api.errorSender(errSock, "param.birthday is invalid", msgId);
+        return false;
+    }
+
+    //year
+    if(splitBirthday[0] < 1900){
+        api.errorSender(errSock, "param.birthday is invalid(year is too old)", msgId);
+        return false;
+    }
+    //month
+    if(splitBirthday[1] > 12 || splitBirthday[1] < 1){
+        api.errorSender(errSock, "param.birthday is invalid(month is out of range)", msgId);
+        return false;
+    }
+    //day
+    if(splitBirthday[2] > 31 || splitBirthday[2] < 1){
+        api.errorSender(errSock, "param.birthday is invalid(day is out of range)", msgId);
+        return false;
+    }
+
+    return true;
+}
 
 /**
  * パラメータが十分かチェックする
@@ -848,8 +1385,6 @@ function checkParamsAreEnough(params, checkParamNames, errSock, msgId){
     }
     return true;
 }
-
-
 
 /**
  * トークン情報をチェックする.
