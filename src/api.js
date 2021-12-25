@@ -4,6 +4,7 @@
 
 exports.jsonParser = jsonParser;
 exports.errorSender = errorSender;
+exports.warnSender = warnSender;
 exports.resultSender = resultSender;
 exports.getMethodName = getMethodName;
 exports.methodExecuter = methodExecuter;
@@ -116,7 +117,10 @@ async function methodExecuter(sock, msg, msgId){
         console.log("result-updateInfo/restaurant/seat");
         console.log(result);
 
-    }else if(methodName == "updateInfo/restaurant/seatAvailability"){
+    }else if(methodName == "updateInfo/restaurant/seatsAvailability"){
+        result = await method.updateInfoRestaurantSeatsAvailability(params, sock, msgId);
+        console.log("result-updateInfo/restaurant/seatsAvailability");
+        console.log(result);
 
     }else if(methodName == "updateInfo/restaurant/holidays"){
 
@@ -225,6 +229,25 @@ function getMsgID(msg){
         }
     }
     sock.send(JSON.stringify(errMsg));
+}
+
+/**
+ * クライアントに警告を送信する.
+ * @param {ws.sock} sock socket
+ * @param {string} reason エラーメッセージ
+ * @param {string | int} id メッセージのID
+ */
+function warnSender(sock, reason, id){
+    let warnMsg = {
+        "jsonrpc": "2.0",
+        "id": id,
+        "result": {
+            "status": "warn",
+            "reason": reason
+        }
+    }
+
+    sock.send(JSON.stringify(warnMsg));
 }
 
 /**

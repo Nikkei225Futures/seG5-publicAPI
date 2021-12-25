@@ -20,6 +20,7 @@ exports.getInfoAdminBasic = getInfoAdminBasic;
 exports.updateInfoUserBasic = updateInfoUserBasic;
 exports.updateInfoRestaurantBasic = updateInfoRestaurantBasic;
 exports.updateInfoRestaurantSeat = updateInfoRestaurantSeat;
+exports.updateInfoRestaurantSeatsAvailability = updateInfoRestaurantSeatsAvailability;
 
 exports.pong = pong;
 
@@ -27,6 +28,7 @@ const api = require("./api.js");
 const db = require("./db.js");
 const sha256 = require("crypto-js/sha256");
 const uuid4 = require('uuid4');
+const { setServers } = require("dns");
 
 /**
  * 利用者アカウント登録APIを実行する. パラメータ不足などのエラーがあればクライアントに
@@ -1274,8 +1276,162 @@ async function createSeatInfo(params, errSock, msgId){
     return result;
 }
 
+/**
+ * 店舗座席利用状況更新API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function updateInfoRestaurantSeatsAvailability(params, errSock, msgId){
+    let requiredParams = ["token", "seats"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if (api.isNotSQLInjection(params.token) == false) {
+        api.errorSender(errSock, "params.token contains suspicious character, you can not register such name", msgId);
+        return false;
+    }
 
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+    if(tokenInfo.token_permission != "restaurant"){
+        api.errorSender(errSock, "you are not restaurant", msgId);
+        return false;
+    }
 
+    let query_getCurrentSeat = `select * from seat where restaurant_id = ${tokenInfo.token_issuer_id}`;
+    let currentSeats = await db.queryExecuter(query_getCurrentSeat);
+    currentSeats = currentSeats[0];
+
+    requiredParams = ["seat_id", "is_filled"];
+    //check params
+    for(let i = 0; i < params.seats.length; i++){
+        if(checkParamsAreEnough(params.seats[i], requiredParams, errSock, msgId) == false){
+            return false;
+        }
+    }
+
+    //convert tinyint->boolean
+    for(let i = 0; i < currentSeats.length; i++){
+        if(currentSeats[i].is_filled == 0){
+            currentSeats[i].is_filled = false;
+        }else{
+            currentSeats[i].is_filled = true;
+        }
+    }
+
+    for(let i = 0; i < params.seats.length; i++){
+            
+        for(let j = 0; j < currentSeats.length; j++){
+            console.log(`searching ${i} - ${j}`);
+            if(params.seats[i].seat_id == currentSeats[j].seat_id){
+                console.log(`matched`);
+
+                // if is_filled changed, update is_filled
+                if(params.seats[i].is_filled != currentSeats[j].is_filled){
+                    currentSeats[j].is_filled = params.seats[i].is_filled;
+                    
+                    //if customer leave the seat(= is_filled <- false),
+                    // update staying_times_array, avg_stay_time
+                    if(params.seats[i].is_filled == false){
+                        //staedSec = currentTime - start_time
+                        let stayedSec = Math.round((new Date()).getTime() / 1000) - currentSeats[j].time_start;
+                        let newStayingTime = convertSecToHHMMSS(stayedSec);
+
+                        //parse
+                        currentSeats[j].staying_times_array = JSON.parse(currentSeats[j].staying_times_array);
+                        currentSeats[j].staying_times_array.push(newStayingTime);
+
+                        let secSum = 0;
+                        for(let k = 0; k < currentSeats[j].staying_times_array.length; k++){
+                            console.log(`convertHHMMSSToSec(currentSeats[${j}].staying_times_array[${k}])`);
+                            console.log(convertHHMMSSToSec(currentSeats[j].staying_times_array[k]));
+                            secSum += convertHHMMSSToSec(currentSeats[j].staying_times_array[k]);
+                        }
+
+                        console.log("secSum: " + secSum);
+                        console.log("currentSeats[j].staying_times_array.length: " + currentSeats[j].staying_times_array.length);
+
+                        currentSeats[j].avg_stay_time = convertSecToHHMMSS(secSum/currentSeats[j].staying_times_array.length);
+
+                        console.log(currentSeats[j]);
+                        currentSeats[j].staying_times_array = JSON.stringify(currentSeats[j].staying_times_array);
+                        //stringify
+
+                        currentSeats[j].time_start = 0;
+                        currentSeats[j].is_filled = 0;
+
+                        let query_updateSeat = `update seat set\
+                        is_filled=${currentSeats[j].is_filled}, time_start=${currentSeats[j].time_start},\
+                        staying_times_array='${currentSeats[j].staying_times_array}', avg_stay_time='${currentSeats[j].avg_stay_time}'\
+                        where seat_id = ${currentSeats[j].seat_id}`;
+
+                        let resUpdateSeat = await db.queryExecuter(query_updateSeat);
+
+                    }else{
+                        let currentTime = Math.round((new Date()).getTime() / 1000);
+                        let query_updateSeat = `update seat set\
+                        is_filled=1, time_start=${currentTime} where seat_id = ${currentSeats[j].seat_id}`;
+                        let resUpdateSeat = await db.queryExecuter(query_updateSeat);
+                    }
+
+                }
+                break;
+            }
+
+            //if index reached to last(= params.seats[i] is not owned by request sender)
+            if(j == currentSeats.length-1){
+                api.errorSender(errSock, "the seats that is not yours are included in the request", msgId);
+                return false;
+            }
+        }
+    }
+
+    let result = {
+        "status": "success"
+    }
+
+    return result;
+}
+
+/**
+ * 秒をHH:MM:SS形式に変換する
+ * @param {int} sec 変換したい秒
+ * @returns {string} HH:MM:SS形式
+ */
+function convertSecToHHMMSS(sec){
+    let hh = Math.floor(sec / 3600);
+    let mm = Math.floor(sec % 3600 / 60);
+    let ss = Math.floor(sec % 60);
+    if(hh < 10){
+        hh = `0${hh}`;
+    }
+    if(mm < 10){
+        mm = `0${mm}`;
+    }
+    if(ss < 10){
+        ss = `0${ss}`;
+    }
+
+    return `${hh}:${mm}:${ss}`;
+}
+
+/**
+ * HH:MM:SS形式の文字列を秒数に変換する.
+ * @param {string} hhmmss HH:MM:SS形式
+ * @returns {int} 秒
+ */
+function convertHHMMSSToSec(hhmmss){
+    let splitedHHMMSS = hhmmss.split(':');
+    console.log(splitedHHMMSS);
+    let hh = splitedHHMMSS[0];
+    let mm = splitedHHMMSS[1];
+    let ss = splitedHHMMSS[2];
+    return hh*3600 + mm*60 + ss*1;
+}
 
 
 /**
@@ -1375,7 +1531,7 @@ function checkParamsAreEnough(params, checkParamNames, errSock, msgId){
     let numErr = 0;
     for(let i = 0; i < checkParamNames.length; i++){
         if(params.hasOwnProperty(checkParamNames[i]) == false){
-            api.errorSender(errSock, `params.${checkParamNames[i]} is not included`, msgId);
+            api.errorSender(errSock, `param ${checkParamNames[i]} is not included`, msgId);
             numErr++;
         }
     }
