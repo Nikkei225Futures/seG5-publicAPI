@@ -2820,7 +2820,7 @@
    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
    <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
       <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;the seats that is not yours are included the request&quot;</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;403&quot;</span>
    <span class="hljs-punctuation">}</span>
 <span class="hljs-punctuation">}</span></code></pre>
             <p>店舗座席利用状況更新APIの実行失敗時には, 次のようなメッセージが返却される.</p>
@@ -2845,23 +2845,42 @@
                   </tr>
                </tbody>
             </table>
-            <p>実行が失敗した理由において, 共通エラー以外のreasonの内容は次の通りである.</p>
+            <h3 id="店舗座席利用状況更新apiでのレスポンスメッセージ定義警告">店舗座席利用状況更新APIでのレスポンスメッセージ定義(警告)</h3>
+            <blockquote>
+               <p>店舗座席利用状況更新API-レスポンスメッセージ定義(警告)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;warn&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;seat_id: 2 is not yours. this request will be ignored. but process will be continued.&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗座席利用状況更新APIにおいて, 自分の店舗が保有する座席以外の利用状況を更新しようとした場合, 次のようなメッセージが返却される. この場合, 警告対象の更新要求を無視して処理が続行する. また, 最後まで処理が継続できないようなエラーがなかった場合は成功時のレスポンスメッセージも返却される.</p>
             <table>
                <thead>
                   <tr>
-                     <th>失敗理由</th>
-                     <th>reasonの内容</th>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
                   </tr>
                </thead>
                <tbody>
                   <tr>
-                     <td>自分の店舗以外の座席利用状況を変更しようとした</td>
-                     <td>&quot;the seats that is not yours are included the request&quot;</td>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;warn&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>&quot;seat_id: N is not yours. this request will be ignored. but process will be continued.&quot; / 座席情報に含まれる店舗IDがトークン発行者IDと一致しない</td>
                   </tr>
                </tbody>
             </table>
             <h2 id="店舗休日情報更新apiupdateinforestaurantholidays">&gt; 店舗休日情報更新API(updateInfo/restaurant/holidays)</h2>
-            <p>店舗休日情報更新APIでは, 店舗の休日情報を登録/削除することができる. ただし, このAPIを実行できるのは店舗アカウント本人のみである. それ以外が実行しようとした場合は403エラーが返却される. なお, 休日追加を行う場合に既に登録している休日情報を再度追加しても構わない. ただし, 登録されていない休日情報を削除するようなリクエストが送信された場合, このAPIはエラーを返却する. この場合のエラーメッセージは別途定義する.</p>
+            <p>店舗休日情報更新APIでは, 店舗の休日情報を登録/削除することができる. ただし, このAPIを実行できるのは店舗アカウント本人のみである. それ以外が実行しようとした場合は403エラーが返却される. なお, 休日追加を行う場合に既に登録している休日情報を再度追加しても構わない. また, 存在しない休日情報を削除しても構わない. ただし, 存在しない休日情報を削除仕様とした場合は警告(後述)が送信される.</p>
             <h3 id="店舗休日情報更新apiでのリクエストメッセージ定義休日追加">店舗休日情報更新APIでのリクエストメッセージ定義(休日追加)</h3>
             <blockquote>
                <p>店舗休日情報取得API-リクエストメッセージの例(休日追加)</p>
@@ -2981,7 +3000,7 @@
    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
    <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
       <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;error&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;the holiday that you wanted to delete is not registered&quot;</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;illegal format included in holidays&quot;</span>
    <span class="hljs-punctuation">}</span>
 <span class="hljs-punctuation">}</span></code></pre>
             <p>店舗休日情報更新APIの実行失敗時には, 次のようなメッセージが返却される.</p>
@@ -3019,9 +3038,54 @@
                      <td>休日情報にYYYY/MM/DD形式でない情報が含まれている</td>
                      <td>&quot;illegal format included in holidays&quot;</td>
                   </tr>
+               </tbody>
+            </table>
+            <h3 id="店舗休日情報更新apiでのレスポンスメッセージ定義警告">店舗休日情報更新APIでのレスポンスメッセージ定義(警告)</h3>
+            <blockquote>
+               <p>店舗休日情報更新API-レスポンスメッセージの例(警告)</p>
+            </blockquote>
+            <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;result&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;warn&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;reason&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;the delete request(YYYY/MM/DD) is not found on current holidays&quot;</span>
+   <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+            <p>店舗休日情報更新API警告時には, 次のようなメッセージが返却される.</p>
+            <table>
+               <thead>
                   <tr>
-                     <td>削除しようとした休日情報は登録されていない</td>
-                     <td>&quot;the holiday that you wanted to delete is not registered&quot;</td>
+                     <th>返り値</th>
+                     <th>型</th>
+                     <th>内容/説明</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>status</td>
+                     <td>string</td>
+                     <td>&quot;warn&quot;</td>
+                  </tr>
+                  <tr>
+                     <td>reason</td>
+                     <td>string</td>
+                     <td>警告理由</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>警告理由において, その内容は次の通りである.</p>
+            <table>
+               <thead>
+                  <tr>
+                     <th>警告理由</th>
+                     <th>reasonの内容</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>存在しない休日情報を削除しようとした.</td>
+                     <td>&quot;the delete request(YYYY/MM/DD) is not found on current holidays&quot;</td>
                   </tr>
                </tbody>
             </table>
