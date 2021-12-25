@@ -1074,7 +1074,7 @@ async function getInfoRestaurants(params, errSock, msgId){
     }else if(params.type == "delete"){
         result = await deleteSeatInfo(params, errSock, msgId);
     }else {
-        api.errorSender(errSock, "params.type is invalid");
+        api.errorSender(errSock, "params.type is invalid", msgId);
         return false
     }
 
