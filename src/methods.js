@@ -21,6 +21,7 @@ exports.updateInfoUserBasic = updateInfoUserBasic;
 exports.updateInfoRestaurantBasic = updateInfoRestaurantBasic;
 exports.updateInfoRestaurantSeat = updateInfoRestaurantSeat;
 exports.updateInfoRestaurantSeatsAvailability = updateInfoRestaurantSeatsAvailability;
+exports.updateInfoRestaurantHOlidays = updateInfoRestaurantHolidays;
 
 exports.pong = pong;
 
@@ -28,8 +29,6 @@ const api = require("./api.js");
 const db = require("./db.js");
 const sha256 = require("crypto-js/sha256");
 const uuid4 = require('uuid4');
-const { setServers } = require("dns");
-
 /**
  * 利用者アカウント登録APIを実行する. パラメータ不足などのエラーがあればクライアントに
  * エラーメッセージを送信し, 関数はfalseを返却する. 
@@ -952,7 +951,7 @@ async function getInfoRestaurants(params, errSock, msgId){
         return false;
     }
 
-    if(checkBirthdaySyntax(params.birthday, errSock, msgId) == false){
+    if(checkYYYYMMDDSyntax(params.birthday, errSock, msgId) == false){
         return false;
     }
     
@@ -1384,8 +1383,7 @@ async function updateInfoRestaurantSeatsAvailability(params, errSock, msgId){
 
             //if index reached to last(= params.seats[i] is not owned by request sender)
             if(j == currentSeats.length-1){
-                api.errorSender(errSock, "the seats that is not yours are included in the request", msgId);
-                return false;
+                api.warnSender(errSock, `seat_id: ${params.seats[i].seat_id} is not yours. this request will be ignored. but process will be continued.`, msgId);
             }
         }
     }
@@ -1396,6 +1394,94 @@ async function updateInfoRestaurantSeatsAvailability(params, errSock, msgId){
 
     return result;
 }
+
+/**
+ * 店舗休日情報更新API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function updateInfoRestaurantHolidays(params, errSock, msgId){
+    let requiredParams = ["token", "type", "holidays"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if (api.isNotSQLInjection(params.token) == false) {
+        api.errorSender(errSock, "params.token contains suspicious character, you can not register such name", msgId);
+        return false;
+    }
+    for(let i = 0; i < params.holidays.length; i++){
+        if(checkYYYYMMDDSyntax(params.holidays[i], errSock, msgId) == false){
+            return false;
+        }
+    }
+
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+    if(tokenInfo.token_permission != "restaurant"){
+        api.errorSender(errSock, "you are not restaurant", msgId);
+        return false;
+    }
+
+    let query_getRestaurantInfo = `select * from restaurant where restaurant_id = ${tokenInfo.token_issuer_id}`;
+    let currentRestaurantInfo = await db.queryExecuter(query_getRestaurantInfo);
+    currentRestaurantInfo = currentRestaurantInfo[0][0];
+
+    console.log("currentRestaurantInfo");
+    console.log(currentRestaurantInfo);
+
+    let currentHolidays = JSON.parse(currentRestaurantInfo.holidays_array);
+    console.log("currentHolidays");
+    console.log(currentHolidays);
+
+    if(params.type == "new"){
+        for(let i = 0; i < params.holidays.length; i++){
+            for(let j = 0; j < currentHolidays.length; j++){
+                if(params.holidays[i] == currentHolidays[j]){
+                    break;
+                }
+                // if not matched
+                if(j == currentHolidays.length-1){
+                    currentHolidays.push(params.holidays[i]);
+                }
+            }
+        }
+
+    }else if(params.type == "delete"){
+        
+        for(let i = 0; i < params.holidays.length; i++){
+            for(let j = 0; j < currentHolidays.length; j++){
+                if(params.holidays[i] == currentHolidays[j]){
+                    currentHolidays.splice(j, 1);
+                    break;
+                }
+                // if not matched
+                if(j == currentHolidays.length-1){
+                    api.warnSender(errSock, `the delete request(${params.holidays[i]}) is not found on current holidays`, msgId);
+                }
+            }
+        }
+        
+    }else{
+        api.errorSender(errSock, "params.type is invalid", msgId);
+        return false;
+    }
+
+    let query_updateHoliday = `update restaurant set holidays_array = '${JSON.stringify(currentHolidays)}' where restaurant_id = ${tokenInfo.token_issuer_id};`;
+
+    let updateRes = await db.queryExecuter(query_updateHoliday);
+
+    return result = {
+        "status": "success"
+    };
+
+}
+
+
+
 
 /**
  * 秒をHH:MM:SS形式に変換する
@@ -1480,43 +1566,47 @@ function checkTimeSyntax(time, errSock, msgId){
 }
 
 /**
- * 誕生日の形式が正しいか判断する. 正しくなければクライアントにエラーを送信する
- * @param {string} birthday パラメータの誕生日
+ * YYYY/MM/DDの形式が正しいか判断する. 正しくなければエラーを送信する.
+ * @param {string} yyyymmdd YYYY/MM/DD
  * @param {ws.sock} errSock エラー時に使用するソケット
- * @param {string | int} msgId メッセージに含まれていたID
- * @returns {boolean} 正しい->true, 正しくない->false
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Array} 正しい->splitedArgument(array), 正しくない->false
  */
-function checkBirthdaySyntax(birthday, errSock, msgId){
-    let splitBirthday = birthday.split('/');
-    for(let i = 0; i < splitBirthday.length; i++){
-        console.log(i + ": " + splitBirthday[i]);
-    }
-    if(splitBirthday.length != 3){
-        api.errorSender(errSock, "param.birthday is invalid", msgId);
+function checkYYYYMMDDSyntax(yyyymmdd, errSock, msgId){
+    let splitYYYYMMDD = yyyymmdd.split('/');
+    if(splitYYYYMMDD.length != 3){
+        api.errorSender(errSock, "invalid format of YYYY/MM/DD", msgId);
         return false;
     }
-    if(splitBirthday[0].length != 4 || splitBirthday[1].length != 2 || splitBirthday[2].length != 2){
-        api.errorSender(errSock, "param.birthday is invalid", msgId);
+    if(splitYYYYMMDD[0].length != 4 || splitYYYYMMDD[1].length != 2 || splitYYYYMMDD[2].length != 2){
+        api.errorSender(errSock, "invalid format of YYYY/MM/DD", msgId);
+        return false;
+    }
+
+    //if not number
+    if (isNaN(splitYYYYMMDD[0]) || isNaN(splitYYYYMMDD[1]) || isNaN(splitYYYYMMDD[2])) {
+        api.errorSender(errSock, "invalid format of YYYY/MM/DD", msgId);
         return false;
     }
 
     //year
-    if(splitBirthday[0] < 1900){
-        api.errorSender(errSock, "param.birthday is invalid(year is too old)", msgId);
+    if (splitYYYYMMDD[0] < 1900) {
+        api.errorSender(errSock, "invalid format of YYYY/MM/DD(year is too old)", msgId);
         return false;
     }
     //month
-    if(splitBirthday[1] > 12 || splitBirthday[1] < 1){
-        api.errorSender(errSock, "param.birthday is invalid(month is out of range)", msgId);
+    if (splitYYYYMMDD[1] > 12 || splitYYYYMMDD[1] < 1) {
+        api.errorSender(errSock, "invalid format of YYYY/MM/DD(month is out of range)", msgId);
         return false;
     }
     //day
-    if(splitBirthday[2] > 31 || splitBirthday[2] < 1){
-        api.errorSender(errSock, "param.birthday is invalid(day is out of range)", msgId);
+    if (splitYYYYMMDD[2] > 31 || splitYYYYMMDD[2] < 1) {
+        api.errorSender(errSock, "invalid format of YYYY/MM/DD(day is out of range)", msgId);
         return false;
     }
 
     return true;
+
 }
 
 /**

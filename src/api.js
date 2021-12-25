@@ -123,6 +123,9 @@ async function methodExecuter(sock, msg, msgId){
         console.log(result);
 
     }else if(methodName == "updateInfo/restaurant/holidays"){
+        result = await method.updateInfoRestaurantHOlidays(params, sock, msgId);
+        console.log("result-updateInfo/restaurant/holidays");
+        console.log(result);
 
     }else if(methodName == "updateInfo/admin/basic"){
 
