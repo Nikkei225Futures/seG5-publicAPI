@@ -41,15 +41,31 @@ ws.on('connection', sock => {
  */
 let tokenManager = setInterval(async () => {
     mute();
-    console.log("tokenManager");
     const currentTime = Math.round((new Date()).getTime() / 1000);
     const query_deleteToken = `delete from auth_token where expiry < ${currentTime}`;
     let delInfo = await db.queryExecuter(query_deleteToken);
     let affectedRows = delInfo[0].affectedRows;
     unmute();
     if(affectedRows > 0){
-        console.log("=================================");
+        console.log("================tokenManager=================");
         console.log("token deletions: " + affectedRows);
+    }
+}, 1000);
+
+/**
+ * 1秒ごとに予約情報を監視し, 予約終了時間が過ぎた予約情報のis_expiredをtrueにする.
+ * @function
+ */
+let reservationManager = setInterval(async () => {
+    mute();
+    const currentTime = Math.round((new Date()).getTime() / 1000);
+    const query_expireReservation = `update reservation set is_expired=1 where time_end < ${currentTime} and is_expired=0`;
+    let changeInfo = await db.queryExecuter(query_expireReservation);
+    let affectedRows = changeInfo[0].affectedRows;
+    unmute();
+    if(affectedRows > 0){
+        console.log("================reservationManager=================");
+        console.log("reservation expires: " + affectedRows);
     }
 }, 1000);
 
