@@ -24,6 +24,7 @@ exports.updateInfoRestaurantSeatsAvailability = updateInfoRestaurantSeatsAvailab
 exports.updateInfoRestaurantHolidays = updateInfoRestaurantHolidays;
 exports.updateInfoAdminBasic = updateInfoAdminBasic;
 exports.updateInfoReservation = updateInfoReservation;
+exports.updateInfoEvaluation = updateInfoEvaluation;
 
 exports.pong = pong;
 
@@ -31,6 +32,7 @@ const api = require("./api.js");
 const db = require("./db.js");
 const sha256 = require("crypto-js/sha256");
 const uuid4 = require('uuid4');
+const { appendFile } = require("fs");
 /**
  * 利用者アカウント登録APIを実行する. パラメータ不足などのエラーがあればクライアントに
  * エラーメッセージを送信し, 関数はfalseを返却する. 
@@ -1844,7 +1846,7 @@ async function deleteReservation(params, errSock, msgId){
             viciousCancels++;
             let query_addViciousCancels = `update user set num_vicious_cancels=${viciousCancels} where user_id = ${tokenInfo.token_issuer_id};`;
             let resAddViciousCancels = await db.queryExecuter(query_addViciousCancels);
-            api.warnSender(errSock, "DO NOT CANCEL RESERVE WHEN RESERVE STARTS WITH IN 10MIN.", msgId); 
+            api.warnSender(errSock, "DO NOT CANCEL RESERVE WHEN RESERVE STARTS WITHIN 10MIN.", msgId); 
         }
 
     }else if(tokenInfo.token_permission == "restaurant"){
@@ -1862,6 +1864,255 @@ async function deleteReservation(params, errSock, msgId){
     }
 
 }
+
+/**
+ * 食べログ情報変更API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function updateInfoEvaluation(params, errSock, msgId){
+    let requiredParams = ["type", "token"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    
+    if (api.isNotSQLInjection(params.token) == false) {
+        api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    let result = false;
+    if(params.type == "new"){
+        result = await registerEvaluation(params, errSock, msgId);
+    }else if(params.type == "change"){
+        result = await changeEvaluation(params, errSock, msgId);
+    }else if(params.type == "delete"){
+        result = await deleteEvaluation(params, errSock, msgId);
+    }else{
+        api.errorSender(errSock, "params.type is invalid", msgId);
+        return false;
+    }
+
+    return result;
+
+}
+
+/**
+ * 食べログ情報変更API-new
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function registerEvaluation(params, errSock, msgId){
+    let requiredParams = ["evaluationData"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    requiredParams = ["restaurant_id", "evaluation_grade", "evaluation_comment"];
+    if(checkParamsAreEnough(params.evaluationData, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+
+    if(api.isNotSQLInjection(params.evaluationData.restaurant_id) == false){
+        api.errorSender(errSock, "params.evaluationData.restaurant_id contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if(api.isNotSQLInjection(params.evaluationData.evaluation_grade) == false){
+        api.errorSender(errSock, "params.evaluationData.evaluation_grade contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if(api.isNotSQLInjection(params.evaluationData.evaluation_comment) == false){
+        api.errorSender(errSock, "params.evaluationData.evaluation_comment contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+    if(tokenInfo.token_permission != "user"){
+        api.errorSender(errSock, "only use can post the evaluation", msgId);
+        return false;
+    }
+
+    let query_getRestaurant = `select * from restaurant where restaurant_id = ${params.evaluationData.restaurant_id}`;
+    let restaurantInfo = await db.queryExecuter(query_getRestaurant);
+    restaurantInfo = restaurantInfo[0];
+    if(restaurantInfo.length == 0){
+        api.errorSender(errSock, "no such restaurant exists", msgId);
+        return false;
+    }
+    // if grade is not number
+    if(isNaN(params.evaluationData.evaluation_grade)){
+        api.errorSender(errSock, "evaluation grade should be number", msgId);
+        return false;
+    }
+    if(params.evaluationData.evaluation_grade < 1 || params.evaluationData.evaluation_grade > 5){
+        api.errorSender(errSock, "evaluation_grade should be 1-5", msgId);
+        return false;
+    }
+
+    let query_getEvaluationId = `select evaluation_id from restaurant_evaluation`;
+    let allEvaluationId = await db.queryExecuter(query_getEvaluationId);
+    if(allEvaluationId == false){
+        return false;
+    }
+    allEvaluationId = allEvaluationId[0];
+    
+    let maxId = 0;
+    for(let i = 0; i < allEvaluationId.length; i++){
+        if(allEvaluationId[i].evaluation_id > maxId){
+            maxId = allEvaluationId[i].evaluation_id;
+        }
+    }
+
+    let query_insertEvaluation = `insert into restaurant_evaluation(evaluation_id, restaurant_id, user_id, evaluation_grade, evaluation_comment)\
+    values(${maxId+1}, ${params.evaluationData.restaurant_id}, ${tokenInfo.token_issuer_id}, ${params.evaluationData.evaluation_grade}, '${params.evaluationData.evaluation_comment}')`;
+
+    let insertRes = await db.queryExecuter(query_insertEvaluation);
+    if(insertRes == false){
+        return false;
+    }
+
+    return result = {
+        "status": "success",
+        "evaluation_id": maxId+1
+    }
+
+}
+
+/**
+ * 食べログ情報変更API-change
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function changeEvaluation(params, errSock, msgId){
+    let requiredParams = ["evaluationData"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    requiredParams = ["evaluation_id", "evaluation_grade", "evaluation_comment"];
+    if(checkParamsAreEnough(params.evaluationData, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+
+    if(api.isNotSQLInjection(params.evaluationData.evaluation_id) == false){
+        api.errorSender(errSock, "params.evaluationData.evaluation_id contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if(api.isNotSQLInjection(params.evaluationData.evaluation_grade) == false){
+        api.errorSender(errSock, "params.evaluationData.evaluation_grade contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if(api.isNotSQLInjection(params.evaluationData.evaluation_comment) == false){
+        api.errorSender(errSock, "params.evaluationData.evaluation_comment contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+    if(tokenInfo.token_permission != "user"){
+        api.errorSender(errSock, "only use can post the evaluation", msgId);
+        return false;
+    }
+
+    if(params.evaluationData.evaluation_grade < 1 || params.evaluationData.evaluation_grade > 5){
+        api.errorSender(errSock, "evaluation_grade should be 1-5", msgId);
+        return false;
+    }
+
+    let query_getEvaluation = `select * from restaurant_evaluation where evaluation_id = ${params.evaluationData.evaluation_id}`;
+    let evaluationData = await db.queryExecuter(query_getEvaluation);
+    evaluationData = evaluationData[0];
+    if(evaluationData.length == 0){
+        api.errorSender(errSock, "no such evaluation exists", msgId);
+        return false;
+    }
+    evaluationData = evaluationData[0];
+    if(evaluationData.user_id != tokenInfo.token_issuer_id){
+        api.errorSender(errSock, "specified evaluation is not yours", msgId);
+        return false;
+    }
+
+    let query_updateEvaluation = `update restaurant_evaluation set\
+    evaluation_grade = ${params.evaluationData.evaluation_grade}, evaluation_comment = '${params.evaluationData.evaluation_comment}'\
+    where evaluation_id = ${params.evaluationData.evaluation_id}`;
+
+    let updateRes = await db.queryExecuter(query_updateEvaluation);
+    if(updateRes == false){
+        return false;
+    }
+
+    return result = {
+        "status": "success",
+        "evaluation_id": params.evaluationData.evaluation_id
+    }
+
+}
+
+/**
+ * 食べログ情報変更API-delete
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function deleteEvaluation(params, errSock, msgId){
+    let requiredParams = ["evaluation_id"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if(api.isNotSQLInjection(params.evaluation_id) == false){
+        api.errorSender(errSock, "params.evaluation_id contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+
+    let query_getEvaluation = `select * from restaurant_evaluation where evaluation_id = ${params.evaluation_id}`;
+    let evaluationData = await db.queryExecuter(query_getEvaluation);
+    evaluationData = evaluationData[0];
+    if(evaluationData.length == 0){
+        api.errorSender(errSock, "no such evaluation exists", msgId);
+        return false;
+    }
+    evaluationData = evaluationData[0];
+
+    //only person who post or restaurant who posted can delete
+    if(tokenInfo.token_permission == "user"){
+        if(evaluationData.user_id != tokenInfo.token_issuer_id){
+            api.errorSender(errSock, "specified evaluation is not yours", msgId);
+            return false;
+        }
+    }else if(tokenInfo.token_permission == "restaurant"){
+        if(evaluationData.restaurant_id != tokenInfo.token_issuer_id){
+            api.errorSender(errSock, "specified evaluation is not yours", msgId);
+            return false;
+        }
+    }
+
+    let query_deleteEvaluation = `delete from restaurant_evaluation where evaluation_id = ${params.evaluation_id}`;
+    let deleteRes = await db.queryExecuter(query_deleteEvaluation);
+    if(deleteRes == false){
+        return false;
+    }
+
+    return result = {
+        "status": "success"
+    }
+
+}
+
 
 
 /**

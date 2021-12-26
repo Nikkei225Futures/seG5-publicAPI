@@ -138,6 +138,9 @@ async function methodExecuter(sock, msg, msgId){
         console.log(result);
 
     }else if(methodName == "updateInfo/evaluation"){
+        result = await method.updateInfoEvaluation(params, sock, msgId);
+        console.log("result-updateInfo/reservation");
+        console.log(result);
 
     }else if(methodName == "resign"){
 
