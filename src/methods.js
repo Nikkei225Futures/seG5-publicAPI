@@ -21,7 +21,9 @@ exports.updateInfoUserBasic = updateInfoUserBasic;
 exports.updateInfoRestaurantBasic = updateInfoRestaurantBasic;
 exports.updateInfoRestaurantSeat = updateInfoRestaurantSeat;
 exports.updateInfoRestaurantSeatsAvailability = updateInfoRestaurantSeatsAvailability;
-exports.updateInfoRestaurantHOlidays = updateInfoRestaurantHolidays;
+exports.updateInfoRestaurantHolidays = updateInfoRestaurantHolidays;
+exports.updateInfoAdminBasic = updateInfoAdminBasic;
+exports.updateInfoReservation = updateInfoReservation;
 
 exports.pong = pong;
 
@@ -894,17 +896,13 @@ async function getInfoRestaurants(params, errSock, msgId){
     }
 
     let result = {
-        "jsonrpc": "2.0",
-        "id": msgId,
-        "result": {
-           "status": "success",      
-           "admin_id": adminInfo.admin_id,
-           "admin_name": adminInfo.admin_name,
-           "birthday": adminInfo.birthday,
-           "gender": adminInfo.gender,
-           "email_addr": adminInfo.email_addr,
-           "address": adminInfo.adress
-        }
+        "status": "success",      
+        "admin_id": adminInfo.admin_id,
+        "admin_name": adminInfo.admin_name,
+        "birthday": adminInfo.birthday,
+        "gender": adminInfo.gender,
+        "email_addr": adminInfo.email_addr,
+        "address": adminInfo.adress
     }
 
     console.log("adminInfo");
@@ -1480,7 +1478,390 @@ async function updateInfoRestaurantHolidays(params, errSock, msgId){
 
 }
 
+/**
+ * 管理者アカウント基本情報更新API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function updateInfoAdminBasic(params, errSock, msgId){
+    let requiredParams = ["token", "admin_name", "birthday", "gender", "email_addr", "address"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
 
+    if (api.isNotSQLInjection(params.token) == false) {
+        api.errorSender(errSock, "params.token contains suspicious character, you can not register such name", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.admin_name) == false) {
+        api.errorSender(errSock, "params.admin_name contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.birthday) == false) {
+        api.errorSender(errSock, "params.birthday contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.gender) == false) {
+        api.errorSender(errSock, "params.gender contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.email_addr) == false) {
+        api.errorSender(errSock, "params.email_addr contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if (api.isNotSQLInjection(params.address) == false) {
+        api.errorSender(errSock, "params.address contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    if(checkYYYYMMDDSyntax(params.birthday, errSock, msgId) == false){
+        return false;
+    }
+
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+    if(tokenInfo.token_permission != "admin"){
+        api.errorSender(errSock, "you are not admin", msgId);
+        return false;
+    }
+
+    let query_updateAdminInfo = `update administrator set\
+    admin_name='${params.admin_name}', birthday='${params.birthday}', gender='${params.gender}', email_addr='${params.email_addr}', address='${params.address}'\
+    where admin_id = ${tokenInfo.token_issuer_id};`;
+
+    let updateRes = await db.queryExecuter(query_updateAdminInfo);
+    console.log(updateRes);
+
+    return result = {
+        "status": "success"
+    }
+
+}
+
+/**
+ * 予約情報更新API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function updateInfoReservation(params, errSock, msgId){
+    let requiredParams = ["token", "type"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if(api.isNotSQLInjection(params.token) == false){
+        api.errorSender(errSock, "params.coken concains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    let result = false;
+    console.log(params.type);
+    if(params.type == "new"){
+        result = await registerReservation(params, errSock, msgId);
+    }else if(params.type == "delete"){
+        result = await deleteReservation(params, errSock, msgId);
+    }else{
+        api.errorSender(errSock, "params.type is invalid", msgId);
+        return false;
+    }
+
+    return result;
+}
+
+/**
+ * 予約情報更新API-new
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function registerReservation(params, errSock, msgId){
+    if(checkParamsAreEnough(params, ["reservationData"], errSock, msgId) == false){
+        return false;
+    }
+    let requiredReservationData = ["restaurant_id", "seat_id", "time_start", "time_end", "num_people"];
+    if(checkParamsAreEnough(params.reservationData, requiredReservationData, errSock, msgId) == false){
+        return false;
+    }
+
+    if(api.isNotSQLInjection(params.reservationData.restaurant_id) == false){
+        return false;
+    }
+    if(api.isNotSQLInjection(params.reservationData.seat_id) == false){
+        return false;
+    }
+    if(api.isNotSQLInjection(params.reservationData.time_start) == false){
+        return false;
+    }
+    if(api.isNotSQLInjection(params.reservationData.time_end) == false){
+        return false;
+    }
+    if(api.isNotSQLInjection(params.reservationData.num_people) == false){
+        return false;
+    }
+
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+    if(tokenInfo.token_permission != "user"){
+        api.errorSender(errSock, "only user can register a reservation", msgId);
+        return false;
+    }
+
+    let currentTime = Math.round((new Date()).getTime() / 1000);
+    
+    if(params.reservationData.time_start < currentTime){
+        api.errorSender(errSock, "you can not register reservation that time_start is earlier than current time", msgId);
+        return false;
+    }
+    if(params.reservationData.time_start > params.reservationData.time_end){
+        api.errorSender(errSock, "time_end should be bigger than time_start", msgId);
+        return false;
+    }
+    let DAYSEC = 86400;
+    if(params.reservationData.time_end - params.reservationData.time_start > DAYSEC){
+        api.errorSender(errSock, "the time length should shorter than 24Hours", msgId)
+        return false;
+    }
+
+    let query_restaurantInfo = `select * from restaurant where restaurant_id = ${params.reservationData.restaurant_id};`;
+    let restaurantInfo = await db.queryExecuter(query_restaurantInfo);
+    if(restaurantInfo[0].length == 0){
+        api.errorSender(errSock, "no such restaurant exists", msgId);
+        return false;
+    }
+    restaurantInfo = restaurantInfo[0][0];
+    console.log(restaurantInfo);
+
+    let timeStart = new Date((params.reservationData.time_start ) * 1000);
+    let timeEnd = new Date((params.reservationData.time_end ) * 1000);
+    let ymdhmStart = [timeStart.getFullYear(), timeStart.getMonth()+1, timeStart.getDate(), timeStart.getHours(), timeStart.getMinutes()];
+    let ymdhmEnd = [timeEnd.getFullYear(), timeEnd.getMonth()+1, timeEnd.getDate(), timeEnd.getHours(), timeEnd.getMinutes()];
+
+    //adjust format
+    console.log(ymdhmStart);
+    console.log(ymdhmEnd);
+    for(let i = 0; i < ymdhmStart.length; i++){
+        ymdhmStart[i] = `${ymdhmStart[i]}`;
+        ymdhmEnd[i] = `${ymdhmEnd[i]}`;
+        if(ymdhmStart[i] < 10){
+            ymdhmStart[i] = `0${ymdhmStart[i]}`;
+        }
+        if(ymdhmEnd[i] < 10){
+            ymdhmEnd[i] = `0${ymdhmEnd[i]}`;
+        }
+    }
+
+    let startYD = `${ymdhmStart[0]}/${ymdhmStart[1]}/${ymdhmStart[2]}`;
+    let endYD = `${ymdhmEnd[0]}/${ymdhmEnd[1]}/${ymdhmEnd[2]}`;
+
+    restaurantInfo.holidays_array = JSON.parse(restaurantInfo.holidays_array);
+    for(let i = 0; i < restaurantInfo.holidays_array.length; i++){
+        if(startYD == restaurantInfo.holidays_array[i] || endYD == restaurantInfo.holidays_array[i]){
+            api.errorSender(errSock, "time of reservation is holiday", msgId);
+            return false;
+        }
+    }
+
+    
+    let separatedBusinessHoursOpen = restaurantInfo.time_open.split(':');
+    let separatedBusinessHoursClose = restaurantInfo.time_close.split(':');
+    let businessHoursOpen = separatedBusinessHoursOpen[0] + separatedBusinessHoursOpen[1];
+    let businessHoursClose = separatedBusinessHoursClose[0] + separatedBusinessHoursClose[1];
+
+    console.log(separatedBusinessHoursOpen);
+    console.log(separatedBusinessHoursClose);
+    
+    console.log("businessHoursOpen");
+    console.log("businessHoursClose");
+    console.log(businessHoursOpen);
+    console.log(businessHoursClose);
+
+    let reqStart = ymdhmStart[3] + ymdhmStart[4];
+    let reqEnd = ymdhmEnd[3] + ymdhmEnd[4];
+
+    
+    //check valid time or not
+    console.log("reqStart: " + reqStart);
+    console.log("reqEnd: " + reqEnd);
+    if(reqStart < businessHoursOpen){
+        api.errorSender(errSock, `time_start is too early. restaurant open_time is ${separatedBusinessHoursOpen[0]}:${separatedBusinessHoursOpen[1]}`, msgId);
+        return false;
+    }
+    
+    if(businessHoursClose - businessHoursOpen < 0 ){   
+        if(reqEnd-reqStart < 0 && reqEnd > businessHoursClose){
+            console.log("1");
+            console.log("reqStart: " + reqStart);
+            console.log("reqEnd: " + reqEnd);
+            api.errorSender(errSock, `time_end is too late. restaurant close_time is ${separatedBusinessHoursClose[0]}:${separatedBusinessHoursClose[1]}`, msgId);
+            return false;
+        }
+    }else{
+        if(businessHoursClose < reqEnd){
+            console.log("2");
+            console.log("reqStart: " + reqStart);
+            console.log("reqEnd: " + reqEnd);
+            api.errorSender(errSock, `time_end is too late. restaurant close_time is ${separatedBusinessHoursClose[0]}:${separatedBusinessHoursClose[1]}`, msgId);
+            return false;
+        }
+    }
+    
+    let query_getCurrentSeatReservations = `select * from reservation where seat_id = ${params.reservationData.seat_id} and restaurant_id = ${params.reservationData.restaurant_id};`;
+    let currentSeatReservations = await db.queryExecuter(query_getCurrentSeatReservations);
+    currentSeatReservations = currentSeatReservations[0];
+    console.log(currentSeatReservations);
+
+    if(currentSeatReservations.length == 0){
+        api.errorSender(errSock, "no such seat exists", msgId);
+        return false;
+    }
+
+    // duplication check
+    for(let i = 0; i < currentSeatReservations.length; i++){
+        //if time_start is inside of current reservations
+        if(params.reservationData.time_start >= currentSeatReservations[i].time_start && params.reservationData.time_start <= currentSeatReservations[i].time_end){
+            api.errorSender(errSock, "your reservation request is duplicating with other. the request was dismissed");
+            console.log("curResStart " + "reqStart " + "curResEnd");
+            console.log(currentSeatReservations[i].time_start + " " + params.reservationData.time_start + " " + currentSeatReservations[i].time_end);
+            return false;
+        }
+
+        //if time_end is inside of current resrvations
+        if(params.reservationData.time_end >= currentSeatReservations[i].time_start && params.reservationData.time_end <= currentSeatReservations[i].time_end){
+            api.errorSender(errSock, "your reservation request is duplicating with other. the request was dismissed");
+            console.log("curResStart " + "reqEnd " + "curResEnd");
+            console.log(currentSeatReservations[i].time_start + " " + params.reservationData.time_end + " " + currentSeatReservations[i].time_end);
+            
+            return false;
+        }
+
+        //if time_start-time_end includes other reservations
+        if(params.reservationData.time_start <= currentSeatReservations[i].time_start && params.reservationData.time_end >= currentSeatReservations[i].time_end){
+            api.errorSender(errSock, "your reservation request is duplicating with other. the request was dismissed");
+            console.log("reqStart -- curStart -- curEnd -- reqEnd");
+            console.log(`${params.reservationData.time_start} -- ${currentSeatReservations[i].time_start} -- ${currentSeatReservations[i].time_end} -- ${params.reservationData.time_end}`);
+            return false;
+        }
+    }
+
+    let query_getSeatInfo = `select * from seat where seat_id = ${params.reservationData.seat_id};`;
+    let seatInfo = await db.queryExecuter(query_getSeatInfo);
+    seatInfo = seatInfo[0][0];
+
+    if(params.reservationData.num_people > seatInfo.capacity){
+        api.errorSender(errSock, "num_people is too much", msgId);
+        return false;
+    }
+
+    let query_getAllReservationIds = `select reservation_id from reservation`;
+    let allReservationId = await db.queryExecuter(query_getAllReservationIds);
+    
+    allReservationId = allReservationId[0];
+    console.log(allReservationId);
+    console.log(allReservationId.length);
+
+    let maxId = 0;
+    for(let i = 0; i < allReservationId.length; i++){
+        if(allReservationId[i].reservation_id > maxId){
+            maxId = allReservationId[i].reservation_id;
+        }
+    }
+
+    let query_insertReservation = `insert into\
+    reservation(reservation_id, restaurant_id, user_id, seat_id, time_start, time_end, num_people, is_expired)\
+    values (${maxId+1}, ${params.reservationData.restaurant_id}, ${tokenInfo.token_issuer_id}, ${params.reservationData.seat_id},\
+    ${params.reservationData.time_start}, ${params.reservationData.time_end}, ${params.reservationData.num_people}, 0)`;
+
+    let resInsert = await db.queryExecuter(query_insertReservation);
+    if(resInsert == false){
+        return false;
+    }
+
+    return result = {
+        "status": "success",
+        "reservation_id": maxId+1
+    }
+
+}
+
+/**
+ * 予約情報更新API-delete
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function deleteReservation(params, errSock, msgId){
+    let requiredParams = ["reservation_id"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if(api.isNotSQLInjection(params.reservation_id) == false){
+        api.errorSender(errSock, "params.reservation_id contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if(isNaN(params.reservation_id)){
+        api.errorSender(errSock, "reservation_id should be number", msgId);
+        return false;
+    }
+
+    
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+
+    let query_getReservation = `select * from reservation where reservation_id = ${params.reservation_id}`;
+    let reservationData = await db.queryExecuter(query_getReservation);
+
+    reservationData = reservationData[0];
+    if(reservationData.length == 0){
+        api.errorSender(errSock, "the reservation_id that you wanted to delete was not found", msgId);
+        return false;
+    }
+    reservationData = reservationData[0];
+
+    let currentTime = Math.round((new Date()).getTime() / 1000);
+
+    if(tokenInfo.token_permission == "user"){
+        if(tokenInfo.token_issuer_id != reservationData.user_id){
+            api.errorSender(errSock, "this reservation is not yours", msgId);
+            return false;
+        }
+        //if reservation dismissed when reserve starts within 10min
+        if(reservationData.time_start - currentTime < 600 && reservationData.time_start-currentTime >= 0){
+            let query_getViciousCancels = `select num_vicious_cancels from user where user_id =${tokenInfo.token_issuer_id};`;
+            let viciousCancels = await db.queryExecuter(query_getViciousCancels);
+            viciousCancels = viciousCancels[0][0];
+            viciousCancels = viciousCancels.num_vicious_cancels;
+            viciousCancels++;
+            let query_addViciousCancels = `update user set num_vicious_cancels=${viciousCancels} where user_id = ${tokenInfo.token_issuer_id};`;
+            let resAddViciousCancels = await db.queryExecuter(query_addViciousCancels);
+            api.warnSender(errSock, "DO NOT CANCEL RESERVE WHEN RESERVE STARTS WITH IN 10MIN.", msgId); 
+        }
+
+    }else if(tokenInfo.token_permission == "restaurant"){
+        if(tokenInfo.tokken_issuer_id != reservationData.restaurant_id){
+            api.errorSender(errSock, "you can not delete this request. this request is not for your restaurant", msgId);
+            return false;
+        }
+    }
+
+    let query_deleteReservation = `delete from reservation where reservation_id = ${params.reservation_id}`;
+    let resDeleteReservation = await db.queryExecuter(query_deleteReservation);
+
+    return result = {
+        "status": "success"
+    }
+
+}
 
 
 /**

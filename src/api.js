@@ -123,13 +123,19 @@ async function methodExecuter(sock, msg, msgId){
         console.log(result);
 
     }else if(methodName == "updateInfo/restaurant/holidays"){
-        result = await method.updateInfoRestaurantHOlidays(params, sock, msgId);
+        result = await method.updateInfoRestaurantHolidays(params, sock, msgId);
         console.log("result-updateInfo/restaurant/holidays");
         console.log(result);
 
     }else if(methodName == "updateInfo/admin/basic"){
+        result = await method.updateInfoAdminBasic(params, sock, msgId);
+        console.log("result-updateInfo/admin/basic");
+        console.log(result);
 
     }else if(methodName == "updateInfo/reservation"){
+        result = await method.updateInfoReservation(params, sock, msgId);
+        console.log("result-updateInfo/reservation");
+        console.log(result);
 
     }else if(methodName == "updateInfo/evaluation"){
 
