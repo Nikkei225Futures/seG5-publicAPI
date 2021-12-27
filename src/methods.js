@@ -25,6 +25,8 @@ exports.updateInfoRestaurantHolidays = updateInfoRestaurantHolidays;
 exports.updateInfoAdminBasic = updateInfoAdminBasic;
 exports.updateInfoReservation = updateInfoReservation;
 exports.updateInfoEvaluation = updateInfoEvaluation;
+exports.resign = resign;
+exports.resignForced = resignForced;
 
 exports.pong = pong;
 
@@ -964,6 +966,23 @@ async function getInfoRestaurants(params, errSock, msgId){
         return false;
     }
 
+    let query_getAllNames = `select * from user`;
+    let allNames = await db.queryExecuter(query_getAllNames);
+    if(allNames == false){
+        return false;
+    }
+    if(allNames[0].length != 0){
+        allNames = allNames[0];
+        for(let i = 0; i < allNames.length; i++){
+            console.log(`${allNames[i].user_name} == ${params.user_name}`)
+            if(allNames[i].user_name == params.user_name && allNames[i].user_id != tokenInfo.token_issuer_id){
+                api.errorSender(errSock, "params.user_name has already taken by other user", msgId);
+                return false;
+            }
+        }
+    }
+
+
     let query_updateUserInfo = `update user set \
     user_name='${params.user_name}', birthday='${params.birthday}', gender='${params.gender}', email_addr='${params.email_addr}', address='${params.address}'\
     where user_id = ${tokenInfo.token_issuer_id};`
@@ -1034,6 +1053,22 @@ async function getInfoRestaurants(params, errSock, msgId){
     if(tokenInfo.token_permission != "restaurant"){
         api.errorSender(errSock, "you are not restaurant", msgId);
         return false;
+    }
+
+    let query_getAllNames = `select * from restaurant`;
+    let allNames = await db.queryExecuter(query_getAllNames);
+    if(allNames == false){
+        return false;
+    }
+    if(allNames[0].length != 0){
+        allNames = allNames[0];
+        for(let i = 0; i < allNames.length; i++){
+            console.log(`${allNames[i].user_name} == ${params.restaurant_name}`)
+            if(allNames[i].user_name == params.restaurant_name && allNames[i].restaurant_id != tokenInfo.token_issuer_id){
+                api.errorSender(errSock, "params.restaurant_name has already taken by other restaurant", msgId);
+                return false;
+            }
+        }
     }
 
     let query_updateRestaurantInfo = `update restaurant set \
@@ -1531,6 +1566,22 @@ async function updateInfoAdminBasic(params, errSock, msgId){
         return false;
     }
 
+    let query_getAllNames = `select * from administrator`;
+    let allNames = await db.queryExecuter(query_getAllNames);
+    if(allNames == false){
+        return false;
+    }
+    if(allNames[0].length != 0){
+        allNames = allNames[0];
+        for(let i = 0; i < allNames.length; i++){
+            console.log(`${allNames[i].user_name} == ${params.admin_name}`)
+            if(allNames[i].user_name == params.admin_name && allNames[i].admin_id != tokenInfo.token_issuer_id){
+                api.errorSender(errSock, "params.admin_name has already taken by other admin", msgId);
+                return false;
+            }
+        }
+    }
+
     let query_updateAdminInfo = `update administrator set\
     admin_name='${params.admin_name}', birthday='${params.birthday}', gender='${params.gender}', email_addr='${params.email_addr}', address='${params.address}'\
     where admin_id = ${tokenInfo.token_issuer_id};`;
@@ -1714,16 +1765,29 @@ async function registerReservation(params, errSock, msgId){
             return false;
         }
     }
+
+    let query_getRestaurantSeat = `select * from seat where seat_id = ${params.reservationData.seat_id}`;
+    let specifiedSeat = await db.queryExecuter(query_getRestaurantSeat);
+    if(specifiedSeat == false){
+        return false;
+    }
+    specifiedSeat = specifiedSeat[0];
+    if(specifiedSeat.length == 0){
+        api.errorSender(errSock, "no such seat exists", msgId);
+        return false;
+    }
+    specifiedSeat = specifiedSeat[0];
+    if(specifiedSeat.restaurant_id != params.reservationData.restaurant_id){
+        api.errorSender(errSock, "the restaurant does not own the seat that you specified", msgId);
+        return false;
+    }
+    
     
     let query_getCurrentSeatReservations = `select * from reservation where seat_id = ${params.reservationData.seat_id} and restaurant_id = ${params.reservationData.restaurant_id};`;
     let currentSeatReservations = await db.queryExecuter(query_getCurrentSeatReservations);
     currentSeatReservations = currentSeatReservations[0];
     console.log(currentSeatReservations);
 
-    if(currentSeatReservations.length == 0){
-        api.errorSender(errSock, "no such seat exists", msgId);
-        return false;
-    }
 
     // duplication check
     for(let i = 0; i < currentSeatReservations.length; i++){
@@ -2110,6 +2174,90 @@ async function deleteEvaluation(params, errSock, msgId){
     return result = {
         "status": "success"
     }
+
+}
+
+/**
+ * アカウント退会API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
+async function resign(params, errSock, msgId){
+    let requiredParams = ["token", "password"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if(api.isNotSQLInjection(params.token) == false){
+        api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+
+    let query_getClientInfo;
+    if(tokenInfo.token_permission == "user"){
+        query_getClientInfo = `select * from user where user_id = ${tokenInfo.token_issuer_id}`;
+    }else if(tokenInfo.token_permission == "restaurant"){
+        query_getClientInfo = `select * from restaurant where restaurant_id = ${tokenInfo.token_issuer_id}`;
+    }else if(tokenInfo.token_permission == "admin"){
+        query_getClientInfo = `select * from administrator where admin_id = ${tokenInfo.token_issuer_id}`;
+    }else{
+        api.errorSender(errSock, "500", msgId);
+        return false;
+    }
+
+    let clientInfo = await db.queryExecuter(query_getClientInfo);
+    clientInfo = clientInfo[0];
+    if(clientInfo.length == 0){
+        api.errorSender(errSock, "no such client exist", msgId);
+        return false;
+    }
+    clientInfo = clientInfo[0];
+
+    // verify password
+    if(clientInfo.password != sha256(params.password)){
+        api.errorSender(errSock, "password is wrong", msgId);
+        return false;
+    }
+
+    let queries;
+    if(tokenInfo.token_permission == "user"){
+        let query_deleteUserReservation = `delete from reservation where user_id = ${tokenInfo.token_issuer_id}`;
+        let query_deleteUserEvaluation = `delete from restaurant_evaluation where user_id = ${tokenInfo.token_issuer_id}`;
+        let query_deleteUserInfo = `delete from user where user_id = ${tokenInfo.token_issuer_id}`;
+        let query_deleteUserToken = `delete from auth_token where token_issuer_id = ${tokenInfo.token_issuer_id}`;
+        queries = [query_deleteUserReservation, query_deleteUserEvaluation, query_deleteUserInfo, query_deleteUserToken];
+
+    }else if(tokenInfo.token_permission == "restaurant"){
+        let query_deleteRestaurantReservation = `delete from reservation where restaurant_id = ${tokenInfo.token_issuer_id}`;
+        let query_deleteRestaurantEvaluation = `delete from restaurant_evaluation where restaurant_id = ${tokenInfo.token_issuer_id}`;
+        let query_deleteRestaurantSeat = `delete from seat where restaurant_id = ${tokenInfo.token_issuer_id}`;
+        let query_deleteRestaurantInfo = `delete from restaurant where restaurant_id = ${tokenInfo.token_issuer_id}`;
+        let query_deleteRestaurantToken = `delete from auth_token where token_issuer_id = ${tokenInfo.token_issuer_id}`;
+        queries = [query_deleteRestaurantReservation, query_deleteRestaurantEvaluation, query_deleteRestaurantSeat, query_deleteRestaurantInfo, query_deleteRestaurantToken];
+
+    }else if(tokenInfo.token_permission == "admin"){
+        let query_deleteAdminInfo = `delete from administrator where admin_id = ${tokenInfo.token_issuer_id}`;
+        let query_deleteAdminToken = `delete from auth_token where token_issuer_id = ${tokenInfo.token_issuer_id}`;
+        queries = [query_deleteAdminInfo, query_deleteAdminToken];
+    }
+
+    for(let i = 0; i < queries.length; i++){
+        let deleteRes = await db.queryExecuter(queries[i]);
+    }
+
+    return result = {
+        "status": "success"
+    }
+
+}
+
+async function resignForced(params, errSock, msgId){
 
 }
 

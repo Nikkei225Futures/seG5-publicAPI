@@ -143,6 +143,9 @@ async function methodExecuter(sock, msg, msgId){
         console.log(result);
 
     }else if(methodName == "resign"){
+        result = await method.resign(params, sock, msgId);
+        console.log("result-resign");
+        console.log(result);
 
     }else if(methodName == "resign/forced"){
 

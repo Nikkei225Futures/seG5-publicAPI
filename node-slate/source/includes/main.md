@@ -1456,7 +1456,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
 {
    "jsonrpc": "2.0",
    "id": "11",
-   "method": "updateInfo/restaurant/seatAvailability",
+   "method": "updateInfo/restaurant/seatsAvailability",
    "params": {
       "token": "634ba39e-bf6f-93c5-f9dd-f1597c0683b0",
       "seats": [
