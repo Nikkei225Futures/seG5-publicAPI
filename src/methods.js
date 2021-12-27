@@ -762,6 +762,12 @@ async function getInfoRestaurantEvaluations(params, errSock, msgId){
         return false;
     }
 
+    //check token
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+
     let query_getRestaurantEvaluations = `select * from restaurant_evaluation where restaurant_id = ${params.restaurant_id};`;
     let evaluations = await db.queryExecuter(query_getRestaurantEvaluations);
     evaluations = evaluations[0];
