@@ -2257,10 +2257,84 @@ async function resign(params, errSock, msgId){
 
 }
 
+/**
+ * アカウント強制退会API
+ * @param {Object} params メッセージに含まれていたパラメータ
+ * @param {ws.sock} errSock エラー時に使用するソケット
+ * @param {int | string} msgId メッセージに含まれていたID
+ * @returns {false | Object} false->エラー, Object->成功
+ */
 async function resignForced(params, errSock, msgId){
+    let requiredParams = ["token", "account_role", "account_id"];
+    if(checkParamsAreEnough(params, requiredParams, errSock, msgId) == false){
+        return false;
+    }
+    if(api.isNotSQLInjection(params.token) == false){
+        api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if(api.isNotSQLInjection(params.account_role) == false){
+        api.errorSender(errSock, "params.account_role contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+    if(api.isNotSQLInjection(params.account_id) == false){
+        api.errorSender(errSock, "params.account_id contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
+        return false;
+    }
+    if(tokenInfo.token_permission != "admin"){
+        api.errorSender(errSock, "403", msgId);
+        return false;
+    }
+
+    let queries;
+    if(params.account_role == "user"){
+        let query_getUser = `select * from user where user_id = ${params.account_id}`;
+        let userInfo = await db.queryExecuter(query_getUser);
+        if(userInfo[0].length == 0){
+            api.errorSender(errSock, "there is no such account", msgId);
+            return false;
+        }
+
+        let query_deleteUserReservation = `delete from reservation where user_id = ${params.account_id}`;
+        let query_deleteUserEvaluation = `delete from restaurant_evaluation where user_id = ${params.account_id}`;
+        let query_deleteUserInfo = `delete from user where user_id = ${params.account_id}`;
+        let query_deleteUserToken = `delete from auth_token where token_issuer_id = ${params.account_id}`;
+        queries = [query_deleteUserReservation, query_deleteUserEvaluation, query_deleteUserInfo, query_deleteUserToken];
+
+    }else if(params.account_role == "restaurant"){
+        let query_getRestaurant = `select * from restaurant where restaurant_id = ${params.account_id}`;
+        let restaurantInfo = await db.queryExecuter(query_getRestaurant);
+        if(restaurantInfo[0].length == 0){
+            api.errorSender(errSock, "there is no such account", msgId);
+            return false;
+        }
+
+        let query_deleteRestaurantReservation = `delete from reservation where restaurant_id = ${params.account_id}`;
+        let query_deleteRestaurantEvaluation = `delete from restaurant_evaluation where restaurant_id = ${params.account_id}`;
+        let query_deleteRestaurantSeat = `delete from seat where restaurant_id = ${params.account_id}`;
+        let query_deleteRestaurantInfo = `delete from restaurant where restaurant_id = ${params.account_id}`;
+        let query_deleteRestaurantToken = `delete from auth_token where token_issuer_id = ${params.account_id}`;
+        queries = [query_deleteRestaurantReservation, query_deleteRestaurantEvaluation, query_deleteRestaurantSeat, query_deleteRestaurantInfo, query_deleteRestaurantToken];
+
+    }else if(params.account_role == "administrator" || params.account_role == "admin"){
+        api.errorSender(errSock, "can not delete admin", msgId);
+        return false;
+    }
+
+    for(let i = 0; i < queries.length; i++){
+        let deleteRes = await db.queryExecuter(queries[i]);
+    }
+
+    return result = {
+        "status": "success"
+    }
 
 }
-
 
 
 /**
