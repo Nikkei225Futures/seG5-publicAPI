@@ -650,19 +650,15 @@ async function getInfoRestaurantBasic(params, errSock, msgId) {
     
 
     let result = {
-        "jsonrpc": "2.0",
-        "id": msgId,
-        "result": {
-           "status": "success",
-           "restaurant_id": restaurantInfo.restaurant_id,
-           "restaurant_name": restaurantInfo.restaurant_name,
-           "email_addr": restaurantInfo.email_addr,
-           "address": restaurantInfo.address,
-           "time_open": restaurantInfo.time_open,
-           "time_close": restaurantInfo.time_close,
-           "features": restaurantInfo.features,
-           "holidays": JSON.parse(restaurantInfo.holidays_array)
-        }
+        "status": "success",
+        "restaurant_id": restaurantInfo.restaurant_id,
+        "restaurant_name": restaurantInfo.restaurant_name,
+        "email_addr": restaurantInfo.email_addr,
+        "address": restaurantInfo.address,
+        "time_open": restaurantInfo.time_open,
+        "time_close": restaurantInfo.time_close,
+        "features": restaurantInfo.features,
+        "holidays": JSON.parse(restaurantInfo.holidays_array)
      }
 
     return result;

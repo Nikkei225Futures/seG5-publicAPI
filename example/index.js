@@ -1,7 +1,7 @@
 let dstLcl = "localhost";
 let dstRmt = "3.143.243.86"
 
-let svr = new WebSocket(`ws://${dstLcl}:8889`);
+let svr = new WebSocket(`ws://${dstRmt}:8889`);
 let log = document.getElementById("log");
 let res;
 
