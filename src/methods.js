@@ -349,14 +349,14 @@ async function logout(params, errSock, msgId) {
         return false;
     }
 
-    let query_deleteToken = `delete from auth_token where token_id = '${params.token}';`;
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if (tokenInfo == false){
+        api.errorSender(errSock, "invalid token", msgId);
+    }
+
+    let query_deleteToken = `delete from auth_token where token_issuer_id = '${tokenInfo.token_issuer_id}';`;
     let deleteResult = await db.queryExecuter(query_deleteToken);
     deleteResult = deleteResult[0];
-
-    if (deleteResult.affectedRows == 0) {
-        api.errorSender(errSock, "invalid token", msgId);
-        return false;
-    }
 
     let result = {
         "status": "success"
