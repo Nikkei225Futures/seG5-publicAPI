@@ -358,11 +358,6 @@ async function logout(params, errSock, msgId) {
     let deleteResult = await db.queryExecuter(query_deleteToken);
     deleteResult = deleteResult[0];
 
-    if (deleteResult.affectedRows == 0) {
-        api.errorSender(errSock, "invalid token", msgId);
-        return false;
-    }
-
     let result = {
         "status": "success"
     }
