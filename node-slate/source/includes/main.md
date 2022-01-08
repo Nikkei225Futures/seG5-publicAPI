@@ -6,7 +6,12 @@
 アカウント登録以外のほとんどのAPIへのアクセスはトークンによる認証を行うため, ログインAPIを1番最初に実行してトークンを手に入れる必要がある.
 
 ## JSON-RPC
-JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルである. JSON-RPCでは, クライアント-サーバ間で送受信されるデータ構造とそのルールを定義する.
+JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルである. JSON-RPCでは, クライアント-サーバ間で送受信されるデータ構造とそのルールを定義する. 
+
+<aside class="notice">
+ただし, 本APIではJSON-RPCのレスポンスメッセージ定義を改変しており, 本来のJSON-RPCの仕様とは一部異なる点に注意する必要がある
+</aside>
+
 
 ### 関数を呼び出す(リクエスト)
 
@@ -221,7 +226,7 @@ JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルであ�
    "params": {
       "admin_name": "IAmTheAdmin",
       "password": "myPasswordIsWeak",
-      "adminPassword": "SECRET"
+      "admin_password": "SECRET"
    }
 }
 ```

@@ -40,7 +40,8 @@
             <h1 id="overview">Overview</h1>
             <p>この公開APIでは, APIにアクセスするためにWebsocketを用いる. また, APIはJSON-RPCのメッセージ形式でデータの送受信を行う. この公開APIでは, 主にアカウント登録系, ログイン/ログアウト系, 情報参照系, 情報取得系APIの4種類が提供される. アカウント登録以外のほとんどのAPIへのアクセスはトークンによる認証を行うため, ログインAPIを1番最初に実行してトークンを手に入れる必要がある.</p>
             <h2 id="json-rpc">JSON-RPC</h2>
-            <p>JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルである. JSON-RPCでは, クライアント-サーバ間で送受信されるデータ構造とそのルールを定義する.</p>
+            <p>JSON-RPCとは, 軽量な遠隔手続き呼び出し(RPC)プロトコルである. JSON-RPCでは, クライアント-サーバ間で送受信されるデータ構造とそのルールを定義する. </p>
+            <aside class="notice"> ただし, 本APIではJSON-RPCのレスポンスメッセージ定義を改変しており, 本来のJSON-RPCの仕様とは一部異なる点に注意する必要がある </aside>
             <h3 id="関数を呼び出すリクエスト">関数を呼び出す(リクエスト)</h3>
             <pre class="highlight bash"><code></code></pre>
             <blockquote>
@@ -381,7 +382,7 @@
    <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
       <span class="hljs-attr">&quot;admin_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;IAmTheAdmin&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myPasswordIsWeak&quot;</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;adminPassword&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;SECRET&quot;</span>
+      <span class="hljs-attr">&quot;admin_password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;SECRET&quot;</span>
    <span class="hljs-punctuation">}</span>
 <span class="hljs-punctuation">}</span></code></pre>
             <p>管理者アカウント登録APIへのリクエストメッセージには次のパラメータが含まれていなければならない.</p>
@@ -2728,7 +2729,7 @@
             <pre class="highlight json"><code><span class="hljs-punctuation">{</span>
    <span class="hljs-attr">&quot;jsonrpc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2.0&quot;</span><span class="hljs-punctuation">,</span>
    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;11&quot;</span><span class="hljs-punctuation">,</span>
-   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/restaurant/seatAvailability&quot;</span><span class="hljs-punctuation">,</span>
+   <span class="hljs-attr">&quot;method&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;updateInfo/restaurant/seatsAvailability&quot;</span><span class="hljs-punctuation">,</span>
    <span class="hljs-attr">&quot;params&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
       <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;634ba39e-bf6f-93c5-f9dd-f1597c0683b0&quot;</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">&quot;seats&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
