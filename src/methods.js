@@ -1669,6 +1669,9 @@ async function registerReservation(params, errSock, msgId){
         return false;
     }
 
+    params.reservationData.time_start = parseInt(params.reservationData.time_start);
+    params.reservationData.time_end = parseInt(params.reservationData.time_end);
+
     let tokenInfo = await checkToken(params.token, errSock, msgId);
     if(tokenInfo == false){
         return false;
