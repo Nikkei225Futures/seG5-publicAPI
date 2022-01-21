@@ -1694,8 +1694,10 @@ async function registerReservation(params, errSock, msgId){
     restaurantInfo = restaurantInfo[0][0];
     console.log(restaurantInfo);
 
-    let timeStart = new Date((params.reservationData.time_start ) * 1000);
-    let timeEnd = new Date((params.reservationData.time_end ) * 1000);
+    let diffJSTSec = 32400;
+
+    let timeStart = new Date((params.reservationData.time_start + diffJSTSec) * 1000);
+    let timeEnd = new Date((params.reservationData.time_end + diffJSTSec) * 1000);
     let ymdhmStart = [timeStart.getFullYear(), timeStart.getMonth()+1, timeStart.getDate(), timeStart.getHours(), timeStart.getMinutes()];
     let ymdhmEnd = [timeEnd.getFullYear(), timeEnd.getMonth()+1, timeEnd.getDate(), timeEnd.getHours(), timeEnd.getMinutes()];
 
@@ -1747,6 +1749,9 @@ async function registerReservation(params, errSock, msgId){
     console.log("reqEnd: " + reqEnd);
     if(reqStart < businessHoursOpen){
         api.errorSender(errSock, `time_start is too early. restaurant open_time is ${separatedBusinessHoursOpen[0]}:${separatedBusinessHoursOpen[1]}`, msgId);
+        return false;
+    }else if(reqStart > businessHoursClose){
+        api.errorSender(errSock, `time_start is too late. restaurant close_time is ${separatedBusinessHoursClose[0]}:${separatedBusinessHoursClose[1]}`, msgId);
         return false;
     }
     
