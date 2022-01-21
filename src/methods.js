@@ -1698,6 +1698,10 @@ async function registerReservation(params, errSock, msgId){
 
     let timeStart = new Date((params.reservationData.time_start + diffJSTSec) * 1000);
     let timeEnd = new Date((params.reservationData.time_end + diffJSTSec) * 1000);
+
+    console.log(`timeStart: ${timeStart}`)
+    console.log(`timeEnd: ${timeEnd}`)
+
     let ymdhmStart = [timeStart.getFullYear(), timeStart.getMonth()+1, timeStart.getDate(), timeStart.getHours(), timeStart.getMinutes()];
     let ymdhmEnd = [timeEnd.getFullYear(), timeEnd.getMonth()+1, timeEnd.getDate(), timeEnd.getHours(), timeEnd.getMinutes()];
 
