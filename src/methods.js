@@ -1660,6 +1660,15 @@ async function registerReservation(params, errSock, msgId){
         return false;
     }
 
+    if(isNaN(params.reservationData.time_start)){
+        api.errorSender(errSock, "params.reservationData.time_start should be int", msgId);
+        return false;
+    }
+    if(isNaN(params.reservationData.time_end)){
+        api.errorSender(errSock, "params.reservationData.time_start should be int", msgId);
+        return false;
+    }
+
     let tokenInfo = await checkToken(params.token, errSock, msgId);
     if(tokenInfo == false){
         return false;
