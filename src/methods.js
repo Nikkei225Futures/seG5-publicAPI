@@ -2315,6 +2315,9 @@ async function resignForced(params, errSock, msgId){
     if(params.account_role == "user"){
         let query_getUser = `select * from user where user_id = ${params.account_id}`;
         let userInfo = await db.queryExecuter(query_getUser);
+
+        console.log(userInfo[0]);
+
         if(userInfo[0].length == 0){
             api.errorSender(errSock, "there is no such account", msgId);
             return false;
