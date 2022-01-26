@@ -875,6 +875,9 @@ async function getInfoRestaurants(params, errSock, msgId){
         query_getAdmin = `select * from administrator where admin_id = ${params.admin_id};`;
     } else if (params.searchBy == "admin_name") {
         query_getAdmin = `select * from administrator where admin_name = '${params.admin_name}';`;
+    } else {
+        api.errorSender(errSock, "searchBy should admin_id or admin_name", msgId);
+        return false;
     }
 
     let adminInfo = false;
