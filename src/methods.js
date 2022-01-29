@@ -908,7 +908,7 @@ async function getInfoRestaurants(params, errSock, msgId){
         "birthday": adminInfo.birthday,
         "gender": adminInfo.gender,
         "email_addr": adminInfo.email_addr,
-        "address": adminInfo.adress
+        "address": adminInfo.address
     }
 
     console.log("adminInfo");
