@@ -399,6 +399,7 @@ async function getInfoUserBasic(params, errSock, msgId) {
         }
     } else {
         api.errorSender(errSock, "params.searchBy is invalid.", msgId);
+        return false;
     }
 
     if (params.hasOwnProperty("token") == false) {
@@ -608,6 +609,7 @@ async function getInfoRestaurantBasic(params, errSock, msgId) {
         }
     } else {
         api.errorSender(errSock, "params.searchBy is invalid.", msgId);
+        return false;
     }
 
     if (params.hasOwnProperty("token") == false) {
@@ -854,6 +856,7 @@ async function getInfoRestaurants(params, errSock, msgId){
         }
     } else {
         api.errorSender(errSock, "params.searchBy is invalid.", msgId);
+        return false;
     }
 
     if (params.hasOwnProperty("token") == false) {
