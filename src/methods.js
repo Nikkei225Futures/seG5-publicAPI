@@ -1481,10 +1481,13 @@ async function updateInfoRestaurantHolidays(params, errSock, msgId){
     console.log(currentHolidays);
 
     if(params.type == "new"){
+        console.log("new");
+        console.log(`len-params = ${params.holidays.length} - len-cur = ${currentHolidays.length}`);
         for(let i = 0; i < params.holidays.length; i++){
             for(let j = 0; j < currentHolidays.length; j++){
                 console.log(`param: ${params.holidays[i]} - currentHoliday: ${currentHolidays[j]}`);
                 if(params.holidays[i] == currentHolidays[j]){
+                    console.log("break, duplicated");
                     break;
                 }
                 // if not matched
