@@ -1513,6 +1513,8 @@ async function updateInfoRestaurantHolidays(params, errSock, msgId){
         return false;
     }
 
+    console.log(`changed holidays_array: ${currentHolidays}`);
+
     let query_updateHoliday = `update restaurant set holidays_array = '${JSON.stringify(currentHolidays)}' where restaurant_id = ${tokenInfo.token_issuer_id};`;
 
     let updateRes = await db.queryExecuter(query_updateHoliday);
