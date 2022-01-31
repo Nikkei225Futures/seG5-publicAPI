@@ -1484,6 +1484,14 @@ async function updateInfoRestaurantHolidays(params, errSock, msgId){
         console.log("new");
         console.log(`len-params = ${params.holidays.length} - len-cur = ${currentHolidays.length}`);
         for(let i = 0; i < params.holidays.length; i++){
+
+            // if no holidays set in the restaurant information
+            if(currentHolidays.length == 0){
+                for(let j = 0; j < params.holidays.length; j++){
+                    currentHolidays.push(params.holidays[j]);
+                }
+            }
+
             for(let j = 0; j < currentHolidays.length; j++){
                 console.log(`param: ${params.holidays[i]} - currentHoliday: ${currentHolidays[j]}`);
                 if(params.holidays[i] == currentHolidays[j]){
