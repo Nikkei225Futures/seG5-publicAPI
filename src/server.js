@@ -24,7 +24,12 @@ ws.on('connection', sock => {
         if (msg == false) {
             api.errorSender(sock, "400", msgId);
         } else {
-            result = api.methodExecuter(sock, msg, msgId);
+            try{
+                result = api.methodExecuter(sock, msg, msgId);
+            }catch(e){
+                api.errorSender(sock, "500" + e, msgId);
+            }
+            
         }
 
     });
