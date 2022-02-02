@@ -683,6 +683,12 @@ async function getInfoRestaurantSeats(params, errSock, msgId){
         api.errorSender(errSock, "params.restaurant_id contains suspicious character, you can not register such name", msgId);
         return false;
     }
+
+    if (isNaN(params.restaurant_id)){
+        api.errorSender(errSock, "params.restaurant_id should be number", msgId);
+        return false;
+    }
+
     if (api.isNotSQLInjection(params.token) == false) {
         api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
         return false;
