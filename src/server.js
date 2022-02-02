@@ -3,7 +3,7 @@
  */
 
 const server = require('ws').Server;
-const ws = new server({ port: 8889 });
+const ws = new server({ port: 8890 });
 const api = require('./api.js');
 const db = require('./db.js');
 let uuid4 = require('uuid4');
@@ -24,7 +24,12 @@ ws.on('connection', sock => {
         if (msg == false) {
             api.errorSender(sock, "400", msgId);
         } else {
-            result = api.methodExecuter(sock, msg, msgId);
+            try{
+                result = api.methodExecuter(sock, msg, msgId);
+            }catch(e){
+                api.errorSender(sock, "500" + e, msgId);
+            }
+            
         }
 
     });
