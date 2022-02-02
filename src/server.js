@@ -3,7 +3,7 @@
  */
 
 const server = require('ws').Server;
-const ws = new server({ port: 8890 });
+const ws = new server({ port: 8891 });
 const api = require('./api.js');
 const db = require('./db.js');
 let uuid4 = require('uuid4');
