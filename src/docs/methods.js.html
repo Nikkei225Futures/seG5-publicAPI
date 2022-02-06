@@ -377,14 +377,14 @@ async function logout(params, errSock, msgId) {
         return false;
     }
 
-    let query_deleteToken = `delete from auth_token where token_id = '${params.token}';`;
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if (tokenInfo == false){
+        api.errorSender(errSock, "invalid token", msgId);
+    }
+
+    let query_deleteToken = `delete from auth_token where token_issuer_id = '${tokenInfo.token_issuer_id}';`;
     let deleteResult = await db.queryExecuter(query_deleteToken);
     deleteResult = deleteResult[0];
-
-    if (deleteResult.affectedRows == 0) {
-        api.errorSender(errSock, "invalid token", msgId);
-        return false;
-    }
 
     let result = {
         "status": "success"
@@ -427,6 +427,7 @@ async function getInfoUserBasic(params, errSock, msgId) {
         }
     } else {
         api.errorSender(errSock, "params.searchBy is invalid.", msgId);
+        return false;
     }
 
     if (params.hasOwnProperty("token") == false) {
@@ -636,6 +637,7 @@ async function getInfoRestaurantBasic(params, errSock, msgId) {
         }
     } else {
         api.errorSender(errSock, "params.searchBy is invalid.", msgId);
+        return false;
     }
 
     if (params.hasOwnProperty("token") == false) {
@@ -678,19 +680,15 @@ async function getInfoRestaurantBasic(params, errSock, msgId) {
     
 
     let result = {
-        "jsonrpc": "2.0",
-        "id": msgId,
-        "result": {
-           "status": "success",
-           "restaurant_id": restaurantInfo.restaurant_id,
-           "restaurant_name": restaurantInfo.restaurant_name,
-           "email_addr": restaurantInfo.email_addr,
-           "address": restaurantInfo.address,
-           "time_open": restaurantInfo.time_open,
-           "time_close": restaurantInfo.time_close,
-           "features": restaurantInfo.features,
-           "holidays": JSON.parse(restaurantInfo.holidays_array)
-        }
+        "status": "success",
+        "restaurant_id": restaurantInfo.restaurant_id,
+        "restaurant_name": restaurantInfo.restaurant_name,
+        "email_addr": restaurantInfo.email_addr,
+        "address": restaurantInfo.address,
+        "time_open": restaurantInfo.time_open,
+        "time_close": restaurantInfo.time_close,
+        "features": restaurantInfo.features,
+        "holidays": JSON.parse(restaurantInfo.holidays_array)
      }
 
     return result;
@@ -713,6 +711,12 @@ async function getInfoRestaurantSeats(params, errSock, msgId){
         api.errorSender(errSock, "params.restaurant_id contains suspicious character, you can not register such name", msgId);
         return false;
     }
+
+    if (isNaN(params.restaurant_id)){
+        api.errorSender(errSock, "params.restaurant_id should be number", msgId);
+        return false;
+    }
+
     if (api.isNotSQLInjection(params.token) == false) {
         api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
         return false;
@@ -791,6 +795,12 @@ async function getInfoRestaurantEvaluations(params, errSock, msgId){
     }
     if (api.isNotSQLInjection(params.token) == false) {
         api.errorSender(errSock, "params.token contains suspicious character, you can not specify such string", msgId);
+        return false;
+    }
+
+    //check token
+    let tokenInfo = await checkToken(params.token, errSock, msgId);
+    if(tokenInfo == false){
         return false;
     }
 
@@ -880,6 +890,7 @@ async function getInfoRestaurants(params, errSock, msgId){
         }
     } else {
         api.errorSender(errSock, "params.searchBy is invalid.", msgId);
+        return false;
     }
 
     if (params.hasOwnProperty("token") == false) {
@@ -901,6 +912,9 @@ async function getInfoRestaurants(params, errSock, msgId){
         query_getAdmin = `select * from administrator where admin_id = ${params.admin_id};`;
     } else if (params.searchBy == "admin_name") {
         query_getAdmin = `select * from administrator where admin_name = '${params.admin_name}';`;
+    } else {
+        api.errorSender(errSock, "searchBy should admin_id or admin_name", msgId);
+        return false;
     }
 
     let adminInfo = false;
@@ -934,7 +948,7 @@ async function getInfoRestaurants(params, errSock, msgId){
         "birthday": adminInfo.birthday,
         "gender": adminInfo.gender,
         "email_addr": adminInfo.email_addr,
-        "address": adminInfo.adress
+        "address": adminInfo.address
     }
 
     console.log("adminInfo");
@@ -1501,9 +1515,21 @@ async function updateInfoRestaurantHolidays(params, errSock, msgId){
     console.log(currentHolidays);
 
     if(params.type == "new"){
+        console.log("new");
+        console.log(`len-params = ${params.holidays.length} - len-cur = ${currentHolidays.length}`);
         for(let i = 0; i &lt; params.holidays.length; i++){
+
+            // if no holidays set in the restaurant information
+            if(currentHolidays.length == 0){
+                for(let j = 0; j &lt; params.holidays.length; j++){
+                    currentHolidays.push(params.holidays[j]);
+                }
+            }
+
             for(let j = 0; j &lt; currentHolidays.length; j++){
+                console.log(`param: ${params.holidays[i]} - currentHoliday: ${currentHolidays[j]}`);
                 if(params.holidays[i] == currentHolidays[j]){
+                    console.log("break, duplicated");
                     break;
                 }
                 // if not matched
@@ -1532,6 +1558,8 @@ async function updateInfoRestaurantHolidays(params, errSock, msgId){
         api.errorSender(errSock, "params.type is invalid", msgId);
         return false;
     }
+
+    console.log(`changed holidays_array: ${currentHolidays}`);
 
     let query_updateHoliday = `update restaurant set holidays_array = '${JSON.stringify(currentHolidays)}' where restaurant_id = ${tokenInfo.token_issuer_id};`;
 
@@ -1686,6 +1714,15 @@ async function registerReservation(params, errSock, msgId){
         return false;
     }
 
+    if(typeof params.reservationData.time_start === 'string' || params.reservationData.time_start instanceof String){
+        api.errorSender(errSock, "params.reservationData.time_start should be int", msgId);
+        return false;
+    }
+    if(typeof params.reservationData.time_end === 'string' || params.reservationData.time_end instanceof String){
+        api.errorSender(errSock, "params.reservationData.time_end should be int", msgId);
+        return false;
+    }
+
     let tokenInfo = await checkToken(params.token, errSock, msgId);
     if(tokenInfo == false){
         return false;
@@ -1720,8 +1757,14 @@ async function registerReservation(params, errSock, msgId){
     restaurantInfo = restaurantInfo[0][0];
     console.log(restaurantInfo);
 
-    let timeStart = new Date((params.reservationData.time_start ) * 1000);
-    let timeEnd = new Date((params.reservationData.time_end ) * 1000);
+    let diffJSTSec = 32400;
+
+    let timeStart = new Date((params.reservationData.time_start + diffJSTSec) * 1000);
+    let timeEnd = new Date((params.reservationData.time_end + diffJSTSec) * 1000);
+
+    console.log(`timeStart: ${timeStart}`)
+    console.log(`timeEnd: ${timeEnd}`)
+
     let ymdhmStart = [timeStart.getFullYear(), timeStart.getMonth()+1, timeStart.getDate(), timeStart.getHours(), timeStart.getMinutes()];
     let ymdhmEnd = [timeEnd.getFullYear(), timeEnd.getMonth()+1, timeEnd.getDate(), timeEnd.getHours(), timeEnd.getMinutes()];
 
@@ -1773,6 +1816,9 @@ async function registerReservation(params, errSock, msgId){
     console.log("reqEnd: " + reqEnd);
     if(reqStart &lt; businessHoursOpen){
         api.errorSender(errSock, `time_start is too early. restaurant open_time is ${separatedBusinessHoursOpen[0]}:${separatedBusinessHoursOpen[1]}`, msgId);
+        return false;
+    }else if(reqStart > businessHoursClose){
+        api.errorSender(errSock, `time_start is too late. restaurant close_time is ${separatedBusinessHoursClose[0]}:${separatedBusinessHoursClose[1]}`, msgId);
         return false;
     }
     
@@ -2323,6 +2369,9 @@ async function resignForced(params, errSock, msgId){
     if(params.account_role == "user"){
         let query_getUser = `select * from user where user_id = ${params.account_id}`;
         let userInfo = await db.queryExecuter(query_getUser);
+
+        console.log(userInfo[0]);
+
         if(userInfo[0].length == 0){
             api.errorSender(errSock, "there is no such account", msgId);
             return false;
@@ -2547,7 +2596,7 @@ async function checkToken(token, errSock, msgId){
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Dec 27 2021 21:46:37 GMT+0900 (Japan Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Feb 07 2022 04:23:13 GMT+0900 (Japan Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
